@@ -1,0 +1,20 @@
+[
+  {
+    "id": "HOOK-001",
+    "name": "3秒冲突开场",
+    "type": "hook",
+    "description": "通过问题和反常识快速吸引观众"
+  },
+  {
+    "id": "SCENE-FLOW-001",
+    "name": "流程图动画",
+    "type": "scene",
+    "description": "适合AI教程和知识讲解"
+  },
+  {
+    "id": "THEME-TECH-001",
+    "name": "科技蓝主题",
+    "type": "theme",
+    "description": "适合AI产品和技术科普"
+  }
+]
