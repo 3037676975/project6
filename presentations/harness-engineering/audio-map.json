@@ -1,8 +1,17 @@
 {
-  "provider":"project5",
-  "engine":"edge",
-  "voice":"zh-TW-YunJheNeural",
-  "speed":1.10,
-  "status":"pending",
-  "segments":{}
+  "provider": "edge-tts",
+  "client": "rany2/edge-tts",
+  "voice": "zh-TW-YunJheNeural",
+  "locale": "zh-TW",
+  "rate": "+0%",
+  "speed": 1.0,
+  "status": "ready",
+  "segments": {
+    "01-harness-engineering/1": "./public/audio/01-harness-engineering/1.mp3",
+    "01-harness-engineering/2": "./public/audio/01-harness-engineering/2.mp3",
+    "01-harness-engineering/3": "./public/audio/01-harness-engineering/3.mp3",
+    "01-harness-engineering/4": "./public/audio/01-harness-engineering/4.mp3",
+    "01-harness-engineering/5": "./public/audio/01-harness-engineering/5.mp3",
+    "01-harness-engineering/6": "./public/audio/01-harness-engineering/6.mp3"
+  }
 }
