@@ -1,0 +1,68 @@
+name: Generate Harness Edge TTS
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "presentations/harness-engineering/narrations.json"
+      - "scripts/generate-harness-edge-tts.py"
+      - ".github/workflows/generate-harness-edge-tts.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  generate-audio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install edge-tts
+        run: pip install "edge-tts==7.2.8"
+
+      - name: Generate YunJhe narration
+        run: python scripts/generate-harness-edge-tts.py
+
+      - name: Download CC0 background loop
+        run: |
+          mkdir -p presentations/harness-engineering/public/audio/bgm
+          curl -L --fail --retry 3 \
+            "https://opengameart.org/sites/default/files/plimplom_0.ogg" \
+            -o presentations/harness-engineering/public/audio/bgm/short-plingy-loop.ogg
+
+      - name: Verify outputs
+        run: |
+          test -s presentations/harness-engineering/public/audio/01-harness-engineering/1.mp3
+          test -s presentations/harness-engineering/public/audio/01-harness-engineering/6.mp3
+          test -s presentations/harness-engineering/public/audio/bgm/short-plingy-loop.ogg
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('presentations/harness-engineering/audio-map.json')
+          data = json.loads(p.read_text())
+          assert data['provider'] == 'edge-tts'
+          assert data['voice'] == 'zh-TW-YunJheNeural'
+          assert data['rate'] == '+0%'
+          assert data['status'] == 'ready'
+          assert len(data['segments']) == 6
+          print('audio verification PASS')
+          PY
+
+      - name: Commit generated audio
+        run: |
+          git config user.name "project6-audio-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add presentations/harness-engineering/audio-map.json \
+                  presentations/harness-engineering/public/audio
+          if git diff --cached --quiet; then
+            echo "No audio changes to commit"
+          else
+            git commit -m "audio: generate Harness YunJhe narration and CC0 BGM [skip ci]"
+            git push
+          fi
