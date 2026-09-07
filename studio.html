@@ -5,19 +5,26 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Project6 Studio</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f5f9ff;color:#10233f;font-family:"Noto Sans SC","Microsoft YaHei",sans-serif}.layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}.side{background:#fff;border-right:1px solid #dbe7f5;padding:30px}.logo{font-size:26px;font-weight:900;color:#2563eb}.nav div{padding:14px;margin-top:10px;border-radius:12px;color:#52657d}.nav .active{background:#2563eb;color:#fff}.main{padding:32px}.top{display:flex;justify-content:space-between;align-items:center}.btn{background:#2563eb;color:#fff;padding:12px 22px;border-radius:14px;border:0}.studio{display:grid;grid-template-columns:240px 1fr 260px;gap:20px;margin-top:25px}.panel{background:#fff;border:1px solid #dbe7f5;border-radius:24px;padding:20px}.preview{height:480px;background:#08172c;border-radius:26px;color:white;display:flex;align-items:center;justify-content:center;font-size:40px}.scene div{padding:14px;border-radius:12px;background:#eff6ff;margin:10px 0}.tool div{padding:14px;border-bottom:1px solid #e5edf7}.timeline{margin-top:20px;background:#08172c;color:white;border-radius:20px;padding:20px}.track{height:45px;background:rgba(255,255,255,.15);border-radius:10px;margin-top:12px;padding:12px}@media(max-width:900px){.layout{display:block}.studio{grid-template-columns:1fr}.side{display:none}}
+*{box-sizing:border-box}body{margin:0;background:#f5f9ff;color:#10233f;font-family:"Noto Sans SC","Microsoft YaHei",sans-serif}.layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}.side{background:white;border-right:1px solid #dbe7f5;padding:30px}.logo{font-size:26px;font-weight:900;color:#2563eb}.nav div{padding:14px;margin:8px 0;border-radius:12px}.active{background:#2563eb;color:white}.main{padding:32px}.header{display:flex;justify-content:space-between;align-items:center}.btn{background:#2563eb;color:white;border:0;padding:12px 22px;border-radius:14px}.studio{display:grid;grid-template-columns:240px 1fr 260px;gap:20px;margin-top:25px}.panel{background:white;border:1px solid #dbe7f5;border-radius:24px;padding:20px}.scene-item{background:#eff6ff;padding:14px;border-radius:12px;margin:10px 0}.preview{height:430px;background:#08172c;color:white;border-radius:26px;display:flex;align-items:center;justify-content:center;font-size:38px}.timeline{margin-top:20px;background:#08172c;color:white;padding:20px;border-radius:20px}.track{background:rgba(255,255,255,.12);padding:12px;border-radius:10px;margin-top:10px}.tool-item{padding:15px;border-bottom:1px solid #e5edf7}.json{margin-top:20px;background:#061426;color:#dbeafe;padding:20px;border-radius:18px;font-family:monospace;white-space:pre-wrap}@media(max-width:900px){.layout{display:block}.studio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="layout">
 <aside class="side"><div class="logo">▶ Project6</div><div class="nav"><div>Dashboard</div><div>Projects</div><div class="active">Studio</div><div>Templates</div><div>Assets</div><div>Knowledge</div></div></aside>
 <main class="main">
-<div class="top"><h1>AI Video Studio</h1><button class="btn">生成 Scene</button></div>
+<div class="header"><h1>AI Video Studio V2</h1><button class="btn">生成 Scene</button></div>
 <div class="studio">
-<div class="panel scene"><h3>Scenes</h3><div>01 开场 Hook</div><div>02 核心概念</div><div>03 流程动画</div><div>04 总结 CTA</div></div>
-<div><div class="preview">Garden Scene Preview</div><div class="timeline"><b>Timeline</b><div class="track">Scene 01 - 5s</div><div class="track">Scene 02 - 15s</div><div class="track">Voice + Animation</div></div></div>
-<div class="panel tool"><h3>工具</h3><div>🎙 Project5 TTS</div><div>🎨 Theme</div><div>🧩 Components</div><div>📹 Local Record</div><div>⚙ Render Engine</div></div>
+<div class="panel"><h3>Scene JSON</h3><div class="scene-item">01 开场 Hook</div><div class="scene-item">02 核心概念</div><div class="scene-item">03 流程动画</div><div class="scene-item">04 总结 CTA</div></div>
+<div><div class="preview">Garden Scene Preview</div><div class="timeline"><b>Timeline</b><div class="track">Scene01 · Hook · 5s</div><div class="track">Scene02 · Flow · 15s</div><div class="track">Scene03 · Voice + Animation</div></div></div>
+<div class="panel"><h3>Pipeline</h3><div class="tool-item">🎙 Project5 TTS</div><div class="tool-item">🎨 Theme Engine</div><div class="tool-item">🧩 Component Library</div><div class="tool-item">📹 Local Record</div><div class="tool-item">⚙ Render Engine</div></div>
 </div>
+<div class="json">{
+  "project":"P0025",
+  "engine":"garden",
+  "voice":"ETG1",
+  "scene":"flow-animation",
+  "status":"ready"
+}</div>
 </main>
 </div>
 </body>
