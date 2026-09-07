@@ -1,0 +1,24 @@
+name: Validate Harness Chapter 1
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "presentations/harness-engineering/index.html"
+      - "presentations/harness-engineering/audio-map.json"
+      - "presentations/harness-engineering/ACCEPTANCE.md"
+      - "presentations/harness-engineering/public/audio/**"
+      - "data/projects.json"
+      - "scripts/validate-harness-chapter1.mjs"
+      - ".github/workflows/validate-harness-chapter1.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run Harness chapter 1 gate
+        run: node scripts/validate-harness-chapter1.mjs
