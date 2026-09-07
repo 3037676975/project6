@@ -1,0 +1,8 @@
+{
+  "provider":"project5",
+  "engine":"edge",
+  "voice":"zh-TW-YunJheNeural",
+  "speed":1.10,
+  "status":"pending",
+  "segments":{}
+}
