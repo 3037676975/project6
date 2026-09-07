@@ -1,123 +1,28 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Project6 · Deploy Test V2</title>
-  <style>
-    :root{
-      --bg:#f5f7fb;
-      --card:#ffffff;
-      --text:#172033;
-      --muted:#6b7280;
-      --line:#e7eaf0;
-      --accent:#ff6b35;
-      --accent2:#ffb703;
-      --green:#16a34a;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at 15% 10%,rgba(255,183,3,.18),transparent 28%),
-        radial-gradient(circle at 85% 85%,rgba(255,107,53,.14),transparent 30%),
-        var(--bg);
-    }
-    .wrap{width:min(1080px,calc(100% - 32px));margin:0 auto;padding:52px 0}
-    .top{
-      display:flex;justify-content:space-between;align-items:center;gap:16px;
-      margin-bottom:24px;
-    }
-    .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:20px}
-    .logo{
-      width:38px;height:38px;border-radius:12px;
-      display:grid;place-items:center;color:white;font-weight:900;
-      background:linear-gradient(135deg,var(--accent),var(--accent2));
-      box-shadow:0 10px 24px rgba(255,107,53,.25);
-    }
-    .pill{
-      padding:9px 13px;border:1px solid #dcefe0;border-radius:999px;
-      background:#f1fff4;color:var(--green);font-size:13px;font-weight:700;
-    }
-    .hero{
-      display:grid;grid-template-columns:1.25fr .75fr;gap:22px;
-      padding:42px;border:1px solid var(--line);border-radius:28px;background:var(--card);
-      box-shadow:0 24px 70px rgba(30,41,59,.08);
-    }
-    h1{margin:0 0 16px;font-size:clamp(42px,7vw,82px);line-height:.96;letter-spacing:-.055em}
-    h1 em{font-style:normal;color:var(--accent)}
-    .lead{font-size:18px;line-height:1.8;color:var(--muted);max-width:690px;margin:0}
-    .stamp{
-      min-height:260px;border-radius:24px;padding:28px;
-      display:flex;flex-direction:column;justify-content:space-between;
-      color:#fff;background:linear-gradient(145deg,#172033,#2b3448 62%,#ff6b35 160%);
-    }
-    .stamp b{font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:#ffd6c7}
-    .stamp strong{display:block;font-size:46px;line-height:1;margin-top:8px}
-    .stamp small{color:#c7cedb;line-height:1.6}
-    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
-    .box{padding:22px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.88)}
-    .box span{display:block;color:var(--muted);font-size:12px;margin-bottom:8px}
-    .box strong{font-size:16px}
-    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
-    button,a{
-      border:0;border-radius:14px;padding:13px 18px;font:inherit;font-weight:750;
-      text-decoration:none;cursor:pointer;
-    }
-    button{background:var(--accent);color:white;box-shadow:0 10px 22px rgba(255,107,53,.22)}
-    a{background:#fff;color:var(--text);border:1px solid var(--line)}
-    #result{margin-top:16px;min-height:24px;color:var(--green);font-weight:700}
-    footer{padding:24px 4px 0;color:#9aa2af;font-size:12px}
-    @media(max-width:760px){
-      .hero{grid-template-columns:1fr;padding:26px}
-      .grid{grid-template-columns:1fr 1fr}
-      .wrap{padding-top:28px}
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Project6 AI Video Studio Test</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#0b1020;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}.app{max-width:1100px;margin:auto;padding:50px 24px}.card{background:linear-gradient(135deg,#151d35,#202b4d);border:1px solid rgba(255,255,255,.12);border-radius:32px;padding:42px;box-shadow:0 30px 80px rgba(0,0,0,.35)}.tag{display:inline-block;padding:8px 14px;border-radius:999px;background:#22c55e;color:#04120a;font-weight:800;font-size:13px}h1{font-size:64px;line-height:1;margin:25px 0}h1 span{color:#60a5fa}.desc{color:#cbd5e1;font-size:18px;line-height:1.8}.panel{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:35px}.item{background:rgba(255,255,255,.06);padding:22px;border-radius:20px}.item small{color:#94a3b8}.item b{display:block;margin-top:10px;font-size:20px}.btn{margin-top:30px;padding:14px 24px;border:0;border-radius:14px;background:#60a5fa;color:#07111f;font-weight:800;cursor:pointer}#msg{margin-top:20px;color:#4ade80}@media(max-width:700px){h1{font-size:42px}.panel{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="top">
-      <div class="brand"><div class="logo">P6</div>Project6</div>
-      <div class="pill">● DEPLOY TEST V2</div>
-    </div>
-
-    <section class="hero">
-      <div>
-        <h1>新的测试页<br><em>已经上线。</em></h1>
-        <p class="lead">
-          这是一版和之前深色页面完全不同的明亮测试页。只要服务器上出现橙色的“新的测试页已经上线”，就说明 GitHub → 宝塔 → Project6 的自动部署已经拿到了最新版本。
-        </p>
-        <div class="actions">
-          <button id="check">测试 JavaScript</button>
-          <a href="https://github.com/3037676975/project6" target="_blank" rel="noopener">查看 GitHub</a>
-        </div>
-        <div id="result"></div>
-      </div>
-
-      <aside class="stamp">
-        <div><b>Project6 Build Marker</b><strong>V2</strong></div>
-        <small>Build marker: P6-TEST-20260907-0856<br>Static HTML · No Node · No Docker</small>
-      </aside>
-    </section>
-
-    <section class="grid">
-      <div class="box"><span>REPOSITORY</span><strong>3037676975/project6</strong></div>
-      <div class="box"><span>BRANCH</span><strong>main</strong></div>
-      <div class="box"><span>ENTRY</span><strong>/index.html</strong></div>
-      <div class="box"><span>MODE</span><strong>Baota Auto Deploy</strong></div>
-    </section>
-
-    <footer>Project6 · Deployment verification page · V2</footer>
-  </div>
-
-  <script>
-    document.getElementById('check').addEventListener('click', () => {
-      document.getElementById('result').textContent = '✓ 页面脚本正常 · ' + new Date().toLocaleString('zh-CN');
-    });
-  </script>
+<div class="app">
+<section class="card">
+<div class="tag">PROJECT6 V3 DEPLOY TEST</div>
+<h1>AI Video<br><span>Creative Studio</span></h1>
+<p class="desc">这是 Project6 自动部署第三版测试页面。用于验证 GitHub → 宝塔 → 服务器链路是否正常。</p>
+<div class="panel">
+<div class="item"><small>PROJECT</small><b>AI Video Workbench</b></div>
+<div class="item"><small>DEPLOY</small><b>Baota + GitHub</b></div>
+<div class="item"><small>STATUS</small><b>Waiting Test</b></div>
+</div>
+<button class="btn" onclick="test()">运行页面测试</button>
+<div id="msg"></div>
+</section>
+</div>
+<script>function test(){document.getElementById('msg').innerHTML='✓ Project6 前端运行正常 '+new Date().toLocaleString('zh-CN')}</script>
 </body>
 </html>
