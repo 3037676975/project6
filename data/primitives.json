@@ -1,0 +1,44 @@
+[
+  {
+    "id":"PRIM-CARD-001",
+    "name":"Surface Card",
+    "type":"card",
+    "purpose":"承载概念、流程节点、对比项和总结项",
+    "tokens":["surface","line","radius","text","muted"]
+  },
+  {
+    "id":"PRIM-RULE-001",
+    "name":"Editorial Rule",
+    "type":"rule",
+    "purpose":"章节分隔、编辑部风格结构线",
+    "tokens":["line","accent"]
+  },
+  {
+    "id":"PRIM-HERO-NUMBER-001",
+    "name":"Hero Number",
+    "type":"hero-number",
+    "purpose":"强调关键数字、比例和指标",
+    "tokens":["accent","text","font"]
+  },
+  {
+    "id":"PRIM-BADGE-001",
+    "name":"Badge",
+    "type":"badge",
+    "purpose":"场景类型、栏目、来源和状态标签",
+    "tokens":["surfaceSoft","accent","radius"]
+  },
+  {
+    "id":"PRIM-FLOW-NODE-001",
+    "name":"Flow Node",
+    "type":"flow-node",
+    "purpose":"流程图、步骤图和机制图节点",
+    "tokens":["surface","line","radius","accent"]
+  },
+  {
+    "id":"PRIM-QUOTE-001",
+    "name":"Quote Block",
+    "type":"quote",
+    "purpose":"观点、金句与引用场景",
+    "tokens":["text","muted","accent","font"]
+  }
+]
