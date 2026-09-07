@@ -1,39 +1,44 @@
 #!/usr/bin/env bash
-# Project6 post-pull hook for Baota Git auto deployment.
-# IMPORTANT: keep this hook fast. Baota already runs git pull before this script.
-# Garden Skills sync is launched in background so network latency can never block website deployment.
+# Project6 唯一部署脚本（宝塔 Git 自动部署：git pull 后执行）
+# 原则：主站部署必须快速成功；Garden Skills 只做后台可选同步，绝不阻塞宝塔。
 
 PROJECT_DIR="/www/wwwroot/project6"
 GARDEN_LOG="/tmp/project6-garden-sync.log"
+export GIT_TERMINAL_PROMPT=0
 
 log() {
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [Project6] $*"
 }
 
-# The site directory must exist because Baota has just pulled into it.
+# 宝塔已经完成 git pull，因此这里不再 fetch / pull。
 if [ ! -d "$PROJECT_DIR" ]; then
-  echo "[Project6] WARNING: project directory not found: $PROJECT_DIR"
-  # Do not make Baota show a red deployment just because the optional hook cannot run.
+  log "WARNING: project directory not found: $PROJECT_DIR"
   exit 0
 fi
 
 cd "$PROJECT_DIR" 2>/dev/null || exit 0
+git config --global --add safe.directory "$PROJECT_DIR" >/dev/null 2>&1 || true
 
 log "post-pull hook started"
 
-# Never run git fetch/pull/submodule synchronously here.
-# They can block for 1-3 minutes on slow GitHub connections and Baota will mark deployment failed.
-if [ -f scripts/sync-garden.sh ] && [ -f .gitmodules ]; then
-  log "Garden Skills sync scheduled in background"
+# Garden Skills：直接在本脚本里后台同步，不再依赖第二个 SH 文件。
+# 即使 GitHub 网络慢或同步失败，也不会影响 Project6 主站部署状态。
+if [ -f .gitmodules ]; then
+  log "Garden Skills background sync scheduled"
   (
     sleep 2
     cd "$PROJECT_DIR" || exit 0
-    # Limit the optional background sync as well. If timeout is unavailable, run normally.
-    if command -v timeout >/dev/null 2>&1; then
-      timeout 180 bash scripts/sync-garden.sh
-    else
-      bash scripts/sync-garden.sh
-    fi
+    git submodule sync --recursive || true
+
+    for attempt in 1 2 3; do
+      echo "[$(date '+%Y-%m-%d %H:%M:%S')] [Garden] update attempt $attempt/3"
+      if command -v timeout >/dev/null 2>&1; then
+        timeout 60 git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=20 submodule update --init --recursive && break
+      else
+        git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=20 submodule update --init --recursive && break
+      fi
+      sleep 3
+    done
   ) >"$GARDEN_LOG" 2>&1 </dev/null &
 fi
 
@@ -44,7 +49,7 @@ else
 fi
 
 log "post-pull hook finished"
-log "Garden background log: $GARDEN_LOG"
+log "Garden log: $GARDEN_LOG"
 
-# Always return success: Baota's own git pull result is the authoritative deployment result.
+# 宝塔是否部署成功，以它自己的 git pull 为准；本后置脚本永远不制造红色失败。
 exit 0
