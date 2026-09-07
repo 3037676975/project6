@@ -1,0 +1,122 @@
+[
+  {
+    "id": "THEME-TECH-001",
+    "name": "Tech Blue",
+    "nameZh": "科技蓝",
+    "mood": "clean, intelligent, calm",
+    "bestFor": ["AI知识讲解", "技术科普", "产品教程"],
+    "tokens": {
+      "stageBg": "#07152f",
+      "surface": "#102447",
+      "surfaceSoft": "#18345f",
+      "text": "#f5f9ff",
+      "muted": "#a9bddb",
+      "accent": "#74a7ff",
+      "accent2": "#78e0ff",
+      "line": "rgba(255,255,255,.16)",
+      "radius": "24px",
+      "shadow": "0 28px 80px rgba(0,18,55,.32)",
+      "font": "Noto Sans SC, PingFang SC, Microsoft YaHei, sans-serif"
+    }
+  },
+  {
+    "id": "THEME-NEWS-001",
+    "name": "Newsroom",
+    "nameZh": "编辑部",
+    "mood": "editorial, dense, credible",
+    "bestFor": ["财经知识", "行业分析", "热点解读"],
+    "tokens": {
+      "stageBg": "#f4f0e7",
+      "surface": "#fffdf7",
+      "surfaceSoft": "#e7e0d3",
+      "text": "#171717",
+      "muted": "#6e675d",
+      "accent": "#df3b2f",
+      "accent2": "#1d1d1d",
+      "line": "rgba(23,23,23,.18)",
+      "radius": "4px",
+      "shadow": "0 20px 55px rgba(47,39,28,.14)",
+      "font": "Georgia, Noto Serif SC, Songti SC, serif"
+    }
+  },
+  {
+    "id": "THEME-CINEMA-001",
+    "name": "Cinematic",
+    "nameZh": "电影感",
+    "mood": "dramatic, premium, spacious",
+    "bestFor": ["品牌故事", "人物故事", "读书分享"],
+    "tokens": {
+      "stageBg": "#090a0d",
+      "surface": "#15171c",
+      "surfaceSoft": "#24262d",
+      "text": "#f3efe6",
+      "muted": "#a9a49b",
+      "accent": "#d7b675",
+      "accent2": "#8c6a3e",
+      "line": "rgba(232,217,189,.17)",
+      "radius": "10px",
+      "shadow": "0 34px 90px rgba(0,0,0,.48)",
+      "font": "Noto Serif SC, Songti SC, serif"
+    }
+  },
+  {
+    "id": "THEME-FINANCE-001",
+    "name": "Market Desk",
+    "nameZh": "财经数据",
+    "mood": "precise, analytical, high-signal",
+    "bestFor": ["财经知识", "数据解读", "商业分析"],
+    "tokens": {
+      "stageBg": "#071b1b",
+      "surface": "#0f2d2b",
+      "surfaceSoft": "#163d39",
+      "text": "#f2fff9",
+      "muted": "#a7c8bf",
+      "accent": "#67e6a4",
+      "accent2": "#f1c75b",
+      "line": "rgba(137,235,190,.18)",
+      "radius": "14px",
+      "shadow": "0 28px 78px rgba(0,42,35,.38)",
+      "font": "Inter, Noto Sans SC, PingFang SC, sans-serif"
+    }
+  },
+  {
+    "id": "THEME-MINIMAL-001",
+    "name": "Minimal Paper",
+    "nameZh": "极简白",
+    "mood": "quiet, minimal, elegant",
+    "bestFor": ["知识讲解", "产品教程", "方法论"],
+    "tokens": {
+      "stageBg": "#f7f7f5",
+      "surface": "#ffffff",
+      "surfaceSoft": "#ececeb",
+      "text": "#18181a",
+      "muted": "#737478",
+      "accent": "#3159d9",
+      "accent2": "#1c1c1e",
+      "line": "rgba(20,20,22,.12)",
+      "radius": "18px",
+      "shadow": "0 20px 60px rgba(21,25,35,.10)",
+      "font": "Noto Sans SC, PingFang SC, Microsoft YaHei, sans-serif"
+    }
+  },
+  {
+    "id": "THEME-SOFT-001",
+    "name": "Soft Knowledge",
+    "nameZh": "柔和知识",
+    "mood": "friendly, warm, approachable",
+    "bestFor": ["读书分享", "成长内容", "知识科普"],
+    "tokens": {
+      "stageBg": "#eef5f1",
+      "surface": "#fffefb",
+      "surfaceSoft": "#dfece7",
+      "text": "#21332f",
+      "muted": "#71817c",
+      "accent": "#4b9b84",
+      "accent2": "#d49a6a",
+      "line": "rgba(63,112,98,.15)",
+      "radius": "28px",
+      "shadow": "0 24px 65px rgba(61,98,86,.13)",
+      "font": "Noto Sans SC, PingFang SC, Microsoft YaHei, sans-serif"
+    }
+  }
+]
