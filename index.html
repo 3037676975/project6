@@ -1,9 +1,72 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Project6 AI Video Studio</title>
-<style>
-*{box-sizing:border-box}body{margin:0;background:#f6faff;color:#10233f;font-family:"Noto Sans SC","Microsoft YaHei",sans-serif}.app{display:flex;min-height:100vh}.side{width:240px;background:#fff;border-right:1px solid #dbe7f5;padding:28px}.logo{font-size:28px;font-weight:900;color:#2563eb}.nav a{display:block;margin:12px 0;padding:14px;border-radius:14px;color:#42566f;text-decoration:none}.nav a:hover,.nav a.active{background:#2563eb;color:#fff}.main{flex:1;padding:35px}.hero{padding:55px;border-radius:30px;background:linear-gradient(135deg,#eaf3ff,#fff);display:flex;justify-content:space-between}.hero h1{font-size:64px;line-height:1;margin:0}.hero span{color:#2563eb}.btn{margin-top:25px;background:#2563eb;color:#fff;border:0;border-radius:14px;padding:15px 28px;font-weight:800}.cards,.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:25px 0}.card,.item{background:white;border:1px solid #dbe7f5;border-radius:22px;padding:25px}.num{font-size:36px;font-weight:900;color:#2563eb}@media(max-width:900px){.side{display:none}.cards,.grid{grid-template-columns:1fr}}
-</style></head>
-<body><div class="app"><aside class="side"><div class="logo">▶ Project6</div><div class="nav"><a class="active" href="index.html">首页</a><a href="projects.html">项目中心</a><a href="studio.html">视频工作台</a><a href="#">模板库</a><a href="#">素材库</a><a href="#">知识库</a></div></aside><main class="main"><section class="hero"><div><h1>AI Video<br><span>Studio</span></h1><p>个人 AI 视频生产工作台 · Garden Engine · Project5 TTS</p><button class="btn">新建视频项目</button></div><div style="font-size:90px">🎬</div></section><div class="cards"><div class="card"><small>项目</small><div class="num">12</div></div><div class="card"><small>模板</small><div class="num">28</div></div><div class="card"><small>素材</small><div class="num">356</div></div><div class="card"><small>视频</small><div class="num">8</div></div></div><h2>最近项目</h2><div class="grid"><div class="item">RAG知识讲解<br>12 Scenes</div><div class="item">Agent介绍<br>制作中</div><div class="item">财经科普<br>完成</div><div class="item">认知觉醒<br>草稿</div></div></main></div></body></html>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f4f8ff">
+  <meta name="description" content="Project6 - Personal AI Video OS">
+  <title>Project6 AI Video Studio</title>
+  <link rel="stylesheet" href="./assets/app.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">P6</div>
+        <div><strong>Project6</strong><small>AI Video Studio</small></div>
+      </div>
+
+      <div class="nav-group-title">WORKSPACE</div>
+      <nav>
+        <a class="nav-link" data-route="dashboard" href="#/dashboard"><span class="nav-icon">⌂</span>工作台</a>
+        <a class="nav-link" data-route="projects" href="#/projects"><span class="nav-icon">▤</span>项目中心</a>
+        <a class="nav-link" data-route="studio" href="#/studio"><span class="nav-icon">▶</span>视频工作台</a>
+        <a class="nav-link" data-route="templates" href="#/templates"><span class="nav-icon">✦</span>模板库</a>
+        <a class="nav-link" data-route="assets" href="#/assets"><span class="nav-icon">◇</span>素材库</a>
+      </nav>
+
+      <div class="nav-group-title">SYSTEM</div>
+      <nav>
+        <a class="nav-link" data-route="lab" href="#/lab"><span class="nav-icon">⌘</span>开源实验室</a>
+        <a class="nav-link" data-route="settings" href="#/settings"><span class="nav-icon">⚙</span>设置</a>
+      </nav>
+
+      <div class="sidebar-foot">
+        <b>V1 · Static First</b>
+        <small>低资源 · 数据驱动 · 本地持久化</small>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="page-title" id="page-title">工作台</div>
+          <label class="search" aria-label="搜索项目">
+            <span>⌕</span>
+            <input id="global-search" placeholder="搜索视频项目...">
+          </label>
+        </div>
+        <div class="top-actions">
+          <a class="btn btn-ghost" href="#/lab">开源实验室</a>
+          <button class="btn btn-primary" id="new-project-btn">＋ 新建视频</button>
+        </div>
+      </header>
+
+      <div class="content" id="app-content">
+        <div class="card empty"><strong>Project6 正在加载</strong>正在读取项目与模板数据…</div>
+      </div>
+    </main>
+  </div>
+
+  <nav class="mobile-nav" aria-label="移动端导航">
+    <a data-route="dashboard" href="#/dashboard">⌂<br>首页</a>
+    <a data-route="projects" href="#/projects">▤<br>项目</a>
+    <a data-route="studio" href="#/studio">▶<br>Studio</a>
+    <a data-route="templates" href="#/templates">✦<br>模板</a>
+    <a data-route="settings" href="#/settings">⚙<br>设置</a>
+  </nav>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="./assets/app.js" defer></script>
+</body>
+</html>
