@@ -1,4 +1,0 @@
-[submodule "vendor/garden-skills"]
-	path = vendor/garden-skills
-	url = https://github.com/ConardLi/garden-skills.git
-	branch = main
