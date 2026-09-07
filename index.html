@@ -3,26 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Project6 AI Video Studio Test</title>
+<title>Project6 AI Video Studio</title>
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#0b1020;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}.app{max-width:1100px;margin:auto;padding:50px 24px}.card{background:linear-gradient(135deg,#151d35,#202b4d);border:1px solid rgba(255,255,255,.12);border-radius:32px;padding:42px;box-shadow:0 30px 80px rgba(0,0,0,.35)}.tag{display:inline-block;padding:8px 14px;border-radius:999px;background:#22c55e;color:#04120a;font-weight:800;font-size:13px}h1{font-size:64px;line-height:1;margin:25px 0}h1 span{color:#60a5fa}.desc{color:#cbd5e1;font-size:18px;line-height:1.8}.panel{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:35px}.item{background:rgba(255,255,255,.06);padding:22px;border-radius:20px}.item small{color:#94a3b8}.item b{display:block;margin-top:10px;font-size:20px}.btn{margin-top:30px;padding:14px 24px;border:0;border-radius:14px;background:#60a5fa;color:#07111f;font-weight:800;cursor:pointer}#msg{margin-top:20px;color:#4ade80}@media(max-width:700px){h1{font-size:42px}.panel{grid-template-columns:1fr}}
+*{box-sizing:border-box}body{margin:0;background:#f5f9ff;color:#10233f;font-family:"Noto Sans SC","Microsoft YaHei",sans-serif}.layout{display:flex;min-height:100vh}.side{width:230px;background:#fff;border-right:1px solid #dbe7f5;padding:28px}.logo{font-size:26px;font-weight:900;color:#2563eb;margin-bottom:35px}.nav div{padding:14px;border-radius:12px;margin:8px 0;color:#42566f}.nav .active{background:#2563eb;color:white}.main{flex:1;padding:32px}.hero{background:linear-gradient(135deg,#eaf3ff,#fff);border-radius:28px;padding:50px;display:flex;justify-content:space-between;overflow:hidden}.hero h1{font-size:58px;line-height:1;margin:0 0 20px}.hero span{color:#2563eb}.btn{padding:14px 26px;border-radius:14px;border:0;background:#2563eb;color:white;font-weight:700}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:24px 0}.card,.project,.template{background:white;border:1px solid #dbe7f5;border-radius:22px;padding:22px;box-shadow:0 10px 30px rgba(40,80,140,.06)}.num{font-size:32px;font-weight:900;color:#2563eb}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.project{height:170px}.template{height:120px}@media(max-width:900px){.side{display:none}.cards,.grid{grid-template-columns:1fr 1fr}.hero h1{font-size:40px}}
 </style>
 </head>
 <body>
-<div class="app">
-<section class="card">
-<div class="tag">PROJECT6 V3 DEPLOY TEST</div>
-<h1>AI Video<br><span>Creative Studio</span></h1>
-<p class="desc">这是 Project6 自动部署第三版测试页面。用于验证 GitHub → 宝塔 → 服务器链路是否正常。</p>
-<div class="panel">
-<div class="item"><small>PROJECT</small><b>AI Video Workbench</b></div>
-<div class="item"><small>DEPLOY</small><b>Baota + GitHub</b></div>
-<div class="item"><small>STATUS</small><b>Waiting Test</b></div>
-</div>
-<button class="btn" onclick="test()">运行页面测试</button>
-<div id="msg"></div>
-</section>
-</div>
-<script>function test(){document.getElementById('msg').innerHTML='✓ Project6 前端运行正常 '+new Date().toLocaleString('zh-CN')}</script>
+<div class="layout">
+<aside class="side"><div class="logo">▶ Project6</div><div class="nav"><div class="active">首页</div><div>项目中心</div><div>视频工作台</div><div>模板库</div><div>素材管理</div><div>知识库</div><div>AI工具</div><div>成品视频</div><div>设置</div></div></aside>
+<main class="main">
+<section class="hero"><div><h1>AI Video<br><span>Studio</span></h1><p>用 AI 创造更好的视频内容</p><button class="btn">新建视频项目</button></div><div style="font-size:80px">🎬</div></section>
+<section class="cards"><div class="card"><small>项目数量</small><div class="num">12</div></div><div class="card"><small>模板数量</small><div class="num">28</div></div><div class="card"><small>素材数量</small><div class="num">356</div></div><div class="card"><small>成品视频</small><div class="num">8</div></div></section>
+<h2>最近项目</h2><section class="grid"><div class="project">P0025<br>RAG知识讲解<br>制作中</div><div class="project">P0024<br>认知觉醒分享<br>已完成</div><div class="project">P0023<br>AI Agent介绍<br>制作中</div><div class="project">P0022<br>财经知识科普<br>草稿</div></section>
+<h2>推荐模板</h2><section class="grid"><div class="template">科技知识风</div><div class="template">数据可视化</div><div class="template">产品介绍</div><div class="template">电影质感</div></section>
+</main></div>
 </body>
 </html>
