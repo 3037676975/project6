@@ -1,0 +1,25 @@
+{
+  "id": "P0025",
+  "slug": "rag-intro",
+  "title": "什么是 RAG",
+  "description": "用 2 章 10 个 Garden Step 解释 RAG 的基本流程、价值和边界。",
+  "theme": "blueprint",
+  "themeNameZh": "蓝图",
+  "chapters": 2,
+  "steps": 10,
+  "cover": "./cover.svg",
+  "voice": "zh-TW-YunJheNeural",
+  "voiceLabel": "ETG1 / Edge 云哲 · 台湾男声",
+  "engine": "edge",
+  "speed": 1.1,
+  "audioProvider": "project5",
+  "audioMap": "./audio-map.json",
+  "audioStorage": "external-url",
+  "stage": {
+    "width": 1920,
+    "height": 1080,
+    "aspectRatio": "16:9"
+  },
+  "status": "visual-ready-audio-pending",
+  "phase": 1
+}
