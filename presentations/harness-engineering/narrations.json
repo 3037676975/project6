@@ -1,6 +1,14 @@
 {
   "chapter":"01-harness-engineering",
-  "voice":{"engine":"edge","voice":"zh-TW-YunJheNeural","speed":1.10,"label":"ETG1 / Edge 云哲 · 台湾男声"},
+  "voice":{
+    "provider":"edge-tts",
+    "client":"rany2/edge-tts",
+    "voice":"zh-TW-YunJheNeural",
+    "locale":"zh-TW",
+    "rate":"+0%",
+    "speed":1.0,
+    "label":"Edge 云哲 · 台湾男声 · 1.0×"
+  },
   "steps":[
     "为什么同样一个模型，放到不同团队里，效果会差这么多？有人能稳定跑任务，有人却总在最后一步翻车。真正拉开差距的，往往不是模型本身。",
     "很多人第一反应会去调模型、改提示词、补 RAG。可这些都做完以后，系统还是可能不稳定，因为问题可能根本不在模型里面。",
