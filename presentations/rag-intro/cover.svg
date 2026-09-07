@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
+  <title id="title">什么是 RAG</title>
+  <desc id="desc">Project6 Garden Blueprint 风格实验视频封面</desc>
+  <rect width="1920" height="1080" fill="#0e1a2e"/>
+  <g stroke="#4dd2ff" stroke-opacity=".10" stroke-width="1">
+    <path d="M0 60H1920M0 120H1920M0 180H1920M0 240H1920M0 300H1920M0 360H1920M0 420H1920M0 480H1920M0 540H1920M0 600H1920M0 660H1920M0 720H1920M0 780H1920M0 840H1920M0 900H1920M0 960H1920M0 1020H1920"/>
+    <path d="M60 0V1080M120 0V1080M180 0V1080M240 0V1080M300 0V1080M360 0V1080M420 0V1080M480 0V1080M540 0V1080M600 0V1080M660 0V1080M720 0V1080M780 0V1080M840 0V1080M900 0V1080M960 0V1080M1020 0V1080M1080 0V1080M1140 0V1080M1200 0V1080M1260 0V1080M1320 0V1080M1380 0V1080M1440 0V1080M1500 0V1080M1560 0V1080M1620 0V1080M1680 0V1080M1740 0V1080M1800 0V1080M1860 0V1080"/>
+  </g>
+  <rect x="72" y="72" width="1776" height="936" fill="none" stroke="#4dd2ff" stroke-opacity=".32" stroke-width="2" stroke-dasharray="14 14"/>
+  <text x="130" y="165" fill="#4dd2ff" font-family="monospace" font-size="28" letter-spacing="7">PROJECT6 / GARDEN EXPERIMENT 01</text>
+  <text x="130" y="520" fill="#4dd2ff" font-family="monospace" font-size="250" font-weight="500">RAG</text>
+  <line x1="130" y1="590" x2="1020" y2="590" stroke="#4dd2ff" stroke-width="4" stroke-dasharray="18 16"/>
+  <text x="130" y="700" fill="#d6e5ff" font-family="sans-serif" font-size="92" font-weight="700">什么是检索增强生成？</text>
+  <g transform="translate(1170 300)">
+    <rect x="0" y="0" width="250" height="160" fill="#142441" stroke="#4dd2ff" stroke-opacity=".55" stroke-width="2"/>
+    <rect x="330" y="0" width="250" height="160" fill="#142441" stroke="#4dd2ff" stroke-opacity=".55" stroke-width="2"/>
+    <rect x="165" y="285" width="250" height="160" fill="#142441" stroke="#4dd2ff" stroke-opacity=".55" stroke-width="2"/>
+    <path d="M250 80H330M125 160V255H290V285M455 160V255H290" fill="none" stroke="#4dd2ff" stroke-width="4"/>
+    <text x="125" y="92" text-anchor="middle" fill="#d6e5ff" font-family="sans-serif" font-size="34">检索</text>
+    <text x="455" y="92" text-anchor="middle" fill="#d6e5ff" font-family="sans-serif" font-size="34">上下文</text>
+    <text x="290" y="380" text-anchor="middle" fill="#d6e5ff" font-family="sans-serif" font-size="34">生成</text>
+  </g>
+</svg>
