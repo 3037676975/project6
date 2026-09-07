@@ -1,54 +1,375 @@
 (() => {
-'use strict';
-const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
-const esc=(v='')=>String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-const KEY_PROJECTS='project6.projects.v2', KEY_SETTINGS='project6.settings.v1';
-const state={seed:[],templates:[],projects:[],sceneIndex:0,playing:false,timer:null,search:''};
-const fallbackProjects=[
-{id:'P0025',title:'什么是 RAG',category:'AI知识讲解',status:'制作中',voice:'ETG1',engine:'garden',theme:'THEME-TECH-001'},
-{id:'P0024',title:'AI Agent 入门',category:'技术科普',status:'规划中',voice:'ETG1',engine:'garden',theme:'THEME-TECH-001'},
-{id:'P0023',title:'机器学习三大范式',category:'知识讲解',status:'已完成',voice:'ETG1',engine:'garden',theme:'soft-blue'}];
-const fallbackTemplates=[
-{id:'HOOK-001',name:'3秒冲突开场',type:'hook',description:'用问题、反常识和答案承诺快速抓住注意力。'},
-{id:'SCENE-FLOW-001',name:'流程图动画',type:'scene',description:'适合 RAG、Agent 与业务流程讲解。'},
-{id:'SCENE-COMPARE-001',name:'对比卡片',type:'scene',description:'适合方案、概念和前后状态对比。'},
-{id:'SCENE-SUMMARY-001',name:'总结卡片',type:'scene',description:'结尾用 3 个关键点强化记忆。'},
-{id:'THEME-TECH-001',name:'科技蓝主题',type:'theme',description:'蓝白渐变与轻玻璃感，适合 AI 技术内容。'},
-{id:'THEME-FINANCE-001',name:'财经数据主题',type:'theme',description:'突出数字、趋势和结构化信息。'}];
-function read(k,f){try{return JSON.parse(localStorage.getItem(k))||f}catch{return f}}
-function write(k,v){localStorage.setItem(k,JSON.stringify(v))}
-function toast(t){const e=$('#toast');if(!e)return;e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2200)}
-function route(){const raw=(location.hash||'#/dashboard').replace(/^#\/?/,'');const [path,q='']=raw.split('?');return{path:path||'dashboard',params:new URLSearchParams(q)}}
-function go(p){location.hash='#/'+p}
-async function getJson(path,fallback){try{const r=await fetch(path,{cache:'no-store'});if(!r.ok)throw 0;return await r.json()}catch{return fallback}}
-function buildScenes(p){return[
-{id:'S01',type:'title',name:'开场 Hook',title:p.title,body:p.brief||'用一个问题快速进入主题',duration:5},
-{id:'S02',type:'flow',name:'核心流程',title:'核心机制是怎样运转的？',body:'用户问题|检索 / 分析|组织信息|输出结果',duration:10},
-{id:'S03',type:'compare',name:'关键对比',title:'为什么这个方法更有效？',body:'传统方式|信息容易过时|当前方案|结构清晰、可追踪',duration:8},
-{id:'S04',type:'summary',name:'总结 CTA',title:'记住这 3 个重点',body:'先理解问题|再看工作流程|最后理解适用边界',duration:8}];}
-function normalize(p){const x={theme:'THEME-TECH-001',voice:'ETG1',engine:'garden',status:'规划中',...p};x.sceneData=x.sceneData?.length?x.sceneData:buildScenes(x);x.scenes=x.sceneData.length;return x}
-function rebuild(){const map=new Map(state.seed.map(x=>[x.id,normalize(x)]));read(KEY_PROJECTS,[]).forEach(x=>map.set(x.id,normalize(x)));state.projects=[...map.values()].sort((a,b)=>(b.updatedAt||b.createdAt||'').localeCompare(a.updatedAt||a.createdAt||'')||b.id.localeCompare(a.id))}
-function persist(p){const list=read(KEY_PROJECTS,[]),i=list.findIndex(x=>x.id===p.id),next={...p,scenes:p.sceneData.length,updatedAt:new Date().toISOString()};if(i>=0)list[i]=next;else list.push(next);write(KEY_PROJECTS,list);rebuild();return next}
-function project(id){return state.projects.find(x=>x.id===id)||state.projects[0]}
-function statusClass(s){return s==='已完成'?'status-done':s==='制作中'?'status-progress':'status-plan'}
-function icon(type){return({hook:'⚡',scene:'◫',theme:'✦'})[type]||'◈'}
-function setNav(path){const active=path==='create'?'projects':path;$$('[data-route]').forEach(a=>a.classList.toggle('active',a.dataset.route===active));const title={dashboard:'工作台',projects:'项目中心',create:'创建视频',studio:'视频工作台',templates:'模板库',assets:'素材库',lab:'开源实验室',settings:'设置'}[path]||'Project6';$('#page-title').textContent=title;document.title=title+' · Project6'}
-function projectCard(p){return `<article class="card project-card"><div class="project-cover"><span class="project-id">${esc(p.id)} · ${esc(p.category)}</span><div class="project-title">${esc(p.title)}</div></div><div class="card-pad"><span class="status ${statusClass(p.status)}">${esc(p.status)}</span><div class="project-meta"><span>${p.sceneData.length} Scenes</span><span>${esc(p.engine)}</span></div><div class="toolbar" style="margin-top:14px"><button class="btn btn-soft open-studio" data-id="${esc(p.id)}">进入 Studio</button></div></div></article>`}
-function templateCard(t){return `<article class="card template-card" data-template="${esc(t.id)}"><div class="template-icon">${icon(t.type)}</div><h3>${esc(t.name)}</h3><p>${esc(t.description)}</p><div class="tag-row"><span class="tag">${esc(t.type.toUpperCase())}</span><span class="tag">可复用</span></div></article>`}
-function dashboard(){const done=state.projects.filter(x=>x.status==='已完成').length,doing=state.projects.filter(x=>x.status==='制作中').length;return `<section class="hero"><div><span class="eyebrow">✦ PROJECT6 · PERSONAL AI VIDEO OS</span><h1>AI Video<br><span>Creative Studio</span></h1><p>把脚本、分镜、Scene、TTS、模板与网页动画统一到一个工作台。V1 先把低成本、可重复、可部署的生产流程做扎实。</p><div class="hero-actions"><button class="btn btn-primary" id="hero-create">＋ 新建视频项目</button><button class="btn btn-ghost" id="hero-templates">浏览模板</button></div></div><div class="hero-visual"><div class="orbit"><div class="orbit-center">▶</div><div class="orbit-chip">Garden Scenes</div><div class="orbit-chip">Project5 TTS</div><div class="orbit-chip">HTML / SVG</div><div class="orbit-chip">Local Render</div></div></div></section><section class="stats"><div class="stat-card"><div class="stat-label">视频项目</div><div class="stat-value">${state.projects.length}</div><div class="stat-meta">${doing} 个制作中</div></div><div class="stat-card"><div class="stat-label">模板资产</div><div class="stat-value">${state.templates.length}</div><div class="stat-meta">持续沉淀方法论</div></div><div class="stat-card"><div class="stat-label">已完成</div><div class="stat-value">${done}</div><div class="stat-meta">可复制生产结构</div></div><div class="stat-card"><div class="stat-label">默认声音</div><div class="stat-value" style="font-size:22px">ETG1</div><div class="stat-meta">Project5 / Edge</div></div></section><div class="section-head"><div><h2>最近项目</h2><p>继续上次的脚本、分镜与 Scene。</p></div><button class="btn btn-ghost" id="all-projects">查看全部</button></div><section class="grid grid-4">${state.projects.slice(0,4).map(projectCard).join('')}</section><div class="section-head"><div><h2>推荐模板</h2><p>保存生产规律，不保存重复劳动。</p></div><button class="btn btn-ghost" id="all-templates">模板库</button></div><section class="grid grid-3">${state.templates.slice(0,3).map(templateCard).join('')}</section><div class="section-head"><div><h2>生产管线</h2><p>先静态、后服务；先结构、后 AI。</p></div></div><section class="panel"><div class="panel-body"><div class="pipeline"><div class="pipeline-step"><b>1. Create</b><small>项目参数 + 默认分镜</small></div><div class="pipeline-step"><b>2. Studio</b><small>Scene + Timeline</small></div><div class="pipeline-step"><b>3. Voice</b><small>Project5 TTS（待代理）</small></div><div class="pipeline-step"><b>4. Render</b><small>WebMotion / HyperFrames</small></div></div></div></section>`}
-function projectsView(){const q=state.search.toLowerCase(),items=state.projects.filter(p=>!q||[p.title,p.id,p.category,p.status].join(' ').toLowerCase().includes(q));return `<div class="section-head" style="margin-top:0"><div><h2>视频项目</h2><p>项目是最小生产单元：脚本 + Scene + 声音 + 主题。</p></div><button class="btn btn-primary" id="projects-create">＋ 新建项目</button></div><section class="panel"><div class="panel-body"><div class="toolbar"><input id="project-search" class="input" style="max-width:340px" placeholder="搜索标题 / ID / 状态" value="${esc(state.search)}"><select id="project-filter" class="select" style="max-width:170px"><option value="">全部状态</option><option>制作中</option><option>规划中</option><option>已完成</option></select></div></div></section><section class="grid grid-4" style="margin-top:16px">${items.length?items.map(projectCard).join(''):'<div class="card empty" style="grid-column:1/-1"><strong>没有匹配项目</strong>换一个关键词试试。</div>'}</section>`}
-function createView(params){const tpl=state.templates.find(x=>x.id===params.get('template'));return `<div class="section-head" style="margin-top:0"><div><h2>创建新视频</h2><p>先建立结构化项目，再进入 Studio；AI 自动生成下一阶段接入。</p></div></div><div class="create-layout"><form class="panel" id="create-form"><div class="panel-head"><b>项目设置</b><span class="status status-plan">LOCAL DRAFT</span></div><div class="panel-body"><div class="form-grid"><div class="field field-full"><label>视频标题</label><input class="input" name="title" required placeholder="例如：什么是 RAG？"></div><div class="field"><label>内容类型</label><select class="select" name="category"><option>AI知识讲解</option><option>技术科普</option><option>财经知识</option><option>产品教程</option><option>读书分享</option></select></div><div class="field"><label>视觉主题</label><select class="select" name="theme"><option value="THEME-TECH-001">科技蓝</option><option value="THEME-FINANCE-001">财经数据</option><option value="soft-blue">柔和知识风</option></select></div><div class="field"><label>声音</label><select class="select" name="voice"><option value="ETG1">ETG1 · Edge 云哲</option><option value="none">暂不配音</option></select></div><div class="field"><label>视频引擎</label><select class="select" name="engine"><option value="garden">Garden / HTML Scenes</option><option value="native">Project6 Native</option></select></div><div class="field"><label>目标时长</label><select class="select" name="duration"><option value="60">1 分钟</option><option value="180" selected>3 分钟</option><option value="300">5 分钟</option></select></div><div class="field"><label>状态</label><select class="select" name="status"><option>规划中</option><option>制作中</option></select></div><div class="field field-full"><label>内容目标 / 提示</label><textarea class="textarea" name="brief" placeholder="想讲清楚什么？目标观众是谁？"></textarea></div></div><div class="toolbar" style="margin-top:18px"><button class="btn btn-primary">创建项目并进入 Studio</button><button class="btn btn-ghost" type="button" id="cancel-create">取消</button></div></div></form><aside><div class="preview-note"><h3>创建后会得到什么？</h3><p>自动建立 4 个基础 Scene：开场、核心流程、关键对比、总结。数据先保存在浏览器 LocalStorage，可立即编辑。</p></div><div class="notice" style="margin-top:14px">公开静态前端不保存 API Key；Project5 与 AI Gateway 会通过后端代理接入。</div>${tpl?`<div class="preview-note" style="margin-top:14px"><h3>已选模板</h3><p>${esc(tpl.name)} · ${esc(tpl.description)}</p></div>`:''}</aside></div>`}
-function preview(s,p){if(s.type==='flow'){const n=String(s.body||'输入|处理|输出').split('|');return `<div class="stage-scene"><span class="stage-label">${esc(p.id)} · FLOW</span><div class="stage-title">${esc(s.title)}</div><div class="flow-row">${n.map((x,i)=>`${i?'<span class="flow-arrow">→</span>':''}<span class="flow-node">${esc(x)}</span>`).join('')}</div></div>`}if(s.type==='compare'){const n=String(s.body).split('|');return `<div class="stage-scene"><span class="stage-label">COMPARE</span><div class="stage-title">${esc(s.title)}</div><div class="flow-row"><span class="flow-node">${esc(n[0])}<br><small>${esc(n[1])}</small></span><span class="flow-arrow">VS</span><span class="flow-node">${esc(n[2])}<br><small>${esc(n[3])}</small></span></div></div>`}if(s.type==='summary'){return `<div class="stage-scene"><span class="stage-label">SUMMARY</span><div class="stage-title">${esc(s.title)}</div><div class="flow-row">${String(s.body).split('|').map((x,i)=>`<span class="flow-node">0${i+1} · ${esc(x)}</span>`).join('')}</div></div>`}return `<div class="stage-scene"><span class="stage-label">PROJECT6 · ${esc(p.category)}</span><div class="stage-title">${esc(s.title||p.title)}</div><div class="stage-sub">${esc(s.body)}</div></div>`}
-function studioView(params){const p=project(params.get('id'));if(!p)return '<div class="card empty"><strong>还没有项目</strong>先创建一个视频项目。</div>';const scenes=p.sceneData;state.sceneIndex=Math.max(0,Math.min(state.sceneIndex,scenes.length-1));const s=scenes[state.sceneIndex];return `<div class="section-head" style="margin-top:0"><div><h2>${esc(p.title)}</h2><p>${esc(p.id)} · ${esc(p.category)} · ${esc(p.engine)}</p></div><div class="toolbar"><button class="btn btn-ghost" id="studio-back">项目中心</button><button class="btn btn-primary" id="save-project">保存修改</button></div></div><div class="studio-layout"><section class="panel scene-list-panel"><div class="panel-head"><b>Scenes</b><small>${scenes.length} 个</small></div><div class="scene-list">${scenes.map((x,i)=>`<div class="scene-item ${i===state.sceneIndex?'active':''}" data-index="${i}"><b>${String(i+1).padStart(2,'0')} · ${esc(x.name)}</b><small>${esc(x.type)} · ${x.duration}s</small></div>`).join('')}<button class="btn btn-ghost" id="add-scene" style="width:100%;margin-top:8px">＋ 添加 Scene</button></div></section><section class="stage-wrap"><div class="stage">${preview(s,p)}</div><div class="toolbar" style="justify-content:center;margin-top:12px"><button class="btn btn-ghost" id="prev-scene">◀</button><button class="btn btn-primary" id="play-scenes">${state.playing?'暂停':'▶ 预览播放'}</button><button class="btn btn-ghost" id="next-scene">▶</button><button class="btn btn-soft" id="local-render">导出计划</button></div><div class="timeline"><div class="timeline-head"><span>Timeline · ${scenes.reduce((n,x)=>n+Number(x.duration||0),0)}s</span><span>HTML / SVG Track</span></div><div class="timeline-track">${scenes.map((x,i)=>`<div class="timeline-segment ${i===state.sceneIndex?'active':''}" data-index="${i}" style="flex:${Math.max(1,x.duration)}">${String(i+1).padStart(2,'0')} ${esc(x.name)}<br>${x.duration}s</div>`).join('')}</div></div></section><aside class="panel inspector"><div class="panel-head"><b>Scene Inspector</b><span class="tag">${esc(s.type)}</span></div><div class="inspector-section"><div class="field"><label>Scene 名称</label><input class="input scene-field" data-key="name" value="${esc(s.name)}"></div><div class="field"><label>主标题</label><input class="input scene-field" data-key="title" value="${esc(s.title)}"></div><div class="field"><label>内容（用 | 分隔流程/要点）</label><textarea class="textarea scene-field" data-key="body">${esc(s.body)}</textarea></div><div class="field"><label>时长（秒）</label><input type="number" min="1" max="60" class="input scene-field" data-key="duration" value="${s.duration}"></div></div><div class="inspector-section"><b style="font-size:13px">Pipeline</b><div class="pipeline" style="grid-template-columns:1fr;margin-top:10px"><div class="pipeline-step"><b>🎙 ${esc(p.voice)}</b><small>Project5 TTS · 待代理</small></div><div class="pipeline-step"><b>🎨 ${esc(p.theme)}</b><small>Theme token</small></div><div class="pipeline-step"><b>⚙ ${esc(p.engine)}</b><small>Scene renderer</small></div></div></div></aside></div>`}
-function templatesView(){return `<div class="section-head" style="margin-top:0"><div><h2>模板资产库</h2><p>模板保存“怎么做视频”，不是保存成品。</p></div><button class="btn btn-primary" id="template-create-project">＋ 用模板创建项目</button></div><div class="toolbar" style="margin-bottom:16px"><button class="btn btn-soft template-filter" data-type="">全部</button><button class="btn btn-ghost template-filter" data-type="hook">开场</button><button class="btn btn-ghost template-filter" data-type="scene">Scene</button><button class="btn btn-ghost template-filter" data-type="theme">Theme</button></div><section class="grid grid-3">${state.templates.map(templateCard).join('')}</section>`}
-function assetsView(){return `<div class="section-head" style="margin-top:0"><div><h2>素材库</h2><p>服务器保存必要素材，不把最终 MP4 当云盘。</p></div></div><section class="grid grid-4"><div class="card card-pad"><div class="template-icon">▧</div><h3>图片</h3><p style="color:var(--text)">封面、插图、背景。</p></div><div class="card card-pad"><div class="template-icon">◇</div><h3>SVG / 图形</h3><p style="color:var(--text)">流程图、数据图、知识卡片。</p></div><div class="card card-pad"><div class="template-icon">♫</div><h3>Audio</h3><p style="color:var(--text)">TTS、音效和 BGM 引用。</p></div><div class="card card-pad"><div class="template-icon">Aa</div><h3>Design Tokens</h3><p style="color:var(--text)">字体、颜色、圆角与动效。</p></div></section><div class="notice" style="margin-top:18px">默认策略：HTML / CSS / SVG / 图片 / 必要音频在服务器；最终视频本地导出。</div>`}
-function labView(){const labs=[['🌱','Garden Skills','Scene / Theme / Skill 组织方式','https://github.com/ConardLi/garden-skills'],['H','HyperFrames','Agent-first HTML → Video','https://github.com/heygen-com/hyperframes'],['W','WebMotion','浏览器 WebCodecs 本地导出','https://github.com/superhq-ai/webmotion'],['M','Motion Canvas','知识讲解矢量动画与配音同步','https://github.com/motion-canvas/motion-canvas'],['K','Keyloom','Scene 模板库与 Studio 结构','https://github.com/theexperiencecompany/keyloom'],['✂','OpenCut','时间轴、轨道和编辑器交互','https://github.com/opencut-app/OpenCut']];return `<div class="section-head" style="margin-top:0"><div><h2>开源实验室</h2><p>吸收架构与方法，不把所有项目硬塞进来。</p></div></div><section class="grid grid-3">${labs.map(x=>`<article class="card lab-card"><div class="lab-logo">${x[0]}</div><div><h3>${x[1]}</h3><p>${x[2]}</p><a href="${x[3]}" target="_blank" rel="noopener">查看源码 ↗</a></div></article>`).join('')}</section><div class="notice" style="margin-top:18px">当前学习顺序：Garden → Motion Canvas → WebMotion / HyperFrames → OpenCut。</div>`}
-function settingsView(){const s=read(KEY_SETTINGS,{voice:'ETG1',project5:'http://186.244.245.177:28442/',render:'browser'});return `<div class="section-head" style="margin-top:0"><div><h2>工作台设置</h2><p>只保存非敏感配置，API Key 不写入公开前端。</p></div></div><form class="panel" id="settings-form"><div class="panel-body"><div class="form-grid"><div class="field"><label>默认声音</label><select class="select" name="voice"><option value="ETG1" ${s.voice==='ETG1'?'selected':''}>ETG1 · Edge 云哲</option><option value="none">无</option></select></div><div class="field"><label>默认渲染方式</label><select class="select" name="render"><option value="browser">浏览器本地渲染</option><option value="record">MediaRecorder</option></select></div><div class="field field-full"><label>Project5 Base URL</label><input class="input" name="project5" value="${esc(s.project5||'')}"></div></div><div class="notice" style="margin-top:16px">Project5 Bearer Key 不能安全放在静态站点。下一阶段增加轻量 server-side proxy。</div><button class="btn btn-primary" style="margin-top:16px">保存设置</button></div></form>`}
-function stopPlayback(repaint=false){clearTimeout(state.timer);state.timer=null;const old=state.playing;state.playing=false;if(repaint&&old)render()}
-function startPlayback(p){stopPlayback();state.playing=true;render();const tick=()=>{if(!state.playing)return;const current=project(p.id);if(state.sceneIndex>=current.sceneData.length-1){stopPlayback(true);toast('预览完成');return}state.sceneIndex++;render();state.timer=setTimeout(tick,Math.min(Math.max(current.sceneData[state.sceneIndex].duration*250,1000),3000))};state.timer=setTimeout(tick,1400)}
-function bindCommon(){$$('.open-studio').forEach(b=>b.onclick=()=>go('studio?id='+encodeURIComponent(b.dataset.id)));$$('.template-card').forEach(c=>c.ondblclick=()=>go('create?template='+encodeURIComponent(c.dataset.template)))}
-function bind(path,params){bindCommon();if(path==='dashboard'){heroCreate.onclick=()=>go('create');heroTemplates.onclick=()=>go('templates');$('#all-projects').onclick=()=>go('projects');$('#all-templates').onclick=()=>go('templates')}if(path==='projects'){projectsCreate.onclick=()=>go('create');const q=$('#project-search'),f=$('#project-filter'),apply=()=>$$('.project-card').forEach(c=>c.style.display=((!q.value||c.textContent.toLowerCase().includes(q.value.toLowerCase()))&&(!f.value||c.textContent.includes(f.value)))?'':'none');q.oninput=apply;f.onchange=apply}if(path==='create'){cancelCreate.onclick=()=>go('projects');$('#create-form').onsubmit=e=>{e.preventDefault();const fd=new FormData(e.currentTarget),p={id:'P'+Date.now().toString().slice(-6),title:String(fd.get('title')).trim(),category:fd.get('category'),theme:fd.get('theme'),voice:fd.get('voice'),engine:fd.get('engine'),duration:Number(fd.get('duration')),status:fd.get('status'),brief:String(fd.get('brief')).trim(),createdAt:new Date().toISOString()};p.sceneData=buildScenes(p);persist(p);toast('项目已创建');go('studio?id='+p.id)}}if(path==='studio'){const p=project(params.get('id')),scenes=p?.sceneData;if(!p)return;const jump=i=>{state.sceneIndex=Math.max(0,Math.min(i,scenes.length-1));render()};$$('.scene-item,.timeline-segment').forEach(x=>x.onclick=()=>jump(Number(x.dataset.index)));$('#prev-scene').onclick=()=>jump(state.sceneIndex-1);$('#next-scene').onclick=()=>jump(state.sceneIndex+1);$('#studio-back').onclick=()=>go('projects');$('#save-project').onclick=()=>{persist(p);toast('已保存到本机浏览器')};$('#add-scene').onclick=()=>{scenes.push({id:'S'+String(scenes.length+1).padStart(2,'0'),type:'title',name:'新 Scene',title:'新的画面',body:'在右侧修改内容',duration:5});persist(p);state.sceneIndex=scenes.length-1;render()};$$('.scene-field').forEach(x=>x.onchange=()=>{const s=scenes[state.sceneIndex],k=x.dataset.key;s[k]=k==='duration'?Math.max(1,Math.min(60,Number(x.value)||1)):x.value;persist(p);render()});$('#local-render').onclick=()=>toast('本地 MP4 导出将在 WebMotion / HyperFrames 接入后开放');$('#play-scenes').onclick=()=>state.playing?stopPlayback(true):startPlayback(p)}if(path==='templates'){templateCreateProject.onclick=()=>go('create');$$('.template-filter').forEach(b=>b.onclick=()=>{const type=b.dataset.type;$$('.template-card').forEach(c=>{const t=state.templates.find(x=>x.id===c.dataset.template);c.style.display=!type||t.type===type?'':'none'});$$('.template-filter').forEach(x=>x.className='btn '+(x===b?'btn-soft':'btn-ghost'))})}if(path==='settings'){$('#settings-form').onsubmit=e=>{e.preventDefault();const fd=new FormData(e.currentTarget);write(KEY_SETTINGS,{voice:fd.get('voice'),render:fd.get('render'),project5:fd.get('project5')});toast('设置已保存')}}}
-function render(){const r=route();setNav(r.path);const root=$('#app-content');if(r.path==='dashboard')root.innerHTML=dashboard();else if(r.path==='projects')root.innerHTML=projectsView();else if(r.path==='create')root.innerHTML=createView(r.params);else if(r.path==='studio')root.innerHTML=studioView(r.params);else if(r.path==='templates')root.innerHTML=templatesView();else if(r.path==='assets')root.innerHTML=assetsView();else if(r.path==='lab')root.innerHTML=labView();else if(r.path==='settings')root.innerHTML=settingsView();else return go('dashboard');bind(r.path,r.params)}
-async function boot(){const [projects,templates]=await Promise.all([getJson('./data/projects.json',fallbackProjects),getJson('./data/templates.json',fallbackTemplates)]);state.seed=projects;state.templates=templates.length?templates:fallbackTemplates;rebuild();window.addEventListener('hashchange',()=>{state.sceneIndex=0;stopPlayback();render()});$('#new-project-btn').onclick=()=>go('create');$('#global-search').onkeydown=e=>{if(e.key==='Enter'){state.search=e.currentTarget.value.trim();go('projects')}};render()}
-boot();
+  'use strict';
+
+  const KEY_PROJECTS = 'project6.projects.v2';
+  const KEY_SETTINGS = 'project6.settings.v2';
+  const state = {
+    seed: [], projects: [], templates: [], themes: [],
+    sceneIndex: 0, playing: false, timer: null, search: ''
+  };
+
+  const $ = (s, root = document) => root.querySelector(s);
+  const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+  const esc = (v = '') => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const read = (key, fallback) => { try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; } catch { return fallback; } };
+  const write = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+  const go = path => { location.hash = '#/' + path; };
+
+  const fallbackThemes = [
+    {id:'THEME-TECH-001',name:'Tech Blue',nameZh:'科技蓝',mood:'clean, intelligent, calm',bestFor:['AI知识讲解'],tokens:{stageBg:'#07152f',surface:'#102447',surfaceSoft:'#18345f',text:'#f5f9ff',muted:'#a9bddb',accent:'#74a7ff',accent2:'#78e0ff',line:'rgba(255,255,255,.16)',radius:'24px',shadow:'0 28px 80px rgba(0,18,55,.32)',font:'Noto Sans SC, sans-serif'}},
+    {id:'THEME-NEWS-001',name:'Newsroom',nameZh:'编辑部',mood:'editorial, dense, credible',bestFor:['财经知识'],tokens:{stageBg:'#f4f0e7',surface:'#fffdf7',surfaceSoft:'#e7e0d3',text:'#171717',muted:'#6e675d',accent:'#df3b2f',accent2:'#1d1d1d',line:'rgba(23,23,23,.18)',radius:'4px',shadow:'0 20px 55px rgba(47,39,28,.14)',font:'Georgia, serif'}},
+    {id:'THEME-CINEMA-001',name:'Cinematic',nameZh:'电影感',mood:'dramatic, premium, spacious',bestFor:['读书分享'],tokens:{stageBg:'#090a0d',surface:'#15171c',surfaceSoft:'#24262d',text:'#f3efe6',muted:'#a9a49b',accent:'#d7b675',accent2:'#8c6a3e',line:'rgba(232,217,189,.17)',radius:'10px',shadow:'0 34px 90px rgba(0,0,0,.48)',font:'Noto Serif SC, serif'}},
+    {id:'THEME-FINANCE-001',name:'Market Desk',nameZh:'财经数据',mood:'precise, analytical, high-signal',bestFor:['财经知识'],tokens:{stageBg:'#071b1b',surface:'#0f2d2b',surfaceSoft:'#163d39',text:'#f2fff9',muted:'#a7c8bf',accent:'#67e6a4',accent2:'#f1c75b',line:'rgba(137,235,190,.18)',radius:'14px',shadow:'0 28px 78px rgba(0,42,35,.38)',font:'Inter, Noto Sans SC, sans-serif'}},
+    {id:'THEME-MINIMAL-001',name:'Minimal Paper',nameZh:'极简白',mood:'quiet, minimal, elegant',bestFor:['产品教程'],tokens:{stageBg:'#f7f7f5',surface:'#ffffff',surfaceSoft:'#ececeb',text:'#18181a',muted:'#737478',accent:'#3159d9',accent2:'#1c1c1e',line:'rgba(20,20,22,.12)',radius:'18px',shadow:'0 20px 60px rgba(21,25,35,.10)',font:'Noto Sans SC, sans-serif'}}
+  ];
+
+  const fallbackTemplates = [
+    {id:'STRUCT-AI-001',name:'3分钟 AI 知识讲解',type:'structure',category:'AI知识讲解',description:'Hook → 概念 → 流程 → 对比 → 总结',sceneTypes:['hook','concept','flow','compare','summary'],recommendedTheme:'THEME-TECH-001',duration:180},
+    {id:'STRUCT-FIN-001',name:'财经数据拆解',type:'structure',category:'财经知识',description:'结论 → 数字 → 趋势 → 原因 → 风险 → 总结',sceneTypes:['hook','stat','flow','compare','risk','summary'],recommendedTheme:'THEME-FINANCE-001',duration:180},
+    {id:'STRUCT-BOOK-001',name:'读书精读',type:'structure',category:'读书分享',description:'问题 → 观点 → 案例 → 金句 → 总结',sceneTypes:['hook','concept','quote','compare','summary'],recommendedTheme:'THEME-SOFT-001',duration:300},
+    {id:'SCENE-FLOW-001',name:'流程图动画',type:'scene',sceneType:'flow',description:'适合机制、工作流与 RAG 流程。'},
+    {id:'SCENE-COMPARE-001',name:'对比卡片',type:'scene',sceneType:'compare',description:'左右对照概念、方案和前后状态。'},
+    {id:'SCENE-STAT-001',name:'Hero 数据卡',type:'scene',sceneType:'stat',description:'突出一个关键数字与解释。'},
+    {id:'SCENE-SUMMARY-001',name:'三点总结',type:'scene',sceneType:'summary',description:'结尾完成记忆强化。'}
+  ];
+
+  const fallbackProjects = [
+    {id:'P0025',title:'什么是 RAG',category:'AI知识讲解',status:'制作中',voice:'ETG1',engine:'garden',theme:'THEME-TECH-001',structure:'STRUCT-AI-001'},
+    {id:'P0024',title:'AI Agent 入门',category:'技术科普',status:'规划中',voice:'ETG1',engine:'garden',theme:'THEME-MINIMAL-001',structure:'STRUCT-AI-001'}
+  ];
+
+  function toast(message) {
+    const el = $('#toast'); if (!el) return;
+    el.textContent = message; el.classList.add('show');
+    clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 2200);
+  }
+
+  function route() {
+    const raw = (location.hash || '#/dashboard').replace(/^#\/?/, '');
+    const [path = 'dashboard', query = ''] = raw.split('?');
+    return {path: path || 'dashboard', params: new URLSearchParams(query)};
+  }
+
+  async function getJson(path, fallback) {
+    try { const r = await fetch(path, {cache:'no-store'}); if (!r.ok) throw new Error(r.status); return await r.json(); }
+    catch { return fallback; }
+  }
+
+  function theme(id) { return state.themes.find(t => t.id === id) || state.themes[0] || fallbackThemes[0]; }
+  function template(id) { return state.templates.find(t => t.id === id); }
+  function project(id) { return state.projects.find(p => p.id === id) || state.projects[0]; }
+  function structures() { return state.templates.filter(t => t.type === 'structure'); }
+
+  function typeDefaults(type, title, brief = '') {
+    const map = {
+      hook:{name:'开场 Hook',title:`为什么要理解「${title}」？`,body:brief || '一个问题|一个反常识|一个答案承诺',duration:5},
+      title:{name:'标题开场',title,body:brief || '今天用最短时间把这件事讲清楚',duration:5},
+      concept:{name:'核心概念',title:`先把「${title}」讲明白`,body:'一句话定义|核心作用|适用场景',duration:12},
+      flow:{name:'核心流程',title:'它到底是怎样运转的？',body:'输入问题|检索 / 分析|组织信息|输出结果',duration:12},
+      compare:{name:'关键对比',title:'和传统方式相比，有什么不同？',body:'传统方式|信息割裂|Project6 方法|结构化、可复用',duration:10},
+      stat:{name:'关键数据',title:'先看一个关键数字',body:'72%|把最重要的数据放到画面中心',duration:8},
+      quote:{name:'金句引用',title:'真正重要的不是更多信息，而是更好的结构。',body:'Project6 Notes',duration:9},
+      timeline:{name:'时间线',title:'事情是怎样一步步发生的？',body:'起点|变化|拐点|结果',duration:10},
+      step:{name:'操作步骤',title:'按照这 4 步完成',body:'准备|设置|执行|验证',duration:12},
+      risk:{name:'风险提醒',title:'最后别忽略这些边界',body:'成本|准确性|更新频率',duration:10},
+      summary:{name:'总结 CTA',title:'记住这 3 个重点',body:'先看问题|再看流程|最后看适用边界',duration:8}
+    };
+    return {...(map[type] || map.concept), type};
+  }
+
+  function scaffold(projectDraft, structureTemplate) {
+    const types = structureTemplate?.sceneTypes?.length ? structureTemplate.sceneTypes : ['hook','concept','flow','compare','summary'];
+    return types.map((type, i) => ({
+      id:'S' + String(i + 1).padStart(2, '0'),
+      animation: type === 'flow' ? 'svg-flow' : type === 'stat' ? 'number-rise' : 'reveal',
+      ...typeDefaults(type, projectDraft.title, i === 0 ? projectDraft.brief : '')
+    }));
+  }
+
+  function normalizeProject(p) {
+    const st = template(p.structure) || structures()[0];
+    const next = {...p};
+    next.theme ||= st?.recommendedTheme || 'THEME-TECH-001';
+    next.structure ||= st?.id || 'STRUCT-AI-001';
+    next.voice ||= 'ETG1'; next.engine ||= 'garden'; next.status ||= '规划中';
+    next.sceneData ||= scaffold(next, st);
+    next.scenes = next.sceneData.length;
+    return next;
+  }
+
+  function rebuild() {
+    const map = new Map(state.seed.map(p => [p.id, normalizeProject(p)]));
+    read(KEY_PROJECTS, []).forEach(p => map.set(p.id, normalizeProject(p)));
+    state.projects = [...map.values()].sort((a,b) => (b.updatedAt || b.createdAt || '').localeCompare(a.updatedAt || a.createdAt || '') || b.id.localeCompare(a.id));
+  }
+
+  function persist(p) {
+    const list = read(KEY_PROJECTS, []);
+    const next = {...p, scenes:p.sceneData?.length || 0, updatedAt:new Date().toISOString()};
+    const i = list.findIndex(x => x.id === p.id);
+    if (i >= 0) list[i] = next; else list.push(next);
+    write(KEY_PROJECTS, list); rebuild(); return next;
+  }
+
+  function setNav(path) {
+    const navPath = path === 'create' ? 'projects' : path;
+    $$('.nav-link,.mobile-nav a').forEach(a => a.classList.toggle('active', a.dataset.route === navPath));
+    const titles = {dashboard:'工作台',projects:'项目中心',create:'创建视频',studio:'视频工作台',templates:'模板库',themes:'主题系统',assets:'素材库',lab:'开源实验室',settings:'设置'};
+    $('#page-title').textContent = titles[path] || 'Project6';
+    document.title = `${titles[path] || 'Project6'} · Project6`;
+  }
+
+  function statusClass(s) { return s === '已完成' ? 'status-done' : s === '制作中' ? 'status-progress' : 'status-plan'; }
+  function iconFor(type) { return ({structure:'⌘',scene:'▦',hook:'⚡',flow:'⇢',compare:'↔',summary:'✓',stat:'72',quote:'“',timeline:'↝'})[type] || '✦'; }
+
+  function projectCard(p) {
+    const th = theme(p.theme);
+    return `<article class="card project-card">
+      <div class="project-cover" style="background:linear-gradient(135deg,${th.tokens.surfaceSoft},${th.tokens.surface});color:${th.tokens.text}">
+        <span class="project-id" style="color:${th.tokens.accent}">${esc(p.id)} · ${esc(p.category)}</span>
+        <div class="project-title">${esc(p.title)}</div>
+      </div>
+      <div class="card-pad"><span class="status ${statusClass(p.status)}">${esc(p.status)}</span>
+        <div class="project-meta"><span>${p.sceneData.length} Scenes</span><span>${esc(th.nameZh)}</span></div>
+        <div class="toolbar" style="margin-top:14px"><button class="btn btn-soft open-studio" data-id="${esc(p.id)}">进入 Studio</button></div>
+      </div>
+    </article>`;
+  }
+
+  function templateCard(t) {
+    return `<article class="card template-card" data-template="${esc(t.id)}" data-type="${esc(t.type)}">
+      <div class="template-preview mini-${esc(t.type)}"><span>${iconFor(t.type)}</span><small>${esc(t.type.toUpperCase())}</small></div>
+      <div class="card-pad"><h3>${esc(t.name)}</h3><p>${esc(t.description)}</p>
+      <div class="tag-row"><span class="tag">${esc(t.type)}</span>${t.category ? `<span class="tag">${esc(t.category)}</span>` : ''}</div></div>
+    </article>`;
+  }
+
+  function themeStyle(th) {
+    const t = th.tokens;
+    return `--stage-bg:${t.stageBg};--stage-surface:${t.surface};--stage-soft:${t.surfaceSoft};--stage-text:${t.text};--stage-muted:${t.muted};--stage-accent:${t.accent};--stage-accent2:${t.accent2};--stage-line:${t.line};--stage-radius:${t.radius};--stage-shadow:${t.shadow};--stage-font:${t.font}`;
+  }
+
+  function themeCard(th) {
+    const t = th.tokens;
+    return `<article class="theme-card card">
+      <div class="theme-shot" style="${themeStyle(th)}">
+        <div class="theme-shot-kicker">PROJECT6 THEME</div>
+        <div class="theme-shot-title">${esc(th.nameZh)}</div>
+        <div class="theme-shot-rule"></div>
+        <div class="theme-shot-grid"><span>01</span><span>Scene</span><b>72%</b></div>
+      </div>
+      <div class="card-pad"><div class="theme-title-row"><div><h3>${esc(th.nameZh)}</h3><small>${esc(th.name)} · ${esc(th.mood)}</small></div></div>
+      <div class="palette"><i style="background:${t.stageBg}"></i><i style="background:${t.surface}"></i><i style="background:${t.accent}"></i><i style="background:${t.accent2}"></i><i style="background:${t.text}"></i></div>
+      <div class="toolbar" style="margin-top:14px"><button class="btn btn-soft use-theme" data-theme="${esc(th.id)}">使用这个主题</button></div></div>
+    </article>`;
+  }
+
+  function dashboard() {
+    const recent = state.projects.slice(0,4);
+    return `<section class="hero garden-hero"><div><span class="eyebrow">✦ THEME × TEMPLATE × SCENE</span><h1>AI Video<br><span>Creative Studio</span></h1><p>Project6 不再让 AI 每次从零设计。先选择视频结构模板，再选择视觉主题，最后由 Scene 承载内容——把 Garden 的资产化思想变成我们自己的生产系统。</p><div class="hero-actions"><button class="btn btn-primary" id="hero-create">＋ 新建视频项目</button><button class="btn btn-ghost" id="hero-themes">浏览主题</button></div></div><div class="hero-visual"><div class="stack-demo"><div>STRUCTURE</div><div>TEMPLATE</div><div>THEME</div><strong>VIDEO</strong></div></div></section>
+      <section class="stats"><div class="stat-card"><div class="stat-label">视频项目</div><div class="stat-value">${state.projects.length}</div><div class="stat-meta">可继续制作</div></div><div class="stat-card"><div class="stat-label">结构 / Scene 模板</div><div class="stat-value">${state.templates.length}</div><div class="stat-meta">可复用生产规律</div></div><div class="stat-card"><div class="stat-label">视觉主题</div><div class="stat-value">${state.themes.length}</div><div class="stat-meta">一键切换视觉语言</div></div><div class="stat-card"><div class="stat-label">默认声音</div><div class="stat-value" style="font-size:22px">ETG1</div><div class="stat-meta">Project5 TTS</div></div></section>
+      <div class="section-head"><div><h2>主题精选</h2><p>Scene 内容不变，主题决定整个视频的视觉气质。</p></div><button class="btn btn-ghost" id="all-themes">全部主题</button></div><section class="grid grid-3">${state.themes.slice(0,3).map(themeCard).join('')}</section>
+      <div class="section-head"><div><h2>视频结构模板</h2><p>先决定“怎么讲”，再生成具体画面。</p></div><button class="btn btn-ghost" id="all-templates">模板库</button></div><section class="grid grid-3">${structures().slice(0,3).map(templateCard).join('')}</section>
+      <div class="section-head"><div><h2>最近项目</h2><p>继续上次的 Scene、主题与声音配置。</p></div><button class="btn btn-ghost" id="all-projects">查看全部</button></div><section class="grid grid-4">${recent.map(projectCard).join('')}</section>`;
+  }
+
+  function projectsView() {
+    return `<div class="section-head" style="margin-top:0"><div><h2>视频项目</h2><p>项目 = Structure + Theme + Scenes + Voice。</p></div><button class="btn btn-primary" id="projects-create">＋ 新建项目</button></div>
+      <section class="panel"><div class="panel-body"><div class="toolbar"><input id="project-search" class="input" style="max-width:340px" placeholder="搜索标题 / ID / 状态"><select id="project-filter" class="select" style="max-width:170px"><option value="">全部状态</option><option>制作中</option><option>规划中</option><option>已完成</option></select></div></div></section>
+      <section class="grid grid-4" id="project-grid" style="margin-top:16px">${state.projects.map(projectCard).join('')}</section>`;
+  }
+
+  function createView(params) {
+    const preTemplate = template(params.get('template'));
+    const preTheme = theme(params.get('theme') || preTemplate?.recommendedTheme);
+    const structureOptions = structures().map(t => `<option value="${esc(t.id)}" ${preTemplate?.id === t.id ? 'selected' : ''}>${esc(t.name)}</option>`).join('');
+    const themeOptions = state.themes.map(t => `<option value="${esc(t.id)}" ${preTheme?.id === t.id ? 'selected' : ''}>${esc(t.nameZh)} · ${esc(t.name)}</option>`).join('');
+    return `<div class="section-head" style="margin-top:0"><div><h2>Scaffold 新视频</h2><p>像 Garden scaffold 一样：先选结构模板和 Theme，再建立完整视频工作区。</p></div></div>
+      <div class="create-layout"><form class="panel" id="create-form"><div class="panel-head"><b>Project Scaffold</b><span class="status status-plan">LOCAL FIRST</span></div><div class="panel-body"><div class="form-grid">
+        <div class="field field-full"><label>视频标题</label><input class="input" name="title" required placeholder="例如：什么是 RAG？"></div>
+        <div class="field"><label>结构模板</label><select class="select" name="structure" id="structure-select">${structureOptions}</select></div>
+        <div class="field"><label>视觉主题</label><select class="select" name="theme" id="theme-select">${themeOptions}</select></div>
+        <div class="field"><label>内容类型</label><select class="select" name="category" id="category-select"><option>AI知识讲解</option><option>技术科普</option><option>财经知识</option><option>产品教程</option><option>读书分享</option></select></div>
+        <div class="field"><label>声音</label><select class="select" name="voice"><option value="ETG1">ETG1 · Edge 云哲</option><option value="none">暂不配音</option></select></div>
+        <div class="field"><label>目标时长</label><select class="select" name="duration" id="duration-select"><option value="60">1 分钟</option><option value="180" selected>3 分钟</option><option value="300">5 分钟</option></select></div>
+        <div class="field"><label>状态</label><select class="select" name="status"><option>规划中</option><option>制作中</option></select></div>
+        <div class="field field-full"><label>内容目标 / Brief</label><textarea class="textarea" name="brief" placeholder="想讲清楚什么？目标观众是谁？最重要的结论是什么？"></textarea></div>
+      </div><div class="toolbar" style="margin-top:18px"><button class="btn btn-primary">生成工作区并进入 Studio</button><button class="btn btn-ghost" type="button" id="cancel-create">取消</button></div></div></form>
+      <aside><div class="preview-note"><h3>Scaffold 会自动完成</h3><p>① 建立 Project 数据 ② 根据 Structure 生成 Scene 序列 ③ 应用 Theme tokens ④ 绑定 ETG1 / Garden Engine ⑤ 进入 Studio。</p></div><div id="scaffold-preview" style="margin-top:14px">${themeCard(preTheme)}</div></aside></div>`;
+  }
+
+  function templatesView() {
+    return `<div class="section-head" style="margin-top:0"><div><h2>模板资产库</h2><p>这里保存“视频怎么讲”和“单个画面怎么表达”。Theme 已单独拆到主题系统。</p></div><button class="btn btn-primary" id="template-create-project">＋ 从模板创建</button></div>
+      <div class="toolbar" style="margin-bottom:16px"><button class="btn btn-soft template-filter" data-type="">全部</button><button class="btn btn-ghost template-filter" data-type="structure">结构模板</button><button class="btn btn-ghost template-filter" data-type="hook">Hook</button><button class="btn btn-ghost template-filter" data-type="scene">Scene</button></div>
+      <section class="grid grid-3" id="template-grid">${state.templates.map(templateCard).join('')}</section>`;
+  }
+
+  function themesView() {
+    return `<div class="section-head" style="margin-top:0"><div><h2>Theme System</h2><p>借鉴 Garden 的核心思想：Theme 用语义 token 控制颜色、字体、圆角、表面与强调色；Scene 不需要因为换主题而重写。</p></div><button class="btn btn-primary" id="theme-create-project">＋ 选择主题创建视频</button></div>
+      <section class="theme-principle panel"><div class="panel-body"><div class="pipeline"><div class="pipeline-step"><b>Theme JSON</b><small>视觉语义与适用场景</small></div><div class="pipeline-step"><b>Design Tokens</b><small>颜色 / 字体 / 圆角 / 阴影</small></div><div class="pipeline-step"><b>Primitives</b><small>Card / Rule / Hero / Badge</small></div><div class="pipeline-step"><b>Scenes</b><small>内容结构保持稳定</small></div></div></div></section>
+      <div class="section-head"><div><h2>主题画廊</h2><p>点击“使用这个主题”直接进入 Scaffold。</p></div></div><section class="grid grid-3">${state.themes.map(themeCard).join('')}</section>`;
+  }
+
+  function stageScene(s, p, th) {
+    const label = `<span class="stage-label">${esc(p.id)} · ${esc(th.name.toUpperCase())} · ${esc(s.type.toUpperCase())}</span>`;
+    if (s.type === 'flow' || s.type === 'timeline' || s.type === 'step') {
+      const nodes = String(s.body || '').split('|');
+      return `<div class="stage-scene">${label}<div class="stage-title">${esc(s.title)}</div><div class="flow-row">${nodes.map((x,i) => `${i ? '<span class="flow-arrow">→</span>' : ''}<span class="flow-node">${esc(x)}</span>`).join('')}</div></div>`;
+    }
+    if (s.type === 'compare') {
+      const n = String(s.body || '').split('|');
+      return `<div class="stage-scene">${label}<div class="stage-title">${esc(s.title)}</div><div class="compare-stage"><div><b>${esc(n[0] || 'A')}</b><small>${esc(n[1] || '')}</small></div><strong>VS</strong><div><b>${esc(n[2] || 'B')}</b><small>${esc(n[3] || '')}</small></div></div></div>`;
+    }
+    if (s.type === 'stat') {
+      const n = String(s.body || '72%|关键数字').split('|');
+      return `<div class="stage-scene stat-scene">${label}<div class="hero-number">${esc(n[0])}</div><div class="stage-title small-title">${esc(s.title)}</div><div class="stage-sub">${esc(n[1] || '')}</div></div>`;
+    }
+    if (s.type === 'quote') {
+      return `<div class="stage-scene quote-scene">${label}<div class="quote-mark">“</div><div class="stage-title">${esc(s.title)}</div><div class="stage-sub">${esc(s.body)}</div></div>`;
+    }
+    if (s.type === 'summary' || s.type === 'risk' || s.type === 'concept') {
+      return `<div class="stage-scene">${label}<div class="stage-title">${esc(s.title)}</div><div class="summary-grid">${String(s.body || '').split('|').map((x,i) => `<div><span>0${i+1}</span><b>${esc(x)}</b></div>`).join('')}</div></div>`;
+    }
+    return `<div class="stage-scene">${label}<div class="stage-title">${esc(s.title || p.title)}</div><div class="stage-sub">${esc(s.body || '')}</div></div>`;
+  }
+
+  function studioView(params) {
+    const p = project(params.get('id')); if (!p) return `<div class="card empty"><strong>还没有项目</strong>请先创建一个视频项目。</div>`;
+    const scenes = p.sceneData; state.sceneIndex = Math.max(0, Math.min(state.sceneIndex, scenes.length - 1));
+    const s = scenes[state.sceneIndex], th = theme(p.theme);
+    return `<div class="section-head" style="margin-top:0"><div><h2>${esc(p.title)}</h2><p>${esc(p.id)} · ${esc(template(p.structure)?.name || 'Custom Structure')} · ${esc(th.nameZh)} · ${esc(p.voice)}</p></div><div class="toolbar"><button class="btn btn-ghost" id="studio-back">项目中心</button><button class="btn btn-primary" id="save-project">保存修改</button></div></div>
+      <div class="studio-layout"><section class="panel scene-list-panel"><div class="panel-head"><b>Scenes</b><small>${scenes.length} 个</small></div><div class="scene-list">${scenes.map((x,i) => `<div class="scene-item ${i === state.sceneIndex ? 'active' : ''}" data-index="${i}"><b>${String(i+1).padStart(2,'0')} · ${esc(x.name)}</b><small>${esc(x.type)} · ${x.duration}s</small></div>`).join('')}<button class="btn btn-ghost" id="add-scene" style="width:100%;margin-top:8px">＋ 添加 Scene</button></div></section>
+      <section class="stage-wrap"><div class="stage themed-stage" style="${themeStyle(th)}">${stageScene(s,p,th)}</div><div class="toolbar" style="justify-content:center;margin-top:12px"><button class="btn btn-ghost" id="prev-scene">◀</button><button class="btn btn-primary" id="play-scenes">${state.playing ? '暂停' : '▶ 预览播放'}</button><button class="btn btn-ghost" id="next-scene">▶</button><button class="btn btn-soft" id="local-render">导出计划</button></div><div class="timeline"><div class="timeline-head"><span>Timeline · ${scenes.reduce((n,x)=>n+Number(x.duration||0),0)}s</span><span>${esc(th.nameZh)} / ${esc(p.engine)}</span></div><div class="timeline-track">${scenes.map((x,i)=>`<div class="timeline-segment ${i===state.sceneIndex?'active':''}" data-index="${i}" style="flex:${Math.max(1,x.duration)}">${String(i+1).padStart(2,'0')} ${esc(x.name)}<br>${x.duration}s</div>`).join('')}</div></div></section>
+      <aside class="panel inspector"><div class="panel-head"><b>Scene Inspector</b><span class="tag">${esc(s.type)}</span></div><div class="inspector-section"><div class="field"><label>Theme</label><select id="studio-theme" class="select">${state.themes.map(x=>`<option value="${esc(x.id)}" ${x.id===p.theme?'selected':''}>${esc(x.nameZh)} · ${esc(x.name)}</option>`).join('')}</select></div><div class="field"><label>Scene 名称</label><input class="input scene-field" data-key="name" value="${esc(s.name)}"></div><div class="field"><label>主标题</label><input class="input scene-field" data-key="title" value="${esc(s.title)}"></div><div class="field"><label>内容（用 | 分隔节点 / 要点）</label><textarea class="textarea scene-field" data-key="body">${esc(s.body)}</textarea></div><div class="field"><label>时长（秒）</label><input type="number" min="1" max="60" class="input scene-field" data-key="duration" value="${s.duration}"></div></div><div class="inspector-section"><b style="font-size:13px">Pipeline</b><div class="pipeline" style="grid-template-columns:1fr;margin-top:10px"><div class="pipeline-step"><b>🎙 ${esc(p.voice)}</b><small>Project5 TTS</small></div><div class="pipeline-step"><b>✦ ${esc(th.nameZh)}</b><small>Theme tokens</small></div><div class="pipeline-step"><b>⚙ ${esc(p.engine)}</b><small>Scene renderer</small></div></div></div></aside></div>`;
+  }
+
+  function assetsView() {
+    return `<div class="section-head" style="margin-top:0"><div><h2>素材与 Primitives</h2><p>主题不直接控制每个 Scene 的 HTML，而是通过可复用基础组件构建稳定视觉语言。</p></div></div><section class="grid grid-4"><div class="card card-pad"><div class="template-icon">▰</div><h3>Card</h3><p>信息卡、对比卡、数据卡。</p></div><div class="card card-pad"><div class="template-icon">—</div><h3>Rule</h3><p>编辑部式分隔线与章节规则。</p></div><div class="card card-pad"><div class="template-icon">72</div><h3>Hero Number</h3><p>财经和数据类关键数字。</p></div><div class="card card-pad"><div class="template-icon">Aa</div><h3>Typography</h3><p>标题、正文、Caption 与标签层级。</p></div></section><div class="notice" style="margin-top:18px">下一阶段：把这些 primitives 真正拆成可复用 renderer 函数，而不是复制 Scene HTML。</div>`;
+  }
+
+  function labView() {
+    const labs = [
+      ['🌱','Garden Skills','学习 Theme / Template / Scaffold 的资产化方法','https://github.com/ConardLi/garden-skills'],
+      ['M','Motion Canvas','学习知识讲解动画与配音同步','https://github.com/motion-canvas/motion-canvas'],
+      ['W','WebMotion','学习浏览器端 WebCodecs 导出','https://github.com/superhq-ai/webmotion'],
+      ['H','HyperFrames','学习 Agent-first HTML → Video','https://github.com/heygen-com/hyperframes'],
+      ['K','Keyloom','学习 Scene Library 与模板工作流','https://github.com/theexperiencecompany/keyloom'],
+      ['✂','OpenCut','学习 Timeline / Track / Editor Interaction','https://github.com/opencut-app/OpenCut']
+    ];
+    return `<div class="section-head" style="margin-top:0"><div><h2>开源实验室</h2><p>学习能力边界，不把第三方仓库直接堆进 Project6。</p></div></div><section class="grid grid-3">${labs.map(x=>`<article class="card lab-card"><div class="lab-logo">${x[0]}</div><div><h3>${x[1]}</h3><p>${x[2]}</p><a href="${x[3]}" target="_blank" rel="noopener">查看源码 ↗</a></div></article>`).join('')}</section>`;
+  }
+
+  function settingsView() {
+    const s = read(KEY_SETTINGS, {voice:'ETG1',project5:'http://186.244.245.177:28442/',render:'browser'});
+    return `<div class="section-head" style="margin-top:0"><div><h2>工作台设置</h2><p>公开前端只保存非敏感配置。</p></div></div><form class="panel" id="settings-form"><div class="panel-body"><div class="form-grid"><div class="field"><label>默认声音</label><select class="select" name="voice"><option value="ETG1" ${s.voice==='ETG1'?'selected':''}>ETG1 · Edge 云哲</option><option value="none">无</option></select></div><div class="field"><label>默认渲染方式</label><select class="select" name="render"><option value="browser">浏览器本地渲染</option><option value="record">MediaRecorder</option></select></div><div class="field field-full"><label>Project5 Base URL</label><input class="input" name="project5" value="${esc(s.project5||'')}"></div></div><div class="notice" style="margin-top:16px">Project5 Bearer Key 不写进静态网页；真实调用通过后端 Proxy。</div><button class="btn btn-primary" style="margin-top:16px">保存设置</button></div></form>`;
+  }
+
+  function stopPlayback(repaint = false) {
+    clearTimeout(state.timer); state.timer = null;
+    const was = state.playing; state.playing = false;
+    if (repaint && was) render();
+  }
+
+  function startPlayback(p) {
+    stopPlayback(); state.playing = true; render();
+    const tick = () => {
+      if (!state.playing) return;
+      const current = project(p.id);
+      if (state.sceneIndex >= current.sceneData.length - 1) { stopPlayback(true); toast('预览完成'); return; }
+      state.sceneIndex++; render();
+      state.timer = setTimeout(tick, Math.min(Math.max(current.sceneData[state.sceneIndex].duration * 220, 900), 2600));
+    };
+    state.timer = setTimeout(tick, 1200);
+  }
+
+  function bindCommon() {
+    $$('.open-studio').forEach(b => b.onclick = () => go('studio?id=' + encodeURIComponent(b.dataset.id)));
+    $$('.use-theme').forEach(b => b.onclick = () => go('create?theme=' + encodeURIComponent(b.dataset.theme)));
+    $$('.template-card').forEach(c => c.ondblclick = () => go('create?template=' + encodeURIComponent(c.dataset.template)));
+  }
+
+  function bind(path, params) {
+    bindCommon();
+    if (path === 'dashboard') {
+      $('#hero-create').onclick = () => go('create'); $('#hero-themes').onclick = () => go('themes');
+      $('#all-themes').onclick = () => go('themes'); $('#all-templates').onclick = () => go('templates'); $('#all-projects').onclick = () => go('projects');
+    }
+    if (path === 'projects') {
+      $('#projects-create').onclick = () => go('create');
+      const q = $('#project-search'), f = $('#project-filter');
+      const apply = () => $$('.project-card').forEach(c => c.style.display = ((!q.value || c.textContent.toLowerCase().includes(q.value.toLowerCase())) && (!f.value || c.textContent.includes(f.value))) ? '' : 'none');
+      q.oninput = apply; f.onchange = apply;
+    }
+    if (path === 'create') {
+      $('#cancel-create').onclick = () => go('projects');
+      const structureSelect = $('#structure-select');
+      structureSelect.onchange = () => {
+        const st = template(structureSelect.value); if (!st) return;
+        $('#theme-select').value = st.recommendedTheme || $('#theme-select').value;
+        $('#category-select').value = st.category || $('#category-select').value;
+        $('#duration-select').value = String(st.duration || 180);
+      };
+      $('#create-form').onsubmit = e => {
+        e.preventDefault(); const fd = new FormData(e.currentTarget); const st = template(fd.get('structure')) || structures()[0];
+        const p = {id:'P'+Date.now().toString().slice(-6),title:String(fd.get('title')).trim(),category:fd.get('category'),structure:fd.get('structure'),theme:fd.get('theme'),voice:fd.get('voice'),engine:'garden',duration:Number(fd.get('duration')),status:fd.get('status'),brief:String(fd.get('brief')).trim(),createdAt:new Date().toISOString()};
+        p.sceneData = scaffold(p, st); persist(p); toast('Scaffold 已创建'); go('studio?id=' + p.id);
+      };
+    }
+    if (path === 'templates') {
+      $('#template-create-project').onclick = () => go('create');
+      $$('.template-filter').forEach(b => b.onclick = () => {
+        const type = b.dataset.type;
+        $$('.template-card').forEach(c => c.style.display = !type || c.dataset.type === type ? '' : 'none');
+        $$('.template-filter').forEach(x => x.className = 'btn ' + (x === b ? 'btn-soft' : 'btn-ghost'));
+      });
+    }
+    if (path === 'themes') $('#theme-create-project').onclick = () => go('create');
+    if (path === 'studio') {
+      const p = project(params.get('id')); if (!p) return;
+      const scenes = p.sceneData;
+      const jump = i => { state.sceneIndex = Math.max(0, Math.min(i, scenes.length - 1)); render(); };
+      $$('.scene-item,.timeline-segment').forEach(x => x.onclick = () => jump(Number(x.dataset.index)));
+      $('#prev-scene').onclick = () => jump(state.sceneIndex - 1); $('#next-scene').onclick = () => jump(state.sceneIndex + 1);
+      $('#studio-back').onclick = () => go('projects'); $('#save-project').onclick = () => { persist(p); toast('项目已保存到浏览器'); };
+      $('#studio-theme').onchange = e => { p.theme = e.currentTarget.value; persist(p); render(); toast('主题已切换'); };
+      $('#add-scene').onclick = () => { const base = typeDefaults('concept', p.title); scenes.push({id:'S'+String(scenes.length+1).padStart(2,'0'),...base,animation:'reveal'}); persist(p); state.sceneIndex = scenes.length - 1; render(); };
+      $$('.scene-field').forEach(x => x.onchange = () => { const s = scenes[state.sceneIndex], k = x.dataset.key; s[k] = k === 'duration' ? Math.max(1, Math.min(60, Number(x.value) || 1)) : x.value; persist(p); render(); });
+      $('#play-scenes').onclick = () => state.playing ? stopPlayback(true) : startPlayback(p);
+      $('#local-render').onclick = () => toast('下一阶段接 WebMotion / HyperFrames 本地 MP4 导出');
+    }
+    if (path === 'settings') {
+      $('#settings-form').onsubmit = e => { e.preventDefault(); const fd = new FormData(e.currentTarget); write(KEY_SETTINGS,{voice:fd.get('voice'),render:fd.get('render'),project5:fd.get('project5')}); toast('设置已保存'); };
+    }
+  }
+
+  function render() {
+    const r = route(); setNav(r.path); stopPlayback(false);
+    const root = $('#app-content');
+    if (r.path === 'dashboard') root.innerHTML = dashboard();
+    else if (r.path === 'projects') root.innerHTML = projectsView();
+    else if (r.path === 'create') root.innerHTML = createView(r.params);
+    else if (r.path === 'studio') root.innerHTML = studioView(r.params);
+    else if (r.path === 'templates') root.innerHTML = templatesView();
+    else if (r.path === 'themes') root.innerHTML = themesView();
+    else if (r.path === 'assets') root.innerHTML = assetsView();
+    else if (r.path === 'lab') root.innerHTML = labView();
+    else if (r.path === 'settings') root.innerHTML = settingsView();
+    else return go('dashboard');
+    bind(r.path, r.params);
+  }
+
+  async function boot() {
+    const [projects, templates, themes] = await Promise.all([
+      getJson('./data/projects.json', fallbackProjects),
+      getJson('./data/templates.json', fallbackTemplates),
+      getJson('./data/themes.json', fallbackThemes)
+    ]);
+    state.seed = projects; state.templates = templates.length ? templates : fallbackTemplates; state.themes = themes.length ? themes : fallbackThemes; rebuild();
+    window.addEventListener('hashchange', () => { state.sceneIndex = 0; stopPlayback(); render(); });
+    $('#new-project-btn').onclick = () => go('create');
+    $('#global-search').onkeydown = e => { if (e.key === 'Enter') { state.search = e.currentTarget.value.trim(); go('projects'); } };
+    render();
+  }
+
+  boot();
 })();
