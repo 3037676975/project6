@@ -1,20 +1,8 @@
 [
-  {
-    "id": "HOOK-001",
-    "name": "3秒冲突开场",
-    "type": "hook",
-    "description": "通过问题和反常识快速吸引观众"
-  },
-  {
-    "id": "SCENE-FLOW-001",
-    "name": "流程图动画",
-    "type": "scene",
-    "description": "适合AI教程和知识讲解"
-  },
-  {
-    "id": "THEME-TECH-001",
-    "name": "科技蓝主题",
-    "type": "theme",
-    "description": "适合AI产品和技术科普"
-  }
+  {"id":"HOOK-001","name":"3秒冲突开场","type":"hook","description":"通过问题、反常识和答案承诺快速吸引观众。"},
+  {"id":"SCENE-FLOW-001","name":"流程图动画","type":"scene","description":"适合 RAG、Agent、工作流和产品机制讲解。"},
+  {"id":"SCENE-COMPARE-001","name":"对比卡片","type":"scene","description":"适合两个概念、方案或前后状态的清晰对照。"},
+  {"id":"SCENE-SUMMARY-001","name":"总结卡片","type":"scene","description":"用三个关键点完成结尾记忆强化。"},
+  {"id":"THEME-TECH-001","name":"科技蓝主题","type":"theme","description":"蓝白渐变与轻玻璃感，适合 AI 与技术科普。"},
+  {"id":"THEME-FINANCE-001","name":"财经数据主题","type":"theme","description":"强调数字、趋势、数据卡片与结构化信息。"}
 ]
