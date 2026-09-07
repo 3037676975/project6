@@ -1,45 +1,50 @@
 #!/usr/bin/env bash
-set -u
+# Project6 post-pull hook for Baota Git auto deployment.
+# IMPORTANT: keep this hook fast. Baota already runs git pull before this script.
+# Garden Skills sync is launched in background so network latency can never block website deployment.
 
 PROJECT_DIR="/www/wwwroot/project6"
+GARDEN_LOG="/tmp/project6-garden-sync.log"
 
 log() {
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [Project6] $*"
 }
 
+# The site directory must exist because Baota has just pulled into it.
 if [ ! -d "$PROJECT_DIR" ]; then
-  echo "[Project6] ERROR: project directory not found: $PROJECT_DIR"
-  exit 1
+  echo "[Project6] WARNING: project directory not found: $PROJECT_DIR"
+  # Do not make Baota show a red deployment just because the optional hook cannot run.
+  exit 0
 fi
 
-cd "$PROJECT_DIR" || exit 1
+cd "$PROJECT_DIR" 2>/dev/null || exit 0
 
-# 宝塔的 Git 自动部署会先执行 git pull，再执行本脚本。
-# 因此这里不再重复 fetch / pull，避免二次拉取造成部署失败。
-git config --global --add safe.directory "$PROJECT_DIR" >/dev/null 2>&1 || true
+log "post-pull hook started"
 
-log "post-pull deployment hook started"
-
-# Garden Skills 是 Project6 的学习底座，但它不应该阻断主站部署。
-# 首次部署会初始化 submodule；如果网络或 GitHub 临时异常，只记录警告。
-if [ -f .gitmodules ]; then
-  log "syncing Garden Skills submodule"
-  if git submodule sync --recursive && git submodule update --init --recursive; then
-    log "Garden Skills ready"
-  else
-    log "WARNING: Garden Skills sync failed; main Project6 site will continue deploying"
-  fi
+# Never run git fetch/pull/submodule synchronously here.
+# They can block for 1-3 minutes on slow GitHub connections and Baota will mark deployment failed.
+if [ -f scripts/sync-garden.sh ] && [ -f .gitmodules ]; then
+  log "Garden Skills sync scheduled in background"
+  (
+    sleep 2
+    cd "$PROJECT_DIR" || exit 0
+    # Limit the optional background sync as well. If timeout is unavailable, run normally.
+    if command -v timeout >/dev/null 2>&1; then
+      timeout 180 bash scripts/sync-garden.sh
+    else
+      bash scripts/sync-garden.sh
+    fi
+  ) >"$GARDEN_LOG" 2>&1 </dev/null &
 fi
 
-if [ -f scripts/sync-garden.sh ]; then
-  chmod +x scripts/sync-garden.sh >/dev/null 2>&1 || true
+if [ -f index.html ]; then
+  log "index page ready: $PROJECT_DIR/index.html"
+else
+  log "WARNING: index.html not found"
 fi
 
-if [ ! -f index.html ]; then
-  echo "[Project6] ERROR: index.html not found"
-  exit 1
-fi
+log "post-pull hook finished"
+log "Garden background log: $GARDEN_LOG"
 
-log "index page ready: $PROJECT_DIR/index.html"
-log "deployment completed successfully"
+# Always return success: Baota's own git pull result is the authoritative deployment result.
 exit 0
