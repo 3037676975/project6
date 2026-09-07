@@ -1,48 +1,180 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Harness Engineering · 第一章 · Project6</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Harness Engineering · 第一章 · Garden Warm Keynote</title>
 <style>
-:root{--paper:#f8f7f2;--ink:#262323;--muted:#79736d;--teal:#1fb6aa;--teal-soft:#e9f8f5;--coral:#ef6d68;--coral-soft:#fff0ee;--yellow:#f2d51c;--line:#e5e0d8;--card:#fff;--shadow:0 14px 36px rgba(45,40,34,.12),0 2px 5px rgba(45,40,34,.05)}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#d8d5cf;color:var(--ink);font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif}.shell{width:100vw;height:100vh;display:grid;place-items:center}.stage{position:relative;width:1920px;height:1080px;transform-origin:center;overflow:hidden;background-color:var(--paper);box-shadow:0 44px 110px rgba(0,0,0,.2)}.stage:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(68,93,84,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(68,93,84,.045) 1px,transparent 1px);background-size:34px 34px}.scene{position:absolute;inset:0;padding:82px 130px 120px;opacity:0;pointer-events:none;transform:translateY(9px);transition:.48s ease;z-index:2}.scene.active{opacity:1;pointer-events:auto;transform:none}.topline{text-align:center;font-size:31px;font-weight:750;line-height:1.55;letter-spacing:-.025em}.topline .teal{color:var(--teal)}.topline .coral{color:var(--coral)}.card{background:rgba(255,255,255,.97);border:1px solid rgba(88,77,65,.08);border-radius:22px;box-shadow:var(--shadow)}.caption{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);font-size:27px;font-weight:900;color:var(--yellow);text-shadow:-1px -1px 0 #544b39,1px -1px 0 #544b39,-1px 1px 0 #544b39,1px 1px 0 #544b39;white-space:nowrap}.stepno{position:absolute;right:38px;top:30px;font:700 14px ui-monospace,monospace;color:#aaa49b}.audio{position:absolute;left:38px;top:30px;font:800 13px ui-monospace,monospace;color:#9d968c}.audio.ready{color:var(--teal)}.lineicon{width:82px;height:82px;margin:auto}.lineicon svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-/* 1 */.s1 .intro{width:980px;margin:110px auto 0;padding:48px 58px;text-align:center}.s1 .intro small{font-size:25px;color:var(--muted)}.s1 .intro h1{font-size:53px;line-height:1.35;margin:16px 0 0;letter-spacing:-.04em}.s1 .intro strong{display:block;font-size:74px;color:var(--teal);margin-top:10px;letter-spacing:-.055em}.s1 .bulb{color:#ddb21a;margin-top:22px}
-/* 2 */.compare{width:1010px;margin:72px auto 0;padding:34px 40px 40px}.compare h2{text-align:center;font-size:34px;margin:0 0 30px}.cols{display:grid;grid-template-columns:1fr 90px 1fr;align-items:center}.persona{padding:27px;text-align:center;border-radius:18px}.persona.a{background:var(--teal-soft);color:var(--teal)}.persona.b{background:var(--coral-soft);color:var(--coral)}.persona b{display:block;font-size:29px;margin-top:10px}.persona span{display:block;margin-top:6px;color:var(--muted);font-size:17px}.vs{text-align:center;font-weight:900;color:#aea79e;font-size:24px}.reasons{width:1050px;margin:24px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.reason{padding:22px;text-align:center}.reason .lineicon{width:54px;height:54px;color:#cba215}.reason strong{display:block;margin-top:8px;font-size:21px}.reason small{color:var(--muted);font-size:15px}
-/* 3 */.statement{text-align:center;font-size:37px;font-weight:800;margin-top:52px}.system{width:980px;margin:62px auto 0;padding:38px;display:grid;grid-template-columns:1fr 90px 1fr;align-items:center}.system .half{text-align:center}.system .half .lineicon{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;padding:22px}.system .bad .lineicon{background:var(--coral-soft);color:var(--coral)}.system .good .lineicon{background:var(--teal-soft);color:var(--teal);outline:2px dashed rgba(31,182,170,.4);outline-offset:12px}.system b{display:block;font-size:29px;margin-top:16px}.system small{color:var(--muted);font-size:16px}.arrow{text-align:center;font-size:34px;color:#aaa49d}
-/* 4 */.termcard{width:970px;margin:72px auto 0;padding:48px 58px;text-align:center}.termcard .lead{font-size:25px;color:var(--muted)}.term{font-size:70px;font-weight:950;letter-spacing:-.055em;margin-top:12px}.term span{color:var(--teal)}.definition{font-size:29px;line-height:1.55;margin:18px auto 0;max-width:780px}.pillrow{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:26px}.pill{padding:9px 14px;background:#f1efea;border-radius:999px;font-size:16px;font-weight:800}
-/* 5 */.case{width:1180px;margin:48px auto 0;padding:32px}.casegrid{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;gap:14px}.side{min-height:410px;padding:30px}.side h3{font-size:32px;margin:0}.side p{color:var(--muted);font-size:18px}.bars{display:grid;gap:12px;margin-top:30px}.bar{height:48px;border-radius:10px;background:#f0ede7;position:relative}.bar:after{content:"";position:absolute;left:15px;top:19px;width:64%;height:8px;border-radius:5px;background:#cdc6bd}.workflow{display:grid;gap:11px;margin-top:24px}.wf{padding:14px 16px;border-radius:12px;background:var(--teal-soft);display:flex;justify-content:space-between;font-size:18px;font-weight:850}.wf span{color:var(--teal)}
-/* 6 */.quote{width:1050px;margin:88px auto 0;padding:48px 56px;text-align:center}.quote small{font-size:24px;color:var(--muted)}.quote h2{font-size:54px;line-height:1.38;letter-spacing:-.04em;margin:16px 0}.quote .under{background:linear-gradient(transparent 62%,rgba(242,213,28,.8) 0)}.bottomcards{width:1060px;margin:24px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.bottomcards div{padding:21px;text-align:center;font-size:20px;font-weight:850}.bottomcards div:nth-child(2){color:var(--teal)}
-.controls{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);display:flex;gap:8px;padding:7px;border-radius:15px;background:rgba(28,27,25,.88);z-index:40;opacity:.11;transition:.25s}.controls:hover{opacity:1}.controls button{border:0;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}.controls .primary{background:#f4d817}.controls .rec{background:#ff6259;color:#fff}.controls .status{display:flex;align-items:center;color:#fff;padding:0 9px;font:700 12px ui-monospace,monospace}@media(max-width:900px){.controls{opacity:.9}}
+:root{
+  /* Garden official warm-keynote tokens */
+  --shell:#f5efe1;--surface:#fdfbf7;--surface-2:#ffffff;--surface-3:#f0e9d8;
+  --text:#43302b;--text-2:#5b443d;--text-mute:#8a7969;--text-faint:#b8a994;
+  --rule:#e6dcc4;--accent:#14b8a6;--accent-soft:rgba(20,184,166,.10);--accent-glow:rgba(20,184,166,.45);
+  --font-display-cn:"Noto Sans SC","Source Han Sans SC",-apple-system,sans-serif;
+  --font-display-en:"Inter","SF Pro Display",-apple-system,sans-serif;
+  --font-body:"Inter","Noto Sans SC",-apple-system,sans-serif;
+  --font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;
+  --dur-base:500ms;--dur-slow:800ms;--dur-cinematic:1200ms;
+  --r-card:32px;--stage-pad-x:100px;--stage-pad-y:80px;
+  --card-shadow:0 1px 2px rgba(67,48,43,.04),0 24px 60px rgba(67,48,43,.10);
+  --shadow-stage:0 60px 160px rgba(67,48,43,.18),0 0 0 1px rgba(0,0,0,.03);
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--shell);font-family:var(--font-body);color:var(--text)}
+body{display:grid;place-items:center}
+button{font:inherit}
+.shell{width:100vw;height:100vh;display:grid;place-items:center;background:var(--shell)}
+.stage-frame{position:relative;width:1920px;height:1080px;transform-origin:center;overflow:hidden;background:var(--surface);box-shadow:var(--shadow-stage)}
+.stage-frame::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--rule) 1px,transparent 1px),linear-gradient(90deg,var(--rule) 1px,transparent 1px);background-size:40px 40px;opacity:.48;pointer-events:none}
+.scene{position:absolute;inset:0;padding:var(--stage-pad-y) var(--stage-pad-x);opacity:0;pointer-events:none;transition:opacity 240ms linear;z-index:2}
+.scene.active{opacity:1;pointer-events:auto}
+.card{background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.9);border-radius:var(--r-card);box-shadow:var(--card-shadow);backdrop-filter:blur(16px)}
+.kicker{font:700 18px/1 var(--font-mono);letter-spacing:.12em;color:var(--text-mute);text-transform:uppercase}
+.title{margin:0;color:var(--text);font-family:var(--font-display-cn);font-size:56px;line-height:1.22;letter-spacing:-.045em;font-weight:850;text-align:center}
+.title .accent{color:var(--accent)}
+.lead{font-size:24px;line-height:1.55;color:var(--text-2);text-align:center}
+.meta{position:absolute;top:32px;left:42px;font:700 14px/1 var(--font-mono);color:var(--text-faint);letter-spacing:.08em;z-index:8}
+.stepmark{position:absolute;top:32px;right:42px;font:700 14px/1 var(--font-mono);color:var(--text-faint);z-index:8}
+
+/* shared line icon primitives */
+.icon{width:74px;height:74px;color:var(--accent)}
+.icon svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* scene 1 · title assembly */
+.s1{display:grid;place-items:center}.s1-inner{text-align:center;margin-top:-20px}
+.s1 .mini{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:17px;margin-bottom:26px}
+.s1 h1{font-family:var(--font-display-en);font-size:86px;line-height:.98;letter-spacing:-.055em;margin:0;font-weight:900;color:var(--text)}
+.s1 h1 span{display:block;color:var(--accent);animation:titleUp var(--dur-slow) cubic-bezier(.2,.9,.25,1.15) both}
+.s1 p{font-size:25px;color:var(--text-2);margin:28px 0 0;animation:fadeUp var(--dur-slow) 180ms both}
+.s1 .motif{width:520px;height:130px;margin:42px auto 0;position:relative}
+.s1 .motif svg{width:100%;height:100%;overflow:visible}.s1 .path{fill:none;stroke:var(--accent);stroke-width:4;stroke-dasharray:680;stroke-dashoffset:680;animation:draw 1.1s .15s ease forwards}.s1 .dot{fill:var(--surface-2);stroke:var(--accent);stroke-width:4;transform-box:fill-box;transform-origin:center;animation:pop .5s .65s both}
+
+/* scene 2 · same model, different outcome */
+.s2 .wrap{width:1180px;margin:58px auto 0}.s2 .compare{padding:38px;display:grid;grid-template-columns:1fr 90px 1fr;gap:18px;align-items:center}
+.s2 .side{height:370px;border-radius:24px;background:var(--surface);border:1px solid var(--rule);display:grid;place-items:center;text-align:center;padding:34px;position:relative;overflow:hidden}.s2 .side strong{font-size:34px}.s2 .side p{margin:10px 0 0;font-size:19px;color:var(--text-mute)}
+.s2 .good .ring{position:absolute;width:180px;height:180px;border:2px solid var(--accent);border-radius:50%;opacity:.18;animation:ring 1.2s ease-out both}.s2 .good .ring.r2{animation-delay:.18s}.s2 .bad .jitter{width:115px;height:115px;position:absolute;border:2px dashed var(--text-faint);border-radius:26px;animation:jitter .7s steps(2,end) 2}.vs{text-align:center;font:900 24px var(--font-display-en);color:var(--text-faint)}
+.s2 .foot{display:flex;justify-content:center;gap:18px;margin-top:24px}.chip{padding:13px 18px;border-radius:16px;background:var(--surface-2);border:1px solid var(--rule);font-size:18px;font-weight:750;color:var(--text-2);animation:chipIn .45s both}.chip:nth-child(2){animation-delay:.12s}.chip:nth-child(3){animation-delay:.24s}
+
+/* scene 3 · causes reveal as system components */
+.s3 .system{width:1220px;margin:54px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+.s3 .component{min-height:360px;padding:36px 30px;text-align:center;position:relative;overflow:hidden;animation:cardLift .65s cubic-bezier(.2,.9,.2,1) both}.s3 .component:nth-child(2){animation-delay:.14s}.s3 .component:nth-child(3){animation-delay:.28s}
+.s3 .component::after{content:"";position:absolute;left:22px;right:22px;bottom:22px;height:4px;background:var(--accent);transform:scaleX(0);transform-origin:left;animation:grow .7s .45s ease forwards}.s3 .component h3{font-size:30px;margin:18px 0 10px}.s3 .component p{font-size:18px;line-height:1.5;color:var(--text-mute);margin:0}
+
+/* scene 4 · prompt vs running system */
+.s4 .flowcard{width:1230px;margin:48px auto 0;padding:42px 44px}.s4 .lane{display:grid;grid-template-columns:280px 1fr;gap:36px;align-items:center;padding:24px 0}.s4 .lane+.lane{border-top:1px solid var(--rule)}
+.s4 .label{font-size:27px;font-weight:850}.s4 .label small{display:block;font-size:15px;font-weight:650;color:var(--text-mute);margin-top:6px}
+.s4 .oneshot{height:86px;border-radius:18px;background:var(--surface-3);position:relative;overflow:hidden}.s4 .oneshot::before{content:"";position:absolute;left:24px;top:28px;width:62%;height:12px;border-radius:6px;background:var(--text-faint)}
+.s4 .pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:center}.s4 .node{min-height:92px;border-radius:18px;background:var(--accent-soft);border:1px solid var(--rule);display:grid;place-items:center;text-align:center;padding:12px;font-size:17px;font-weight:800;position:relative;opacity:0;animation:nodeIn .5s forwards}.s4 .node:nth-child(2){animation-delay:.12s}.s4 .node:nth-child(3){animation-delay:.24s}.s4 .node:nth-child(4){animation-delay:.36s}.s4 .node:nth-child(5){animation-delay:.48s}.s4 .node:not(:last-child)::after{content:"";position:absolute;right:-12px;top:50%;width:14px;height:2px;background:var(--accent)}
+
+/* scene 5 · execution loop */
+.s5 .loopwrap{width:1170px;margin:42px auto 0;padding:38px 46px;display:grid;grid-template-columns:430px 1fr;gap:54px;align-items:center}.s5 .loopviz{height:470px;position:relative}.s5 .loopviz svg{width:100%;height:100%}.s5 .arc{fill:none;stroke:var(--accent);stroke-width:5;stroke-dasharray:16 12;animation:dashMove 2s linear infinite}.s5 .loopnode{position:absolute;width:122px;height:80px;border-radius:18px;background:var(--surface-2);box-shadow:var(--card-shadow);display:grid;place-items:center;text-align:center;font-size:16px;font-weight:850}.s5 .n1{left:150px;top:8px}.s5 .n2{right:4px;top:190px}.s5 .n3{left:150px;bottom:8px}.s5 .n4{left:0;top:190px}.s5 .copy h2{font-size:44px;line-height:1.25;margin:0}.s5 .copy p{font-size:22px;line-height:1.65;color:var(--text-2)}.s5 .metric{margin-top:28px;padding:20px 24px;border-radius:20px;background:var(--accent-soft);display:flex;align-items:center;justify-content:space-between}.s5 .metric b{font-size:23px}.s5 .metric span{font:900 32px var(--font-display-en);color:var(--accent)}
+
+/* scene 6 · harness definition */
+.s6{display:grid;place-items:center}.s6 .final{width:1180px;padding:54px 64px;text-align:center;position:relative;overflow:hidden}.s6 .final::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:var(--accent);transform:scaleX(0);transform-origin:left;animation:grow .8s ease forwards}.s6 .eyebrow{font-size:20px;color:var(--text-mute);margin-bottom:12px}.s6 h2{font-family:var(--font-display-en);font-size:74px;letter-spacing:-.05em;line-height:1;margin:0;font-weight:900}.s6 h2 span{color:var(--accent)}.s6 .definition{font-size:28px;line-height:1.55;color:var(--text-2);margin:28px auto 0;max-width:900px}.s6 .layers{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}.s6 .layer{padding:18px;border-radius:18px;background:var(--surface);border:1px solid var(--rule);font-size:18px;font-weight:800;animation:layerIn .55s both}.s6 .layer:nth-child(2){animation-delay:.1s}.s6 .layer:nth-child(3){animation-delay:.2s}.s6 .layer:nth-child(4){animation-delay:.3s}
+
+/* controls: hidden chrome */
+.controls{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);display:flex;gap:8px;z-index:60;padding:7px;background:rgba(67,48,43,.92);border-radius:14px;opacity:.04;transition:opacity .2s}.controls:hover{opacity:1}.controls button{border:0;border-radius:10px;padding:10px 14px;cursor:pointer;font-weight:800;background:var(--surface-2);color:var(--text)}.controls .primary{background:var(--accent);color:var(--surface-2)}.controls .record{background:var(--text-2);color:var(--surface-2)}.status{display:flex;align-items:center;padding:0 10px;color:var(--surface-2);font:700 12px var(--font-mono)}
+.start-mask{position:fixed;inset:0;display:none;place-items:center;background:rgba(245,239,225,.78);backdrop-filter:blur(10px);z-index:80}.start-mask.show{display:grid}.start-card{padding:28px 34px;text-align:center}.start-card strong{display:block;font-size:26px}.start-card p{margin:8px 0 0;color:var(--text-mute)}
+
+@keyframes titleUp{from{opacity:0;transform:translateY(28px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:scale(1)}}
+@keyframes ring{from{transform:scale(.45);opacity:.42}to{transform:scale(1.35);opacity:0}}
+@keyframes jitter{0%,100%{transform:translate(0)}25%{transform:translate(-8px,5px)}50%{transform:translate(7px,-5px)}75%{transform:translate(-4px,-3px)}}
+@keyframes chipIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes cardLift{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes grow{to{transform:scaleX(1)}}
+@keyframes nodeIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+@keyframes dashMove{to{stroke-dashoffset:-56}}
+@keyframes layerIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 </style>
 </head>
-<body><div class="shell"><main class="stage" id="stage">
-<div class="audio" id="audioState">ETG1 CHECKING</div><div class="stepno" id="stepNo">01 / 06</div>
-<section class="scene s1 active" data-step="0"><div class="topline">直到最近我才意识到：真正影响 Agent 稳定性的，不只是 Prompt。</div><div class="intro card"><small>我当时改的那些东西，本质上就是</small><h1>提示词外面的那一整套</h1><strong>Harness</strong><div class="lineicon bulb"><svg viewBox="0 0 64 64"><path d="M23 43h18M26 50h12M32 8c-10 0-18 7-18 17 0 7 4 11 8 15 2 2 3 5 3 7h14c0-2 1-5 3-7 4-4 8-8 8-15 0-10-8-17-18-17Z"/><path d="M26 25c2-5 6-7 11-7"/></svg></div></div><div class="caption">我后来才发现，真正改变结果的是提示词外面的系统</div></section>
-<section class="scene s2" data-step="1"><div class="topline">为什么同样一个模型，换个环境以后，结果会差这么多？</div><div class="compare card"><h2>为什么同样是一个模型？</h2><div class="cols"><div class="persona a"><div class="lineicon"><svg viewBox="0 0 64 64"><path d="M15 42c10-4 20-14 28-28l7 7C37 35 27 44 15 47Z"/><path d="M21 38l5 5"/></svg></div><b>稳定高效</b><span>别人家的 Agent</span></div><div class="vs">VS.</div><div class="persona b"><div class="lineicon"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="18"/><path d="M24 26h1M39 26h1M24 42c5-5 11-7 16-3M32 12V6M17 17l-5-5M47 17l5-5"/></svg></div><b>差强人意</b><span>到了自己手里</span></div></div></div><div class="reasons"><div class="reason card"><div class="lineicon"><svg viewBox="0 0 64 64"><path d="M12 18h40v28H12zM22 26h20M22 34h13"/></svg></div><strong>模型不够强？</strong><small>不是核心原因</small></div><div class="reason card"><div class="lineicon"><svg viewBox="0 0 64 64"><path d="M13 18h38v26H25l-9 8v-8h-3z"/></svg></div><strong>Prompt 不够好？</strong><small>也不只这一层</small></div><div class="reason card"><div class="lineicon"><svg viewBox="0 0 64 64"><ellipse cx="32" cy="17" rx="18" ry="7"/><path d="M14 17v15c0 4 8 7 18 7s18-3 18-7V17M14 32v15c0 4 8 7 18 7s18-3 18-7V32"/></svg></div><strong>RAG 没调明白？</strong><small>仍然只是局部</small></div></div><div class="caption">后来我把他们做的事情一层层拆开看</div></section>
-<section class="scene s3" data-step="2"><div class="topline">真正决定系统能不能稳定跑起来的，往往是模型外面的运行系统。</div><div class="statement">最后改动最大的地方，反而不是模型，也不是提示词。</div><div class="system card"><div class="half bad"><div class="lineicon"><svg viewBox="0 0 64 64"><path d="M15 16h34v32H15zM22 24h20M22 32h15"/><path d="M12 12l40 40"/></svg></div><b>只盯模型本身</b><small>局部优化，很难稳定</small></div><div class="arrow">→</div><div class="half good"><div class="lineicon"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="11"/><path d="M32 8v9M32 47v9M8 32h9M47 32h9M15 15l6 6M43 43l6 6M49 15l-6 6M21 43l-6 6"/></svg></div><b>运行系统</b><small>上下文 · 工具 · 执行 · 恢复</small></div></div><div class="caption">真正变化最大的，是模型外面的运行系统</div></section>
-<section class="scene s4" data-step="3"><div class="topline">所以这个阶段，大家开始相信一件事：问题已经不只是 Prompt Engineering。</div><div class="termcard card"><div class="lead">A BETTER NAME FOR THE PROBLEM</div><div class="term"><span>Harness</span> Engineering</div><div class="definition">给 Agent 搭一整套工作环境，让它知道看什么、用什么、怎么执行，以及失败以后怎么回来。</div><div class="pillrow"><span class="pill">Context</span><span class="pill">Tools</span><span class="pill">Execution</span><span class="pill">State</span><span class="pill">Evaluation</span><span class="pill">Recovery</span></div></div><div class="caption">模型不是不会，而是你还没有把问题说清楚、环境搭完整</div></section>
-<section class="scene s5" data-step="4"><div class="topline">举个最简单的例子：让 Agent 帮你研究 10 家公司。</div><div class="case card"><div class="casegrid"><div class="side"><h3>只靠 Prompt</h3><p>一次性问完，得到一大段看起来像答案的文字。</p><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div></div><div class="arrow">→</div><div class="side"><h3><span style="color:var(--teal)">有 Harness</span></h3><p>任务被拆成可执行、可检查、可恢复的过程。</p><div class="workflow"><div class="wf">搜索资料 <span>01</span></div><div class="wf">读取网页 <span>02</span></div><div class="wf">整理表格 <span>03</span></div><div class="wf">保存进度 <span>04</span></div><div class="wf">检查遗漏 <span>05</span></div></div></div></div></div><div class="caption">差别不是“回答更漂亮”，而是任务真的能往下执行</div></section>
-<section class="scene s6" data-step="5"><div class="topline">所以真正决定 Agent 能不能稳定工作的，往往不是那一句提示词。</div><div class="quote card"><small>从 Prompt 到 Harness</small><h2>真正重要的是<br><span class="under">提示词外面这一整套系统</span></h2></div><div class="bottomcards"><div class="card">看见什么</div><div class="card">如何行动</div><div class="card">失败怎么回来</div></div><div class="caption">下一章，我们把这套系统一层一层拆开</div></section>
-</main></div>
-<div class="controls"><button id="prev">←</button><button id="play" class="primary">自动播放</button><button id="next">→</button><button id="record" class="rec">播放并录制</button><span class="status" id="status">STEP 1/6</span></div>
+<body>
+<div class="shell">
+  <main class="stage-frame" id="stage" aria-label="Harness Engineering chapter 1">
+    <div class="meta" id="audioState">ETG1 · CHECKING</div><div class="stepmark" id="stepMark">01 / 06</div>
+
+    <section class="scene s1 active" data-step="0">
+      <div class="s1-inner">
+        <div class="mini">AI 工程的新变量</div>
+        <h1>Harness <span>Engineering</span></h1>
+        <p>为什么同一个模型，在不同系统里表现可以完全不同？</p>
+        <div class="motif"><svg viewBox="0 0 520 130"><path class="path" d="M35 68 C120 18 178 114 260 66 C342 18 398 112 486 64"/><circle class="dot" cx="35" cy="68" r="11"/><circle class="dot" cx="260" cy="66" r="11"/><circle class="dot" cx="486" cy="64" r="11"/></svg></div>
+      </div>
+    </section>
+
+    <section class="scene s2" data-step="1">
+      <h2 class="title">为什么<span class="accent">同一个模型</span>，结果却完全不同？</h2>
+      <div class="wrap">
+        <div class="compare card">
+          <div class="side good"><div class="ring"></div><div class="ring r2"></div><div><div class="icon" style="margin:auto"><svg viewBox="0 0 64 64"><path d="M18 40c8-1 16-9 18-18 7 5 10 12 9 20-7 7-16 10-27 8-2-3-2-7 0-10Z"/><path d="M21 43l-7 7M37 27l10-10"/></svg></div><strong>稳定完成任务</strong><p>会查资料、会用工具、会继续执行</p></div></div>
+          <div class="vs">VS</div>
+          <div class="side bad"><div class="jitter"></div><div><div class="icon" style="margin:auto;color:var(--text-mute)"><svg viewBox="0 0 64 64"><path d="M20 18h24v28H20z"/><path d="M26 26h12M26 34h8M25 49l-7 7M39 49l7 7"/></svg></div><strong>容易中途失控</strong><p>信息不足、状态丢失、工具失败</p></div></div>
+        </div>
+        <div class="foot"><div class="chip">模型本身</div><div class="chip">Prompt</div><div class="chip">RAG</div></div>
+      </div>
+    </section>
+
+    <section class="scene s3" data-step="2">
+      <h2 class="title">问题往往不在模型，而在它<span class="accent">外面的运行系统</span></h2>
+      <div class="system">
+        <article class="component card"><div class="icon" style="margin:auto"><svg viewBox="0 0 64 64"><path d="M15 14h34v38H15z"/><path d="M21 22h22M21 30h18M21 38h22"/></svg></div><h3>上下文管理</h3><p>该给模型看什么、什么时候压缩、怎样避免重要信息被冲掉。</p></article>
+        <article class="component card"><div class="icon" style="margin:auto"><svg viewBox="0 0 64 64"><path d="M14 22h36v28H14z"/><path d="M24 22v-7h16v7M24 34h16M32 28v12"/></svg></div><h3>工具系统</h3><p>搜索、文件、数据库、浏览器和外部 API 能否可靠调用并返回结果。</p></article>
+        <article class="component card"><div class="icon" style="margin:auto"><svg viewBox="0 0 64 64"><path d="M17 44V20h30v24z"/><path d="M23 28h18M23 36h12"/><path d="M45 49l6-6-6-6"/></svg></div><h3>执行与状态</h3><p>任务如何拆分、怎样保存进度、失败后从哪里继续而不是全部重来。</p></article>
+      </div>
+    </section>
+
+    <section class="scene s4" data-step="3">
+      <h2 class="title">Prompt 决定怎么问；<span class="accent">Harness 决定事情怎么做完</span></h2>
+      <div class="flowcard card">
+        <div class="lane"><div class="label">Prompt Engineering<small>一次输入 → 一次输出</small></div><div class="oneshot"></div></div>
+        <div class="lane"><div class="label">Harness Engineering<small>完整任务运行环境</small></div><div class="pipeline"><div class="node">读上下文</div><div class="node">选工具</div><div class="node">执行动作</div><div class="node">保存状态</div><div class="node">评估 / 恢复</div></div></div>
+      </div>
+    </section>
+
+    <section class="scene s5" data-step="4">
+      <h2 class="title">真实 Agent 的工作方式，是一个<span class="accent">持续循环</span></h2>
+      <div class="loopwrap card">
+        <div class="loopviz"><svg viewBox="0 0 430 470"><path class="arc" d="M215 78 C360 78 373 214 347 256 C317 365 173 408 83 317 C6 239 52 102 165 80"/></svg><div class="loopnode n1">理解目标</div><div class="loopnode n2">执行工具</div><div class="loopnode n3">检查结果</div><div class="loopnode n4">修正继续</div></div>
+        <div class="copy"><h2>稳定，不是靠一句神奇提示词。</h2><p>Agent 要在一次任务里不断读取新信息、调用工具、检查结果、修正路线。真正决定它是否可靠的，是这条循环能不能一直跑下去。</p><div class="metric"><b>真正要优化的对象</b><span>System</span></div></div>
+      </div>
+    </section>
+
+    <section class="scene s6" data-step="5">
+      <div class="final card"><div class="eyebrow">这就是这一章要建立的概念</div><h2><span>Harness</span> Engineering</h2><p class="definition">不是把 Prompt 写得更长，而是给 Agent 搭好它真正工作的环境：上下文、工具、执行、状态、评估与恢复。</p><div class="layers"><div class="layer">Context</div><div class="layer">Tools</div><div class="layer">Execution</div><div class="layer">Recovery</div></div></div>
+    </section>
+  </main>
+</div>
+
+<div class="controls" data-no-advance><button id="prev">←</button><button id="next">→</button><button id="auto" class="primary">Auto</button><button id="record" class="record">录制</button><span class="status" id="status">MANUAL</span></div>
+<div class="start-mask" id="startMask"><div class="start-card card"><strong>ETG1 Auto Ready</strong><p>按 Space 开始第一章，音频结束后自动推进。</p></div></div>
+<audio id="voice" preload="auto"></audio>
 <script>
-const narrations=[
-'Prompt 写得再漂亮，Agent 还是可能把事情做砸。',
-'因为一个真正能工作的 Agent，面对的从来不只是模型。它还要拿到上下文、调用工具、执行多步任务、记住状态、判断结果，出了错还得自己回来修。',
-'所以真正决定系统能不能稳定跑起来的，往往是模型外面的运行系统。',
-'所以今天更值得关注的，不只是 Prompt Engineering，而是 Harness Engineering。你可以把它理解成：给 Agent 搭一整套工作环境。',
-'举个最简单的例子。你让 Agent 帮你研究十家公司。只靠 Prompt，它可能给你十段看起来很像答案的文字；有了 Harness，它会自己搜索、读网页、整理表格、保存进度，再回来检查漏没漏。',
-'所以真正决定 Agent 能不能稳定工作的，往往不是那一句提示词，而是提示词外面这一整套系统。下一章，我们把这套系统一层一层拆开看。'
-];
-let step=0,playing=false,audioMap=null,currentAudio=null,recorder=null,chunks=[],recordStream=null;
-const scenes=[...document.querySelectorAll('.scene')],stage=document.getElementById('stage'),audioState=document.getElementById('audioState');
-function fit(){stage.style.transform=`scale(${Math.min(innerWidth/1920,innerHeight/1080)})`}addEventListener('resize',fit);fit();
-function show(n){step=Math.max(0,Math.min(5,n));scenes.forEach((s,i)=>s.classList.toggle('active',i===step));document.getElementById('stepNo').textContent=String(step+1).padStart(2,'0')+' / 06';document.getElementById('status').textContent=`STEP ${step+1}/6`;tone(step)}
-function tone(i){try{const c=new AudioContext(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=[440,520,390,610,480,350][i];g.gain.setValueAtTime(.025,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.12);o.start();o.stop(c.currentTime+.13)}catch{}}
-async function loadAudio(){try{const r=await fetch('./audio-map.json',{cache:'no-store'});const m=await r.json();if(m.status==='ready'&&m.voice==='zh-TW-YunJheNeural'&&Object.keys(m.segments||{}).length===6){audioMap=m;audioState.textContent='ETG1 READY · YUNJHE';audioState.classList.add('ready');return true}}catch{}audioState.textContent='ETG1 PENDING · NO FALLBACK';return false}
-function audioUrl(i){return audioMap?.segments?.[`chapter-01/${i+1}`]||audioMap?.segments?.[String(i+1)]||null}
-async function playStep(i){show(i);const url=audioUrl(i);if(!url){playing=false;document.getElementById('play').textContent='自动播放';return}if(currentAudio){currentAudio.pause();currentAudio=null}currentAudio=new Audio(url);await currentAudio.play();await new Promise(res=>{currentAudio.onended=res;currentAudio.onerror=res});if(playing&&i<5)return playStep(i+1);playing=false;document.getElementById('play').textContent='自动播放';if(recorder&&recorder.state==='recording')stopRecording()}
-document.getElementById('prev').onclick=()=>show(step-1);document.getElementById('next').onclick=()=>show(step+1);document.getElementById('play').onclick=async()=>{if(!audioMap&&!await loadAudio())return alert('ETG1 云哲配音尚未生成。Project6 不会使用浏览器系统声音冒充正式配音。');playing=true;document.getElementById('play').textContent='播放中';playStep(0)};
-async function startRecording(){if(!audioMap&&!await loadAudio())return alert('请先完成 ETG1 云哲 6/6 音频。未配好正式旁白时禁止导出假成片。');recordStream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:30},audio:true});chunks=[];const mime=MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')?'video/webm;codecs=vp9,opus':'video/webm';recorder=new MediaRecorder(recordStream,{mimeType:mime});recorder.ondataavailable=e=>e.data.size&&chunks.push(e.data);recorder.onstop=()=>{const blob=new Blob(chunks,{type:'video/webm'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='project6-harness-chapter01.webm';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);recordStream?.getTracks().forEach(t=>t.stop())};recorder.start();playing=true;document.getElementById('record').textContent='录制中';playStep(0)}
-function stopRecording(){if(recorder&&recorder.state!=='inactive')recorder.stop();document.getElementById('record').textContent='播放并录制'}document.getElementById('record').onclick=()=>recorder?.state==='recording'?stopRecording():startRecording();
-document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(step+1);if(e.key==='ArrowLeft')show(step-1)});stage.addEventListener('click',()=>show(step+1));loadAudio();show(0);
-</script></body></html>
+const scenes=[...document.querySelectorAll('.scene')];
+const voice=document.getElementById('voice'),audioState=document.getElementById('audioState'),stepMark=document.getElementById('stepMark'),statusEl=document.getElementById('status'),startMask=document.getElementById('startMask');
+let step=0,mode='manual',audioMap=null,recorder=null,stream=null,chunks=[];
+const key=i=>`01-harness-engineering/${i+1}`;
+function scale(){const s=Math.min(innerWidth/1920,innerHeight/1080);document.getElementById('stage').style.transform=`scale(${s})`}
+addEventListener('resize',scale);scale();
+function render(){scenes.forEach((s,i)=>s.classList.toggle('active',i===step));stepMark.textContent=`${String(step+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`;if(mode!=='manual')playVoice()}
+function go(n){step=Math.max(0,Math.min(scenes.length-1,n));render();playSfx(step)}
+function next(){if(step<scenes.length-1)go(step+1);else if(recorder?.state==='recording')stopRecording()}
+function prev(){go(step-1)}
+document.getElementById('next').onclick=e=>{e.stopPropagation();mode='manual';statusEl.textContent='MANUAL';next()};
+document.getElementById('prev').onclick=e=>{e.stopPropagation();mode='manual';statusEl.textContent='MANUAL';prev()};
+document.getElementById('stage').onclick=e=>{if(e.target.closest('[data-no-advance]'))return;if(mode==='manual')next()};
+addEventListener('keydown',e=>{if(e.key==='ArrowRight'&&mode==='manual')next();if(e.key==='ArrowLeft'&&mode==='manual')prev();if(e.code==='Space'&&startMask.classList.contains('show')){e.preventDefault();startMask.classList.remove('show');step=0;render()}});
+async function loadAudio(){try{const r=await fetch('./audio-map.json',{cache:'no-store'});audioMap=await r.json();const ok=audioMap?.status==='ready'&&audioMap?.provider==='project5'&&audioMap?.engine==='edge'&&audioMap?.voice==='zh-TW-YunJheNeural'&&Number(audioMap?.speed)===1.1&&scenes.every((_,i)=>audioMap.segments?.[key(i)]);audioState.textContent=ok?'ETG1 · READY':'ETG1 · PENDING';audioState.style.color=ok?'var(--accent)':'var(--text-faint)';return ok}catch{audioState.textContent='ETG1 · PENDING';return false}}
+function audioReady(){return audioMap?.status==='ready'&&audioMap?.provider==='project5'&&audioMap?.engine==='edge'&&audioMap?.voice==='zh-TW-YunJheNeural'&&Number(audioMap?.speed)===1.1&&scenes.every((_,i)=>audioMap.segments?.[key(i)])}
+function playVoice(){voice.pause();voice.currentTime=0;if(mode==='manual'||!audioReady())return;voice.src=audioMap.segments[key(step)];voice.play().catch(()=>{});}
+voice.onended=()=>{if(mode==='auto')setTimeout(next,200)};
+document.getElementById('auto').onclick=async e=>{e.stopPropagation();if(!await loadAudio()){alert('第一章只允许 Project5 ETG1：Edge / zh-TW-YunJheNeural / speed 1.10。当前真实音频未就绪。');return}mode='auto';statusEl.textContent='AUTO · ETG1';startMask.classList.add('show')};
+function playSfx(i){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;const ctx=playSfx.ctx||(playSfx.ctx=new AC());const o=ctx.createOscillator(),g=ctx.createGain();o.type=i%2?'sine':'triangle';o.frequency.setValueAtTime(230+i*28,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(360+i*22,ctx.currentTime+.09);g.gain.setValueAtTime(.025,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.13);o.connect(g).connect(ctx.destination);o.start();o.stop(ctx.currentTime+.14)}
+async function startRecording(){if(!audioReady()){alert('ETG1 未 ready，禁止录制伪完整成片。');return}stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:60},audio:true});chunks=[];recorder=new MediaRecorder(stream,{mimeType:MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')?'video/webm;codecs=vp9,opus':'video/webm'});recorder.ondataavailable=e=>e.data.size&&chunks.push(e.data);recorder.onstop=()=>{const blob=new Blob(chunks,{type:'video/webm'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='harness-engineering-ch01.webm';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);stream?.getTracks().forEach(t=>t.stop())};recorder.start();mode='auto';statusEl.textContent='REC · ETG1';startMask.classList.add('show')}
+function stopRecording(){if(recorder?.state==='recording')recorder.stop();mode='manual';statusEl.textContent='MANUAL'}
+document.getElementById('record').onclick=async e=>{e.stopPropagation();if(recorder?.state==='recording')stopRecording();else await startRecording()};
+loadAudio();render();
+</script>
+</body>
+</html>
