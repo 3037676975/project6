@@ -1,0 +1,20 @@
+[
+  {
+    "id": "P0025",
+    "title": "什么是 RAG",
+    "category": "AI知识讲解",
+    "status": "制作中",
+    "scenes": 12,
+    "voice": "ETG1",
+    "engine": "garden"
+  },
+  {
+    "id": "P0024",
+    "title": "AI Agent 入门",
+    "category": "技术科普",
+    "status": "规划中",
+    "scenes": 8,
+    "voice": "ETG1",
+    "engine": "garden"
+  }
+]
