@@ -1,8 +1,90 @@
 [
-  {"id":"HOOK-001","name":"3秒冲突开场","type":"hook","description":"通过问题、反常识和答案承诺快速吸引观众。"},
-  {"id":"SCENE-FLOW-001","name":"流程图动画","type":"scene","description":"适合 RAG、Agent、工作流和产品机制讲解。"},
-  {"id":"SCENE-COMPARE-001","name":"对比卡片","type":"scene","description":"适合两个概念、方案或前后状态的清晰对照。"},
-  {"id":"SCENE-SUMMARY-001","name":"总结卡片","type":"scene","description":"用三个关键点完成结尾记忆强化。"},
-  {"id":"THEME-TECH-001","name":"科技蓝主题","type":"theme","description":"蓝白渐变与轻玻璃感，适合 AI 与技术科普。"},
-  {"id":"THEME-FINANCE-001","name":"财经数据主题","type":"theme","description":"强调数字、趋势、数据卡片与结构化信息。"}
+  {
+    "id":"STRUCT-AI-001",
+    "name":"3分钟 AI 知识讲解",
+    "type":"structure",
+    "category":"AI知识讲解",
+    "description":"Hook → 概念 → 流程 → 对比 → 总结，适合 RAG、Agent、LangChain 等主题。",
+    "sceneTypes":["hook","concept","flow","compare","summary"],
+    "recommendedTheme":"THEME-TECH-001",
+    "duration":180
+  },
+  {
+    "id":"STRUCT-FIN-001",
+    "name":"财经数据拆解",
+    "type":"structure",
+    "category":"财经知识",
+    "description":"结论先行 → 核心数字 → 趋势 → 原因 → 风险 → 总结。",
+    "sceneTypes":["hook","stat","flow","compare","risk","summary"],
+    "recommendedTheme":"THEME-FINANCE-001",
+    "duration":180
+  },
+  {
+    "id":"STRUCT-BOOK-001",
+    "name":"读书精读",
+    "type":"structure",
+    "category":"读书分享",
+    "description":"问题引入 → 核心观点 → 案例 → 方法 → 金句 → 总结。",
+    "sceneTypes":["hook","concept","quote","compare","summary"],
+    "recommendedTheme":"THEME-SOFT-001",
+    "duration":300
+  },
+  {
+    "id":"STRUCT-TUTORIAL-001",
+    "name":"产品教程",
+    "type":"structure",
+    "category":"产品教程",
+    "description":"目标 → 步骤 → 操作 → 常见错误 → 完成结果。",
+    "sceneTypes":["title","flow","step","compare","summary"],
+    "recommendedTheme":"THEME-MINIMAL-001",
+    "duration":180
+  },
+  {
+    "id":"HOOK-001",
+    "name":"3秒冲突开场",
+    "type":"hook",
+    "description":"用问题、反常识与答案承诺快速建立注意力。"
+  },
+  {
+    "id":"SCENE-FLOW-001",
+    "name":"流程图动画",
+    "type":"scene",
+    "sceneType":"flow",
+    "description":"节点逐个出现，适合机制、工作流、RAG 与 Agent 流程。"
+  },
+  {
+    "id":"SCENE-COMPARE-001",
+    "name":"对比卡片",
+    "type":"scene",
+    "sceneType":"compare",
+    "description":"左右对照概念、方案、前后状态和优缺点。"
+  },
+  {
+    "id":"SCENE-STAT-001",
+    "name":"Hero 数据卡",
+    "type":"scene",
+    "sceneType":"stat",
+    "description":"突出一个关键数字与解释，适合财经、产品与行业分析。"
+  },
+  {
+    "id":"SCENE-TIMELINE-001",
+    "name":"时间线",
+    "type":"scene",
+    "sceneType":"timeline",
+    "description":"按年份或步骤展示发展过程与关键节点。"
+  },
+  {
+    "id":"SCENE-QUOTE-001",
+    "name":"金句引用",
+    "type":"scene",
+    "sceneType":"quote",
+    "description":"大字号引用 + 小型来源信息，适合读书与观点视频。"
+  },
+  {
+    "id":"SCENE-SUMMARY-001",
+    "name":"三点总结",
+    "type":"scene",
+    "sceneType":"summary",
+    "description":"三个关键点依次出现，完成结尾记忆强化。"
+  }
 ]
