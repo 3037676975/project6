@@ -1,6 +1,57 @@
 [
-  {"id":"P0025","title":"什么是 RAG","category":"AI知识讲解","status":"制作中","voice":"ETG1","engine":"garden","theme":"THEME-TECH-001","brief":"用直观流程解释检索增强生成，并说明它为什么适合知识库场景。"},
-  {"id":"P0024","title":"AI Agent 入门","category":"技术科普","status":"规划中","voice":"ETG1","engine":"garden","theme":"THEME-TECH-001","brief":"解释 Agent 与普通聊天模型的区别，突出规划、工具调用和多步执行。"},
-  {"id":"P0023","title":"机器学习三大范式","category":"知识讲解","status":"已完成","voice":"ETG1","engine":"garden","theme":"soft-blue","brief":"监督学习、无监督学习、强化学习的直觉区别。"},
-  {"id":"P0022","title":"认知觉醒：为什么知道却做不到","category":"读书分享","status":"规划中","voice":"ETG1","engine":"native","theme":"soft-blue","brief":"用知识卡片和流程动画拆解行动力与认知之间的关系。"}
+  {
+    "id":"P0025",
+    "title":"什么是 RAG",
+    "category":"AI知识讲解",
+    "status":"制作中",
+    "voice":"ETG1",
+    "engine":"garden",
+    "theme":"THEME-TECH-001",
+    "structure":"STRUCT-AI-001",
+    "brief":"用直观流程解释检索增强生成，并说明它为什么适合知识库场景。"
+  },
+  {
+    "id":"P0024",
+    "title":"AI Agent 入门",
+    "category":"AI知识讲解",
+    "status":"规划中",
+    "voice":"ETG1",
+    "engine":"garden",
+    "theme":"THEME-MINIMAL-001",
+    "structure":"STRUCT-AI-001",
+    "brief":"解释 Agent 与普通聊天模型的区别，突出规划、工具调用和多步执行。"
+  },
+  {
+    "id":"P0023",
+    "title":"机器学习三大范式",
+    "category":"AI知识讲解",
+    "status":"已完成",
+    "voice":"ETG1",
+    "engine":"garden",
+    "theme":"THEME-NEWS-001",
+    "structure":"STRUCT-AI-001",
+    "brief":"监督学习、无监督学习、强化学习的直觉区别。"
+  },
+  {
+    "id":"P0022",
+    "title":"认知觉醒：为什么知道却做不到",
+    "category":"读书分享",
+    "status":"规划中",
+    "voice":"ETG1",
+    "engine":"garden",
+    "theme":"THEME-CINEMA-001",
+    "structure":"STRUCT-BOOK-001",
+    "brief":"用知识卡片、金句和对比结构拆解行动力与认知之间的关系。"
+  },
+  {
+    "id":"P0021",
+    "title":"市场为什么突然波动？",
+    "category":"财经知识",
+    "status":"规划中",
+    "voice":"ETG1",
+    "engine":"garden",
+    "theme":"THEME-FINANCE-001",
+    "structure":"STRUCT-FIN-001",
+    "brief":"用关键数字、趋势、原因和风险完成一条结构化财经解读。"
+  }
 ]
