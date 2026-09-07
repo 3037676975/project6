@@ -7,8 +7,14 @@
     "voice":"ETG1",
     "engine":"garden",
     "theme":"THEME-TECH-001",
+    "gardenTheme":"blueprint",
     "structure":"STRUCT-AI-001",
-    "brief":"用直观流程解释检索增强生成，并说明它为什么适合知识库场景。"
+    "brief":"用直观流程解释检索增强生成，并说明它为什么适合知识库场景。",
+    "presentation":"./presentations/rag-intro/index.html",
+    "phase":1,
+    "chapters":2,
+    "steps":10,
+    "audioStatus":"pending"
   },
   {
     "id":"P0024",
