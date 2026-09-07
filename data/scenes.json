@@ -1,0 +1,23 @@
+[
+  {
+    "id": "SCENE-001",
+    "type": "title",
+    "name": "标题开场",
+    "duration": 5,
+    "animation": "fade-in"
+  },
+  {
+    "id": "SCENE-002",
+    "type": "flow",
+    "name": "流程解释",
+    "duration": 10,
+    "animation": "svg-flow"
+  },
+  {
+    "id": "SCENE-003",
+    "type": "summary",
+    "name": "总结卡片",
+    "duration": 8,
+    "animation": "card-reveal"
+  }
+]
