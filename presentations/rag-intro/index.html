@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0a1224">
+  <title>什么是 RAG · Project6 Garden Experiment</title>
+  <link rel="stylesheet" href="./src/styles/presentation.css">
+  <style>
+    #start-gate{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:var(--shell)}
+    #start-gate[hidden]{display:none}
+    .start-card{width:min(720px,calc(100vw - 48px));padding:44px;border:2px solid var(--rule);background:var(--surface-2);box-shadow:var(--shadow-stage)}
+    .start-card small{font:14px var(--font-mono);color:var(--accent);letter-spacing:.12em}
+    .start-card h1{font-size:42px;margin:18px 0 12px}
+    .start-card p{font-size:18px;line-height:1.7;color:var(--text-2)}
+    .start-card button{margin-top:18px;border:2px solid var(--accent);background:var(--accent-soft);color:var(--text);padding:14px 24px;font:16px var(--font-mono);cursor:pointer}
+  </style>
+</head>
+<body>
+  <div id="viewport">
+    <main class="stage-frame" id="stage" aria-label="Project6 RAG 视频舞台">
+      <div id="scene-root">
+        <div class="system-message"><div><strong>Project6</strong><p>正在载入 Garden Step…</p></div></div>
+      </div>
+    </main>
+  </div>
+
+  <div id="narration-preview" aria-live="polite"></div>
+
+  <div id="hud" data-no-advance>
+    <button class="hud-btn" id="restart" type="button" data-no-advance>从头</button>
+    <button class="hud-btn" id="play-toggle" type="button" data-no-advance>自动播放</button>
+    <span id="step-label">01 / 10</span>
+    <span id="audio-label">ETG1 PENDING</span>
+  </div>
+
+  <div id="progress-zone" data-no-advance>
+    <div id="progress-track"><div id="progress-fill"></div></div>
+  </div>
+
+  <section id="start-gate" hidden>
+    <div class="start-card">
+      <small>AUTO PLAY / AUDIO PERMISSION</small>
+      <h1>开始自动播放</h1>
+      <p>浏览器需要一次用户点击才能播放声音。点击后，Project6 会按每个 Step 的 ETG1 音频结束时间自动推进画面；如果该段音频尚未生成，会临时按口播字数估时。</p>
+      <button id="start-auto" type="button">START PRESENTATION</button>
+    </div>
+  </section>
+
+  <script type="module" src="./src/presentation.js"></script>
+</body>
+</html>
