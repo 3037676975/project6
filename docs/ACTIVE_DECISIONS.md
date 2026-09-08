@@ -119,32 +119,108 @@ audio.currentTime / audio.duration
 - Manual 播放当前旁白后仍停留当前 Step。
 - Step 内视觉元素只能解释当前 narration；不得提前出现下一 Step 的概念。
 
-### 5.5 动画风格按 Emil 规则
+---
 
-优先：
+## 2026-09-08 · Emil Skills 必须进入完整动画设计链（最新）
 
-- transform + opacity；
-- enter 使用 strong ease-out；
-- moving/morphing 使用 ease-in-out；
-- stagger 原则 30–80ms（视频解释型动画可按语义适当延长，但不能拖沓）；
-- 不使用 `scale(0)`；
-- 不为了“炫”而动；
-- 文字和数据正在被阅读时避免无意义持续移动；
-- 动画必须有 Explanation / Feedback / State / Spatial Consistency 等明确目的。
+用户要求：**不能只把 `emilkowalski/skills` 当参考文档或最终验收清单，必须充分利用它来决定动画怎么设计、怎么构建、怎么审查。**
 
-### 5.6 当前第一章动画实现
+从本决策开始，Project6 每个视频章节的动画工作流固定为：
 
-第一章改为 **6 条独立 GSAP timeline**：
+```text
+Garden Chapter / Step / Narration
+        ↓
+Emil · find-animation-opportunities
+扫描：哪些地方真的值得动画，哪些应该保持静态
+        ↓
+Emil · animate
+明确：目的 / 工具 / properties / easing / duration / interruption / exit
+        ↓
+Emil · animation-vocabulary / emil-design-eng
+补齐：空间关系、连续状态、motion personality、细节语言
+        ↓
+GSAP Runtime
+Timeline / Stagger / DrawSVG / MotionPath / Flip / Morph（按需要）
+        ↓
+Edge TTS SentenceBoundary
+真实口播句子起始时间驱动当前 Step 内 cue
+        ↓
+Emil · review-animations
+逐动画检查十条 Non-negotiable standards
+        ↓
+Emil · improve-animations
+对整章做高杠杆审计与优化
+```
 
-1. Step 1：标签 → 标题 → 问题 → SVG 关系线。
-2. Step 2：问题 → 执行翻车 → 失败信号 → VS → 稳定闭环 → 稳定信号。
-3. Step 3：工作台 → 4 个工具/状态模块 → 右侧 Harness 作用。
-4. Step 4：员工 → Prompt → 工作环境 → 4 个 Harness 条件 → 结论。
-5. Step 5：任务 → 执行循环 → 4 个节点 → 无 Harness / 有 Harness → 10 家公司。
-6. Step 6：章节提示 → 主结论 → 中文解释 → 4 层 Harness。
+### A. 动画不是“蹦出来”
 
-Timeline 时长会根据当前 narration duration 做整体缩放，但**绝不控制 Step 跳转**。
+正式成片优先使用：
 
-### 5.7 Gate
+- 路径生长；
+- 对象沿路径移动；
+- 同一对象从一个状态连续过渡到另一个状态；
+- 空间来源与去向一致；
+- Flow / Connector / State Change；
+- stagger 作为组内顺序，而不是所有东西逐个弹出；
+- 解释完后画面稳定下来，允许观众阅读。
 
-第一章未通过用户最终验收前，不进入第二章。最新用户评分以 **40 / 100** 作为返工基线，不沿用上一版 87 分的错误判断。
+禁止把“opacity 0 → 1 + translateY”当成所有动画的统一答案。
+
+### B. TTS 真实时间码
+
+`edge-tts` 生成 MP3 时必须同步保存 `SentenceBoundary`：
+
+```text
+MP3
++
+timings.json
++
+SRT（仅隐藏时间码，不显示字幕）
+```
+
+动画 cue 根据真实 `SentenceBoundary.start` 启动，不再按音频总时长百分比猜测。
+
+### C. Emil 交互规则也适用于后台工具栏
+
+- Button press：100–160ms 级别、`scale(.97)` 附近。
+- Hover 只能在 `hover:hover` + `pointer:fine` 生效。
+- Focus-visible 必须可见。
+- 不使用 `transition: all`。
+- 不使用 UI `ease-in`。
+- 高频工具栏不加长、炫、阻塞操作的动画。
+- `prefers-reduced-motion` 必须存在。
+- 触觉/Haptic 只在平台支持、且低频“反馈”动作真正受益时采用；不为了存在感强行震动。
+
+### D. 当前第一章的空间故事
+
+1. **Step 1**：标题建立 → SVG 关系路径长出来 → traveler 沿路径走。
+2. **Step 2**：同一个模型 → 失败分叉 → 失败状态 → 稳定分叉 → 稳定状态。
+3. **Step 3**：Agent Core → 四条连接线 → Context / Tools / State / Recovery 从中心关系展开。
+4. **Step 4**：员工 → Prompt token 沿路径进入工作环境 → Harness 四层环境建立。
+5. **Step 5**：循环路径 → runner 跑一圈 → 执行节点 → 两种模式 → 01–10 连续完成。
+6. **Step 6**：四层 Harness → 聚合成 Reliable Agent。
+
+### E. Review 产物
+
+每章必须有实际 Review 文件，例如第一章：
+
+`presentations/harness-engineering/ANIMATION_REVIEW.md`
+
+Review 必须记录：
+
+- 哪些动画机会被采用；
+- 哪些候选被主动拒绝；
+- 每个动画的目的；
+- 使用的工具 / easing / duration / physicality；
+- Emil 十条标准是否 PASS；
+- 慢放 / frame-by-frame / reduced motion 的 feel-check 项。
+
+### F. 当前 Gate
+
+- 上游镜像：PASS。
+- SentenceBoundary timing：PASS。
+- GSAP / MotionPath / DrawSVG 代码 Gate：PASS。
+- Emil Review 文件：已建立。
+- 产品最终体验：仍由用户实际观看决定。
+
+第一章未通过用户最终验收前，不进入第二章。
