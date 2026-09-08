@@ -1,0 +1,16 @@
+{
+  "source":"uiverse-io/galaxy",
+  "purpose":"Project6 知识视频首批精选候选。所有候选进入成片前必须经过 Garden Theme 统一和 Emil Review。",
+  "items":[
+    {"path":"Cards/0senno_warm-cheetah-38.html","category":"Cards","use":"卡片结构 / 图标组 / 轻量 hover 语言"},
+    {"path":"Cards/0xnihilism_average-mole-62.html","category":"Cards","use":"信息卡片候选"},
+    {"path":"Cards/0xnihilism_cold-tiger-22.html","category":"Cards","use":"复杂信息卡片候选"},
+    {"path":"Cards/1osm_funny-cat-84.html","category":"Cards","use":"轻松风格卡片候选"},
+    {"path":"loaders/0xnihilism_brown-puma-30.html","category":"loaders","use":"扫描 / 状态 / 持续环境动画语言；只提取低强度可读部分"},
+    {"path":"loaders/A-nshuman_fluffy-fox-90.html","category":"loaders","use":"轻量 loading / 状态候选"},
+    {"path":"loaders/AHMED-MIT_quick-dragonfly-5.html","category":"loaders","use":"流程等待 / 执行状态候选"},
+    {"path":"Buttons/0x-Sarthak_hungry-penguin-30.html","category":"Buttons","use":"按钮 micro-interaction 候选"},
+    {"path":"Buttons/0x3ther_heavy-dragon-56.html","category":"Buttons","use":"强调按钮 / CTA 候选"},
+    {"path":"Buttons/0xnihilism_fast-cat-82.html","category":"Buttons","use":"按钮细节与 hover/press 语言候选"}
+  ]
+}
