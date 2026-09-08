@@ -1,6 +1,6 @@
 /* Project6 Harness Engineering · Garden v41 polish
- * Purpose: readability, typographic hierarchy, recording controls.
- * This file only overrides v40. Visual recipes stay scene-specific.
+ * Purpose: readability, typographic hierarchy, screenshot-reviewed refinements,
+ * and recording controls. This file only overrides v40.
  */
 :root{
   --font-display-cn:"Noto Sans SC","PingFang SC","Microsoft YaHei","Source Han Sans SC",system-ui,sans-serif;
@@ -40,6 +40,23 @@
 .s040 .model-k,.s040 .harness-k,.s040 .stable{font-size:22px}
 .s041 .sys-node{font-size:19px}
 .s042 .final-tag{font-size:18px}
+
+/* Screenshot QA round 1: scene-specific corrections.
+ * QA report flagged tiny text in 004 / 009 / 025 / 040.
+ * Visual review also found 036 title/browser crowding and some dense semantic labels.
+ */
+.s004 .orbit-copy{font-size:19px!important;font-family:var(--font-body)!important;font-weight:800!important;letter-spacing:0!important}
+.s004 .r3{font-size:37px!important}.s004 .r2{font-size:35px!important}
+.s009 .dial span{font-size:16px!important}.s009 .dial b{font-size:41px!important}.s009 .dial{width:380px!important;height:380px!important}
+.s010 .spec i{font-size:15px!important}.s010 .compile-core .micro{font-size:15px!important}
+.s015 .slots{gap:14px!important}.s015 .slot{font-size:19px!important;min-height:62px!important;display:flex!important;align-items:center!important}
+.s018 .door-panel{font-size:25px!important}.s018 .ctx-orb{font-size:18px!important;min-width:88px!important;min-height:52px!important;display:grid!important;place-items:center!important}
+.s025 .stack{inset:255px 160px 105px!important}.s025 .floor{min-height:82px!important;padding:0 28px!important}.s025 .floor span,.s025 .floor small{font-size:17px!important}
+.s036 .scene-title{top:105px!important;max-width:760px!important}.s036 .scene-title h1{font-size:62px!important;line-height:1.05!important}.s036 .browser{top:255px!important;bottom:85px!important}
+.s040 .scene-title h1{font-size:70px!important}.s040 .micro{font-size:17px!important}.s040 .equation2{top:355px!important}
+
+/* Keep reading areas stable after their construction animation. */
+.s010 .spec,.s015 .slot,.s023 .skill-sheet,.s029 .qa-metric,.s035 .doc-preview,.s036 .browser{backface-visibility:hidden;transform:translateZ(0)}
 
 /* Make the control strip calm and recording-friendly. */
 .toolbar{grid-template-columns:minmax(360px,1fr) auto minmax(360px,1fr);min-height:78px}
