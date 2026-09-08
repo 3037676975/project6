@@ -1,56 +1,54 @@
 [
   {
-    "id":"animejs",
-    "name":"Anime.js",
-    "type":"JavaScript / SVG / Timeline",
+    "id":"gsap",
+    "name":"GSAP 3.15",
+    "tier":"CORE",
+    "type":"JavaScript Animation Runtime",
+    "license":"GreenSock Standard no-charge license",
+    "repo":"https://github.com/greensock/GSAP",
+    "localPath":"./vendor/upstream/gsap/",
+    "bestFor":["Timeline","Stagger","SVG","SplitText","Flip","MotionPath","MorphSVG","DrawSVG"],
+    "project6Role":"Project6 第一动画执行引擎。Garden Step 内的进入、强调、流程建立、SVG 路径、文字拆分和场景内时间线优先用 GSAP 实现。"
+  },
+  {
+    "id":"emil-skills",
+    "name":"Emil Kowalski Animation Skills",
+    "tier":"CORE",
+    "type":"Animation Design / Review Skills",
     "license":"MIT",
-    "repo":"https://github.com/juliangarnier/anime",
-    "bestFor":["Narration beat timeline","stagger","SVG path","number animation","WAAPI"],
-    "project6Role":"主时间线引擎候选。适合把一个 Garden Step 拆成多个 narration beat，按口播时间逐项 reveal。"
+    "repo":"https://github.com/emilkowalski/skills",
+    "localPath":"./vendor/upstream/emil-skills/",
+    "bestFor":["Animate decisions","Review animations","Improve motion","Find opportunities","Animation vocabulary","Design engineering"],
+    "project6Role":"Project6 动画品味与验收规范。先判断该不该动、为什么动、用什么属性/曲线/时长，再由 GSAP 或 CSS/WAAPI 执行。"
   },
   {
     "id":"motion",
     "name":"Motion",
+    "tier":"SECONDARY",
     "type":"JavaScript / React",
     "license":"MIT",
     "repo":"https://github.com/motiondivision/motion",
     "bestFor":["React component motion","spring","layout animation","gestures"],
-    "project6Role":"React 视频组件的主要动效候选，适合卡片、布局、Spring 和组件级进入/退出。"
+    "project6Role":"React 场景的补充选择；默认不与 GSAP 重复建设同一条时间线。"
   },
   {
     "id":"lottie-web",
     "name":"Lottie Web",
+    "tier":"SECONDARY",
     "type":"JSON / SVG / Canvas",
     "license":"MIT",
     "repo":"https://github.com/airbnb/lottie-web",
-    "bestFor":["illustration motion","icon animation","loop animation","After Effects export"],
-    "project6Role":"用于可复用插画、图标、角色或装饰型动画，不承担 narration 主时间轴。"
+    "bestFor":["illustration motion","icon animation","loop animation"],
+    "project6Role":"用于插画、角色和装饰型 JSON 动画，不负责 Garden Step 主时间线。"
   },
   {
     "id":"auto-animate",
     "name":"AutoAnimate",
+    "tier":"UI",
     "type":"JavaScript / React / Vue",
     "license":"MIT",
     "repo":"https://github.com/formkit/auto-animate",
     "bestFor":["DOM add/remove","list transition","layout smoothing"],
-    "project6Role":"后台资源列表、卡片重排、作品中心等 UI 动效；不作为成片主时间线。"
-  },
-  {
-    "id":"animate-css",
-    "name":"Animate.css",
-    "type":"CSS",
-    "license":"MIT",
-    "repo":"https://github.com/animate-css/animate.css",
-    "bestFor":["quick entrance","attention","exit presets"],
-    "project6Role":"快速原型和轻量入场效果。正式视频必须受 Beat Reveal 控制，禁止整页一次性套动画。"
-  },
-  {
-    "id":"react-spring",
-    "name":"React Spring",
-    "type":"React / Spring physics",
-    "license":"MIT",
-    "repo":"https://github.com/pmndrs/react-spring",
-    "bestFor":["spring physics","animated values","interactive diagrams"],
-    "project6Role":"复杂 React 信息图和物理感动画候选，适合需要自然弹性和连续状态变化的场景。"
+    "project6Role":"主要用于 Project6 后台 UI，而不是成片主动画。"
   }
 ]
