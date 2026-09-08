@@ -1,118 +1,75 @@
-# Harness Engineering · 整片验收标准 v31
+# Harness Engineering · 整片验收标准 v40
 
-> 开发前固定阅读：`PROJECT_CHARTER.md` → `PRD.md` → `ACTIVE_DECISIONS.md` → `DEVELOPMENT_STATUS.md` → Garden 官方 `web-video-presentation` → `CHAPTER-CRAFT.md` → 本文件。
+> 当前视觉要求发生重大变更：Scene 001 保留为 Anchor；Scene 002～042 全部推翻重做。
 
 ## 当前验收对象
 
-完整《Harness Engineering》视频，不再按章节分别交接。
-
-- 内部章节：7
-- Garden Scene：42
-- 完整口播：42 段
-- 整片 TTS JSON：`full-tts-tasks.json`
-- 整片播放器：`full-video.html`
-- 当前视觉版本：**Garden v31**
+- 完整视频：42 Scene
+- Scene 001：保留视觉锚点
+- Scene 002～042：v40 全视觉重构
+- TTS：仍然整片一次 JSON / 一次 ZIP，不改变
+- SFX：仍然最后处理
 
 ## Gate A · 完整口播
 
 状态：**CODE PASS / WAITING USER CONFIRM**
 
-- [x] 根据完整字幕素材整理整片叙事线。
-- [x] 覆盖 Harness 为什么出现 → Prompt → Context → Harness → 六层系统 → 实践 → 总结。
-- [x] 42 段连续编号 `001`～`042`。
-- [x] 章节只用于内部组织，不要求用户分章生成 TTS。
-- [x] 用户一次确认以后，一键复制完整 JSON。
-- [ ] 用户确认整片口播稿。
+- [x] 42 段完整口播保持不变。
+- [x] 编号仍为 001～042。
+- [x] TTS 仍然只导出一个总 JSON。
 
-## Gate B · Garden 画面
+## Gate B · Garden 视觉
 
-状态：**V31 CODE PASS / USER REVIEW**
+状态：**V40 CODE REBUILT / USER REVIEW REQUIRED**
 
-Garden 官方核心要求：这是视频，不是 PPT；每一步必须先根据内容决定“这一步演什么”，而不是先有模板再塞文字。
+### 强制要求
 
-### v31 强制规则
+- [x] Scene 001 保留为 Anchor。
+- [x] Scene 002～042 不再使用统一左文字 / 右可视化骨架。
+- [x] Scene 002～042 分别编写独立 visual recipe。
+- [x] Scene 002～042 分别编写独立 motion recipe。
+- [x] 新增 `VISUAL_REBUILD_V40.md`，逐张记录视觉命题 / 构图 / 主动画。
+- [x] 视觉类型覆盖：断裂管线、工作台鸟瞰、同心系统边界、雷达盘、山路迁移、光束、机械拨盘、编译器、示例墙、玻璃墙、粒子概率场、天平、格式冲压机、堵塞漏斗、罗盘、空间门、知识网络、容量仪表、RAG 传送带、双时间轴、Skills 抽屉、Context 调度台、六层建筑、工具插槽、泳道流程、状态机、Evaluation Radar、恢复树、A/B 系统、Context Reset、三角工作流、诊断面板、目录树、Browser Feedback、全屏大字、信息云、Harness 轨道、动态公式、工程师角色转移、最终三环收束。
+- [x] GSAP 动画不再统一 fade；按 Scene 分别使用路径绘制、轨迹移动、旋转扫描、状态切换、结构搭建、Reset 闪断、门开启、传送带、天平平衡等动作。
+- [x] full player 已切换到 `full-video-v40.css` + `full-video-v40.js`。
+- [x] DrawSVG / MotionPath 使用 Project6 本地 GSAP vendor。
+- [ ] 浏览器逐张检查 002～042 无遮挡 / 溢出 / 文字过小。
+- [ ] 用户确认视觉质量达到第一张 Anchor 的标准。
 
-- [x] 42 Scene 均存在，编号 `001`～`042`。
-- [x] 保持第一章 anchor 的 `warm-keynote`：官方 cream canvas / sepia text / teal accent / 40px warm grid。
-- [x] 色彩与字体全部以 Garden theme token 为视觉基准。
-- [x] 删除 v30 的“少数 visualMarkup 模板重复套 42 张”的方案。
-- [x] v31 使用 `switch(scene.id)` 为 42 张分别定义内容驱动的视觉命题。
-- [x] Scene 001：同模型双轨稳定性对照。
-- [x] Scene 002：真实断链 Execution Chain。
-- [x] Scene 003：LLM + Context / Tools / State / Recovery 工作台。
-- [x] Scene 004：系统边界同心扩张。
-- [x] Scene 007：Prompt → Context → Harness 三阶段迁移曲线。
-- [x] Scene 014：概率空间聚束演示。
-- [x] Scene 019：Context 决策信息网络。
-- [x] Scene 023：Progressive Disclosure 抽屉式展开。
-- [x] Scene 025：Harness 六层总架构。
-- [x] Scene 027：任务编排闭环。
-- [x] Scene 029：Evaluation Radar。
-- [x] Scene 032：Context Reset / State Handoff。
-- [x] Scene 033：Planner / Generator / Evaluator 三角生产验收分离。
-- [x] Scene 035：索引 → 子文档渐进式文档树。
-- [x] Scene 036：Browser RUN → SEE → FIX → VERIFY。
-- [x] Scene 040：Model × Harness = Stable Delivery。
-- [x] Scene 042：最终 Reliable AI 收束。
-- [x] SVG path 场景使用 line-draw；结构场景按内容选择 build / reveal / reset / sweep 等不同动作。
-- [x] Scene-local class 增加 v31 隔离覆盖，避免 `.l1/.s1` 等局部类互相污染。
-- [x] 没有假公司 Logo / 假用户数 / 假来源数。
-- [ ] 用户逐屏确认 42 张视觉质量。
+### Garden / Emil 防回归
 
-### 防“模板化”验收
+1. 连续 3 张主构图相同 → FAIL。
+2. 只有文字卡片 + fade → FAIL。
+3. 动画无法解释内容 / 空间 / 状态 / 反馈 → 删除。
+4. 一屏展示整段口播 → FAIL。
+5. 重新出现统一“左文案右卡片”外壳 → FAIL。
+6. 使用假数据 / 假 Logo / Emoji 充视觉 → FAIL。
 
-出现以下任何一条，Gate B 自动 FAIL：
-
-1. 连续 3 张主要构图相同，只替换文字。
-2. 整章只使用 cards / rail / timeline 中一种结构。
-3. 画面只是把 narration 原样打字，没有额外关系演示。
-4. 每张都使用相同 fade-in 作为唯一主动作。
-5. 为了填空使用 fake logo / fake number / emoji。
-
-## Gate C · 整片本地 IndexTTS
+## Gate C · 整片 IndexTTS
 
 状态：**CODE READY / WAITING REAL ZIP**
 
-- [x] Project6 不负责本地 GPU 推理。
-- [x] canonical JSON：`full-tts-tasks.json`。
-- [x] 任务只导出一次，编号 `001`～`042`。
-- [x] 本地预期输出：`001.mp3`～`042.mp3`，可附 `manifest.json`。
-- [x] 后台只接收一个整片 ZIP，或直接多选全部音频。
-- [x] ZIP 支持子目录 basename 匹配。
-- [ ] 用户上传真实 42 段 IndexTTS。
-- [ ] 42/42 匹配通过。
+- [x] 整片 JSON 001～042 保持不变。
+- [x] 本地 IndexTTS 仍由用户生成。
+- [x] Project6 仍接收一个总 ZIP。
+- [ ] 等 Gate B 视觉验收后再正式生成最终语音包，避免反复重做。
 
-## Gate D · 整片本地音画预览
+## Gate D · 整片音画预览
 
 状态：**CODE READY / WAITING REAL AUDIO**
 
-- [x] 播放 / 暂停 / 继续。
-- [x] 暂停同时停止 narration 与 GSAP timeline。
-- [x] 上一张 / 下一张。
-- [x] 42 Scene 进度跳转。
-- [x] 全屏对象为整个播放器 shell，全屏状态仍保留暂停、进度条和控制器。
-- [x] `F` 全屏、空格暂停/继续、方向键切 Scene。
-- [x] 上传的新本地音频通过 `postMessage` 注入整片播放器。
-- [x] 每个 Scene 音频 ended 后进入下一 Scene。
-- [ ] 用户用真实 42 段音频连续播放确认。
-- [ ] 按真实 IndexTTS duration 微调 Scene 内动画节奏。
+- [x] 播放 / 暂停 / 继续 / 全屏 / 上一张 / 下一张 / Scene 进度跳转保留。
+- [x] 本地音频注入协议不变。
+- [ ] 真实 IndexTTS 上传后根据每段时长调整 v40 Scene 内 timing。
 
-## Gate E · 动画音效
+## Gate E · 动画 SFX
 
 状态：**LOCKED UNTIL D PASS**
 
-- [x] SFX 与人物配音严格分开。
-- [x] SFX 只在整片音画确认之后添加。
-- [ ] Gate D PASS 后设计 reveal / whoosh / click / confirm / accent 等动画 SFX。
+- SFX 仍然只在最终音画通过后加入。
 
-## 当前总状态
+## 当前结论
 
-| Gate | 状态 |
-|---|---|
-| A 完整口播 | CODE PASS / WAITING USER CONFIRM |
-| B 42 张 Garden 画面 | V31 CODE PASS / USER REVIEW |
-| C 整片 IndexTTS | WAITING REAL ZIP |
-| D 整片音画预览 | WAITING REAL AUDIO |
-| E 动画 SFX | LOCKED |
+**代码结构已经从 v31 模板化方案切换为 v40 逐 Scene 视觉方案。**
 
-下一步：用户先看 v31 整片视觉，不进入 TTS；若仍有明显模板感，继续返工 Gate B。
+但 Gate B 不能由开发者自己宣布通过：必须由用户打开 v40 整片播放器逐张看，尤其检查 Scene 002～042 是否真正达到“每张都在演不同事情”的目标。
