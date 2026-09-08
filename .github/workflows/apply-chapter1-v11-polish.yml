@@ -1,0 +1,29 @@
+name: Apply Harness Chapter1 v11 Polish
+
+on:
+  push:
+    paths:
+      - "scripts/apply-chapter1-v11-polish.mjs"
+      - ".github/workflows/apply-chapter1-v11-polish.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Apply v11 polish
+        run: node scripts/apply-chapter1-v11-polish.mjs
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add presentations/harness-engineering/index.html presentations/harness-engineering/chapter1-redesign.css
+          git diff --cached --quiet || git commit -m "style: refine Harness chapter1 cover and palette v11"
+          git push
