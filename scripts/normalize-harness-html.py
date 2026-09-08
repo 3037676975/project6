@@ -25,11 +25,15 @@ def normalize_harness() -> int:
     if "${Array.from" in text or "${String(i+1)" in text:
         raise SystemExit("Harness template literal artifact still present")
 
-    css_tag = '<link rel="stylesheet" href="./continuous-motion.css">'
+    css_tags = [
+        '<link rel="stylesheet" href="./continuous-motion.css">',
+        '<link rel="stylesheet" href="./galaxy-layer.css">',
+    ]
     js_tag = '<script src="./continuous-motion.js"></script>'
-    if css_tag not in text:
-        text = text.replace('</head>', f'{css_tag}\n</head>', 1)
-        count += 1
+    for tag in css_tags:
+        if tag not in text:
+            text = text.replace('</head>', f'{tag}\n</head>', 1)
+            count += 1
     if js_tag not in text:
         text = text.replace('</body>', f'{js_tag}\n</body>', 1)
         count += 1
