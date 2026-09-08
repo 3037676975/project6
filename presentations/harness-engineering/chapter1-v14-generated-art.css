@@ -1,0 +1,16 @@
+/* Generated image support layer — decorative only, never the information source. */
+.system-card.harness-map:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url('./public/images/harness-runtime-hero.webp') 64% 54% / cover no-repeat;
+  opacity:.075;
+  filter:saturate(.82) contrast(.95);
+  mix-blend-mode:multiply;
+  mask-image:radial-gradient(circle at 58% 52%,#000 0%,rgba(0,0,0,.72) 35%,transparent 76%);
+  pointer-events:none;
+  z-index:1;
+}
+.system-card.harness-map>*{position:relative;z-index:2}
+.system-card.harness-map .orbit-svg{position:absolute;z-index:2}
+@media(prefers-reduced-motion:reduce){.system-card.harness-map:after{opacity:.05}}
