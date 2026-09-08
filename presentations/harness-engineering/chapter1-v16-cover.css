@@ -1,0 +1,75 @@
+/* Chapter 1 v16 — Scene 1 only. Restore a clean premium Harness cover.
+ * Scenes 2–6 are intentionally untouched.
+ */
+.s1 .hero-grid{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)!important;gap:72px!important}
+.s1 .system-card.harness-map{
+  min-height:690px!important;
+  overflow:hidden!important;
+  border-radius:38px!important;
+  background:
+    radial-gradient(circle at 50% 46%,rgba(255,255,255,.98) 0 18%,rgba(255,255,255,.74) 19% 31%,transparent 32%),
+    radial-gradient(circle at 50% 52%,rgba(77,171,247,.15),transparent 42%),
+    linear-gradient(145deg,rgba(239,248,255,.94),rgba(237,255,249,.90))!important;
+  border:1px solid rgba(77,171,247,.22)!important;
+  box-shadow:0 28px 80px rgba(51,120,172,.13),inset 0 1px 0 rgba(255,255,255,.92)!important;
+  isolation:isolate;
+}
+.s1 .system-card.harness-map:before{
+  content:""!important;position:absolute!important;inset:0!important;z-index:0!important;
+  background:
+    linear-gradient(rgba(77,171,247,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(77,171,247,.055) 1px,transparent 1px),
+    radial-gradient(circle at 50% 50%,rgba(99,230,190,.12),transparent 40%)!important;
+  background-size:28px 28px,28px 28px,auto!important;
+  pointer-events:none!important;
+}
+.s1 .system-card.harness-map:after{
+  content:""!important;position:absolute!important;left:50%!important;top:52%!important;z-index:1!important;
+  width:330px!important;height:330px!important;transform:translate(-50%,-50%)!important;border-radius:50%!important;
+  background:
+    radial-gradient(circle at 35% 30%,rgba(255,255,255,.98) 0 8%,transparent 9%),
+    radial-gradient(circle at center,rgba(255,255,255,.94) 0 25%,rgba(210,241,255,.90) 26% 43%,rgba(163,231,217,.55) 44% 56%,rgba(77,171,247,.12) 57% 70%,transparent 71%)!important;
+  box-shadow:0 0 0 1px rgba(77,171,247,.18),0 0 0 18px rgba(255,255,255,.38),0 0 0 19px rgba(99,230,190,.10),0 30px 80px rgba(77,171,247,.18)!important;
+  pointer-events:none!important;
+}
+.s1 .system-card.harness-map>*{position:relative;z-index:4}
+.s1 .system-head{padding:2px 4px!important;align-items:flex-start!important}
+.s1 .system-title b{font-size:26px!important;color:#204c68!important;letter-spacing:-.02em}
+.s1 .system-title small{font-size:15px!important;color:#7890a2!important;margin-top:4px!important}
+.s1 .system-card .status{background:rgba(230,252,245,.90)!important;color:#087f5b!important;border-color:rgba(18,184,134,.18)!important}
+.s1 .orbit-svg{position:absolute!important;inset:104px 44px 72px!important;width:calc(100% - 88px)!important;height:calc(100% - 176px)!important;z-index:2!important;overflow:visible!important}
+.s1 .orbit-line{stroke:#6ebef7!important;stroke-width:2.2!important;opacity:.72!important;fill:none!important}
+.s1 .orbit-line:nth-of-type(even){stroke:#58d7b0!important}
+.s1 .model-core{
+  position:absolute!important;left:50%!important;top:51%!important;bottom:auto!important;transform:translate(-50%,-50%)!important;
+  width:214px!important;height:214px!important;min-height:0!important;border-radius:50%!important;padding:0!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:7px!important;
+  background:linear-gradient(145deg,#ffffff 0%,#e9f7ff 44%,#eafcf7 100%)!important;
+  border:1px solid rgba(77,171,247,.28)!important;color:#173e5c!important;
+  box-shadow:0 24px 60px rgba(77,171,247,.18),inset 0 1px 0 rgba(255,255,255,.96)!important;
+  backdrop-filter:blur(18px)!important;
+}
+.s1 .model-core:before{
+  content:""!important;display:block!important;position:absolute!important;inset:18px!important;border-radius:50%!important;
+  border:1px solid rgba(77,171,247,.20)!important;background:radial-gradient(circle at 50% 42%,rgba(99,230,190,.22),rgba(77,171,247,.08) 48%,transparent 49%)!important;
+  box-shadow:0 0 0 12px rgba(255,255,255,.34)!important;pointer-events:none!important;
+}
+.s1 .model-core .chip,.s1 .model-core strong,.s1 .model-core small{position:relative;z-index:2}
+.s1 .model-core .chip{font-size:10px!important;letter-spacing:.14em!important;color:#0b8f70!important;background:#e6fcf5!important;border:1px solid rgba(18,184,134,.14)!important;border-radius:999px!important;padding:7px 10px!important}
+.s1 .model-core strong{font-size:42px!important;line-height:1!important;color:#1971c2!important;letter-spacing:-.04em!important}
+.s1 .model-core small{max-width:145px!important;text-align:center!important;font-size:12px!important;line-height:1.45!important;color:#6c8397!important}
+.s1 .sat{
+  position:absolute!important;width:182px!important;min-height:100px!important;padding:15px 16px!important;border-radius:22px!important;
+  background:rgba(255,255,255,.88)!important;border:1px solid rgba(77,171,247,.18)!important;border-top:none!important;
+  box-shadow:0 14px 34px rgba(64,115,153,.10)!important;backdrop-filter:blur(16px)!important;
+}
+.s1 .sat:before{content:"";display:block;width:28px;height:4px;border-radius:999px;margin-bottom:9px;background:linear-gradient(90deg,#4dabf7,#63e6be)}
+.s1 .sat b{font-size:18px!important;color:#244f6a!important;letter-spacing:-.01em!important}
+.s1 .sat small{font-size:12px!important;line-height:1.45!important;color:#70889b!important}
+.s1 .sat.a{left:34px!important;top:178px!important}
+.s1 .sat.b{right:34px!important;top:168px!important}
+.s1 .sat.c{left:52px!important;bottom:86px!important}
+.s1 .sat.d{right:46px!important;bottom:82px!important}
+.s1 .flow-particle{fill:#2f9ee8!important;filter:drop-shadow(0 0 7px rgba(47,158,232,.55))!important}
+.s1 .flow-particle:nth-of-type(even){fill:#20c997!important}
+@media(prefers-reduced-motion:reduce){.s1 .flow-particle{display:none!important}.s1 .model-core{transform:translate(-50%,-50%)!important}}
