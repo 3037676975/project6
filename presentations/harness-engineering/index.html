@@ -1,12 +1,226 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Harness Engineering · 第一章</title>
-<link rel="stylesheet" href="./chapter1-redesign.css?v=14"><link rel="stylesheet" href="./chapter1-v14-polish.css?v=14"><link rel="stylesheet" href="./chapter1-v16-cover.css?v=16"><link rel="stylesheet" href="./chapter1-v17-recovery.css?v=19"><link rel="stylesheet" href="./chapter1-v20-fix.css?v=20"><link rel="stylesheet" href="./chapter1-v21-controls.css?v=21"></head><body>
-<div class="app"><div class="viewer"><main class="stage">
-<section class="scene s1 active" data-step="0"><div class="topline"><div class="chapter"><i></i>CHAPTER 01 · HARNESS ENGINEERING</div><div class="progress-dots"><span></span><span></span><span></span><span></span><span></span><span></span></div></div><div class="hero-grid"><div class="copy"><div class="question-pill">为什么同一个模型，执行结果差这么多？</div><div class="eyebrow">THE OPERATING LAYER AROUND AI AGENTS</div><h1><span class="cover-main">HARNESS</span><span class="cover-sub">ENGINEERING</span></h1><p>Prompt 决定你怎么交代任务；<strong>Harness 决定 Agent 能不能把任务稳定做完。</strong> 这一章，我们只讲清楚模型外面这套真正决定执行质量的运行系统。</p><div class="cover-proof"><span>Context</span><i></i><span>Tools</span><i></i><span>State</span><i></i><span>Recovery</span></div></div><div class="surface system-card harness-map"><div class="system-head"><div class="system-title"><b>Harness Runtime Map</b><small>一个模型 · 四层执行保障</small></div><span class="status">SYSTEM</span></div><svg class="orbit-svg" viewBox="0 0 640 500" aria-hidden="true"><path class="orbit-line" d="M110 128 C220 70 330 110 320 250"/><path class="orbit-line" d="M530 122 C430 65 335 105 320 250"/><path class="orbit-line" d="M95 385 C205 430 320 370 320 250"/><path class="orbit-line" d="M535 390 C430 440 335 382 320 250"/><circle class="signal-dot" r="7" cx="0" cy="0"/></svg><div class="dark-surface model-core"><span class="chip">AGENT CORE</span><strong>LLM</strong><small>模型负责推理，Harness 负责把推理变成稳定执行。</small></div><div class="sat a"><b>Context</b><small>给模型正确的任务、资料与约束</small></div><div class="sat b"><b>Tools</b><small>把搜索、数据库和 API 接起来</small></div><div class="sat c"><b>State</b><small>让多步任务持续记住执行进度</small></div><div class="sat d"><b>Recovery</b><small>失败后检查、重试并继续执行</small></div></div></div></section>
-<section class="scene s2" data-step="1"><div class="topline"><div class="chapter"><i></i>CHAPTER 01 · WHY AGENTS FAIL</div><div class="progress-dots"><span></span><span></span><span></span><span></span><span></span><span></span></div></div><div style="text-align:center"><div class="eyebrow">Same model · Different system</div><h1 class="headline">问题，可能早就跑到模型外面了</h1></div><div class="content"><div class="surface lane bad"><div class="lane-head"><span class="status bad">UNSTABLE</span><span class="label">WITHOUT HARNESS</span></div><h2>看起来聪明，真正执行就翻车</h2><div class="desc">换模型、改 Prompt、再加 RAG，仍然解决不了执行链本身的问题。</div><div class="stack"><div class="stack-item"><div class="iconbox">＋</div><div><b>工具调用断开</b><small>模型知道要做什么，但工具没有接起来</small></div><span class="metric">FAIL</span></div><div class="stack-item"><div class="iconbox">◷</div><div><b>任务状态丢失</b><small>多步任务做到一半，下一步失去上下文</small></div><span class="metric">LOST</span></div><div class="stack-item"><div class="iconbox">×</div><div><b>失败无法恢复</b><small>一处错误让整个执行链直接停止</small></div><span class="metric">STOP</span></div></div><div class="flow-rail"><i></i></div></div><div class="vs-col"><div class="vs-badge">VS</div></div><div class="surface lane good"><div class="lane-head"><span class="status">STABLE</span><span class="label">WITH HARNESS</span></div><h2>同一个模型，开始变成可靠系统</h2><div class="desc">上下文、工具、状态和恢复机制被组织成完整执行环境。</div><div class="stack"><div class="stack-item"><div class="iconbox">▤</div><div><b>上下文清楚</b><small>每一步都知道自己正在处理什么</small></div><span class="metric">READY</span></div><div class="stack-item"><div class="iconbox">✓</div><div><b>执行有状态</b><small>进度、结果和中间产物持续被保存</small></div><span class="metric">SYNC</span></div><div class="stack-item"><div class="iconbox">↻</div><div><b>失败可恢复</b><small>错误被检查、修复，再从正确位置继续</small></div><span class="metric">RETRY</span></div></div><div class="flow-rail"><i></i></div></div></div></section>
-<section class="scene s3" data-step="2"><div class="topline"><div class="chapter"><i></i>CHAPTER 01 · THE WORKBENCH</div><div class="progress-dots"><span></span><span></span><span></span><span></span><span></span><span></span></div></div><div style="text-align:center"><div class="eyebrow">Think of Harness as an operating workbench</div><h1 class="headline">Harness，就是给 Agent 搭的一张工作台</h1></div><div class="workspace"><aside class="surface rail"><h3>Resources</h3><p>不是给模型堆更多文字，而是把真正需要的资源组织起来。</p><div class="resource-list"><div class="resource"><div><b>Context</b><small>资料与任务约束</small></div></div><div class="resource"><div><b>Tools</b><small>搜索、API、数据库</small></div></div><div class="resource"><div><b>State</b><small>过程与中间结果</small></div></div><div class="resource"><div><b>Recovery</b><small>检查、重试与继续</small></div></div></div></aside><section class="dark-surface console"><div class="console-top"><div class="console-title"><b>Agent runtime / active</b></div><span class="status">RUNNING</span></div><div class="runtime"><div class="runtime-grid"><div class="runtime-card"><b>Context channel</b><small>正在装载任务资料与边界条件</small><div class="mini"><i></i></div></div><div class="runtime-card"><b>Tool registry</b><small>搜索、浏览器、数据库已连接</small><div class="mini"><i></i></div></div><div class="runtime-card"><b>Execution state</b><small>当前进度 04 / 10，状态已持久化</small><div class="mini"><i></i></div></div><div class="runtime-card"><b>Recovery policy</b><small>失败自动回看日志并重试</small><div class="mini"><i></i></div></div></div><div class="core-ring"><span class="status">ONLINE</span><b>Harness Core</b></div></div></section><aside class="surface activity"><h3>Activity</h3><div class="timeline-list"><div class="event"><i></i><div><b>资料加载完成</b><small>Context 已更新</small></div></div><div class="event"><i></i><div><b>搜索工具已调用</b><small>返回 12 条结果</small></div></div><div class="event"><i></i><div><b>进度已保存</b><small>下一步从 04 继续</small></div></div><div class="event"><i></i><div><b>异常自动恢复</b><small>重试成功</small></div></div></div></aside></div></section>
-<section class="scene s4" data-step="3"><div class="topline"><div class="chapter"><i></i>CHAPTER 01 · PROMPT VS HARNESS</div><div class="progress-dots"><span></span><span></span><span></span><span></span><span></span><span></span></div></div><div style="text-align:center"><div class="eyebrow">Instruction vs Operating Environment</div><h1 class="headline">Prompt 管“怎么说”，Harness 管“怎么把事做完”</h1></div><div class="compare-wrap"><section class="surface prompt-card"><div><span class="label">PROMPT</span><h2>一句指令</h2><p>像你对一个员工说：这件事你这样做。</p></div><div class="prompt-box">“帮我研究 10 家公司，整理它们的产品、融资和竞争优势，并给出结论。”</div><span class="status">INSTRUCTION</span></section><div class="arrow-stage"><div class="prompt-orb">PROMPT</div></div><section class="surface control-plane"><span class="label">HARNESS CONTROL PLANE</span><h2>完整工作环境</h2><div class="cp-grid"><div class="cp-item"><span class="pill">01</span><b>Context</b><small>哪些资料可以看，当前任务是什么。</small></div><div class="cp-item"><span class="pill">02</span><b>Tools</b><small>搜索、浏览器、数据库怎样调用。</small></div><div class="cp-item"><span class="pill">03</span><b>State</b><small>做到哪一步，中间结果放在哪里。</small></div><div class="cp-item"><span class="pill">04</span><b>Recovery</b><small>失败后怎样检查、重试、继续。</small></div></div><div class="control-bottom"><div><b>Prompt = instruction</b><small>告诉它要做什么</small></div><div><b>Harness = environment</b><small>保证它真的能做完</small></div></div></section></div></section>
-<section class="scene s5" data-step="4"><div class="topline"><div class="chapter"><i></i>CHAPTER 01 · A REAL TASK</div><div class="progress-dots"><span></span><span></span><span></span><span></span><span></span><span></span></div></div><div style="text-align:center"><div class="eyebrow">Example · Research 10 companies</div><h1 class="headline">真正的差别，是有没有执行闭环</h1></div><div class="case-layout"><section class="surface research-board"><div class="board-top"><h2>Company research workspace</h2><div class="board-kpis"><span class="kpi">10 TARGETS</span><span class="kpi">6 VERIFIED</span><span class="kpi">4 PENDING</span></div></div><div class="pipeline"><div class="pipe">查资料</div><div class="pipe">记来源</div><div class="pipe">找缺口</div><div class="pipe">继续验证</div></div><div class="company-table"><div class="row head"><span>#</span><span>公司</span><span>资料完整度</span><span>来源验证</span><span>状态</span></div><div class="row"><span>01</span><b>Alpha AI</b><div class="bar"><i></i></div><span>8 sources</span><span class="status">DONE</span></div><div class="row"><span>02</span><b>Nova Labs</b><div class="bar"><i></i></div><span>6 sources</span><span class="status">DONE</span></div><div class="row"><span>03</span><b>Orbit Data</b><div class="bar"><i></i></div><span>4 sources</span><span class="status">CHECK</span></div><div class="row"><span>04</span><b>Vector OS</b><div class="bar"><i></i></div><span>5 sources</span><span class="status">CHECK</span></div><div class="row"><span>05</span><b>Arc Systems</b><div class="bar"><i></i></div><span>3 sources</span><span class="status bad">GAP</span></div><div class="row"><span>06</span><b>Flow Labs</b><div class="bar"><i></i></div><span>7 sources</span><span class="status">DONE</span></div></div></section><aside class="surface side-case"><span class="label">TASK PROGRESS</span><div class="big-number">10</div><h3>不是搜一遍就结束</h3><p>真正可靠的执行，会持续检查：资料够不够？来源可靠吗？缺口有没有补上？失败之后能不能继续？</p><div class="loop"><div>查资料</div><span>→</span><div>记来源</div><span>→</span><div>找缺口</div><span>→</span><div>继续验证</div></div></aside></div></section>
-<section class="scene s6" data-step="5"><div class="topline"><div class="chapter"><i></i>CHAPTER 01 · SUMMARY</div><div class="progress-dots"><span></span><span></span><span></span><span></span><span></span><span></span></div></div><div class="summary surface"><div class="eyebrow">One sentence to remember</div><h1 class="headline">模型决定它有多聪明，<span>Harness 决定它有多可靠。</span></h1><div class="pillars"><div class="pillar"><span>01</span><b>Context</b><small>正确资料和边界</small></div><div class="pillar"><span>02</span><b>Tools</b><small>真实世界能力</small></div><div class="pillar"><span>03</span><b>State</b><small>连续执行记忆</small></div><div class="pillar"><span>04</span><b>Recovery</b><small>失败恢复机制</small></div></div><div class="merge-line"></div><div class="reliable"><span class="status">RESULT</span><b>Reliable Agent</b><small>从“会回答”走向“能完成”</small></div></div></section>
-</main></div><div class="toolbar"><div class="left"><div class="mode"><button id="modeManual" class="on">手动</button><button id="modeAuto">自动</button></div><button class="btn" id="prevBtn">← 上一页</button><button class="btn" id="nextBtn">下一页 →</button><span class="stepinfo" id="stepInfo">01 / 06</span><a class="btn" id="designSystemBtn" href="./design-system.html" target="_blank" rel="noopener">设计规范</a></div><div class="center"><button class="btn primary" id="speakBtn">▶ 播放当前旁白</button><div class="music"><select id="musicSelect"><option value="none">无音乐</option><option value="tech">轻松科技</option><option value="calm">轻松氛围</option><option value="other">轻快神秘</option><option value="upload">本地上传</option></select><input id="musicUpload" type="file" accept="audio/*"><input id="musicVolume" type="range" min="0" max="20" value="8"></div></div></div></div>
-<audio id="narration" preload="auto"></audio><audio id="bgm" loop preload="auto"></audio><script src="../../vendor/upstream/gsap/dist/gsap.min.js"></script><script src="../../vendor/upstream/gsap/dist/MotionPathPlugin.min.js"></script><script src="../../vendor/upstream/gsap/dist/DrawSVGPlugin.min.js"></script><script src="./chapter1-redesign.js?v=19"></script></body></html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Project6 · Harness Engineering 第一章 · Garden v22">
+  <title>Harness Engineering · 第一章 · Garden v22</title>
+  <link rel="stylesheet" href="./chapter1-v22-garden.css?v=22">
+</head>
+<body>
+<div class="app">
+  <div class="viewer">
+    <main class="stage" aria-label="Harness Engineering 第一章视频舞台">
+
+      <section class="scene s1 active" data-step="0">
+        <div class="topline">
+          <div class="chapter"><i></i>CHAPTER 01 · WHY HARNESS</div>
+          <div class="progress-dots" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="hero">
+          <div class="copy">
+            <div class="kicker"><i></i>SAME MODEL · DIFFERENT OUTCOME</div>
+            <div class="eyebrow">The operating layer around an AI agent</div>
+            <h1 class="hero-title"><span>同一个模型，</span><span>为什么有人<strong>稳</strong>，有人会崩？</span></h1>
+            <p class="hero-copy">模型负责推理；真正把任务从“会回答”变成“能稳定做完”的，是模型外面那套运行环境。</p>
+            <div class="cover-proof"><span>Context</span><i></i><span>Tools</span><i></i><span>State</span><i></i><span>Recovery</span></div>
+          </div>
+          <div class="runtime-shell surface">
+            <div class="shell-head">
+              <div><b>Harness Runtime</b><small>把推理接进真实执行世界</small></div>
+              <div class="live-badge"><i></i>OPERATING</div>
+            </div>
+            <div class="runtime-field">
+              <svg class="orbit" viewBox="0 0 580 400" aria-hidden="true">
+                <path class="hot" d="M75 78 C165 40 225 85 290 200"/>
+                <path d="M505 72 C405 38 350 88 290 200"/>
+                <path d="M80 330 C170 372 235 325 290 200"/>
+                <path d="M505 326 C410 370 350 323 290 200"/>
+                <circle class="flow-dot" r="6" cx="0" cy="0"/>
+              </svg>
+              <div class="core"><div><small>MODEL</small><b>LLM</b><em>reasoning core</em></div></div>
+              <div class="port p1"><b>Context</b><small>任务、资料、边界</small></div>
+              <div class="port p2"><b>Tools</b><small>搜索、API、数据库</small></div>
+              <div class="port p3"><b>State</b><small>进度与中间结果</small></div>
+              <div class="port p4"><b>Recovery</b><small>检查、重试、继续</small></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene s2" data-step="1">
+        <div class="topline">
+          <div class="chapter"><i></i>CHAPTER 01 · WHERE IT BREAKS</div>
+          <div class="progress-dots" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="heading">
+          <div class="eyebrow">The model can be smart while the execution chain is broken</div>
+          <h1 class="hero-title">问题，往往已经跑到<strong>模型外面</strong>了</h1>
+        </div>
+        <div class="breakdown surface">
+          <div class="rail-title"><b>一次真实任务，要穿过完整执行链</b><span>MODEL → TOOL → STATE → RECOVERY → RESULT</span></div>
+          <div class="exec-rail">
+            <div class="exec-line"><span class="progress"></span></div>
+            <div class="exec-node"><div class="node">LLM</div><b>推理</b><small>知道要做什么</small></div>
+            <div class="exec-node"><div class="node">API</div><b>工具</b><small>能不能真正调用</small></div>
+            <div class="exec-node"><div class="node">MEM</div><b>状态</b><small>下一步还记不记得</small></div>
+            <div class="exec-node"><div class="node">TRY</div><b>恢复</b><small>失败能不能接着跑</small></div>
+            <div class="exec-node"><div class="node">✓</div><b>结果</b><small>任务是否真正完成</small></div>
+          </div>
+          <div class="failure-note"><span>只优化模型和 Prompt，</span><strong>并不会自动修好执行链。</strong></div>
+        </div>
+      </section>
+
+      <section class="scene s3" data-step="2">
+        <div class="topline">
+          <div class="chapter"><i></i>CHAPTER 01 · THE WORKBENCH</div>
+          <div class="progress-dots" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="heading">
+          <div class="eyebrow">Think of Harness as an operating workbench</div>
+          <h1 class="hero-title">Harness，就是给 Agent 搭一张<strong>工作台</strong></h1>
+        </div>
+        <div class="workbench">
+          <div class="workbench-base"></div>
+          <svg class="workbench-svg" viewBox="0 0 1200 500" aria-hidden="true">
+            <path class="active" d="M190 100 C335 115 420 190 600 250"/>
+            <path d="M1010 100 C865 115 780 190 600 250"/>
+            <path d="M190 402 C335 386 420 310 600 250"/>
+            <path d="M1010 402 C865 386 780 310 600 250"/>
+          </svg>
+          <div class="module m1"><span class="num">01</span><b>Context</b><small>资料放哪儿、任务边界是什么</small></div>
+          <div class="module m2"><span class="num">02</span><b>Tools</b><small>搜索、浏览器、API 怎么调用</small></div>
+          <div class="module m3"><span class="num">03</span><b>State</b><small>做到一半，进度怎么保留下来</small></div>
+          <div class="module m4"><span class="num">04</span><b>Recovery</b><small>失败以后，从哪里检查并继续</small></div>
+          <div class="workbench-core"><div><small>OPERATING LAYER</small><b>Agent Workbench</b><span>把四种能力组织成一套可执行环境</span></div></div>
+          <div class="workbench-label">THIS ORGANIZED ENVIRONMENT = HARNESS</div>
+        </div>
+      </section>
+
+      <section class="scene s4" data-step="3">
+        <div class="topline">
+          <div class="chapter"><i></i>CHAPTER 01 · PROMPT VS HARNESS</div>
+          <div class="progress-dots" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="heading">
+          <div class="eyebrow">Instruction is only one layer of the operating environment</div>
+          <h1 class="hero-title">Prompt 管“怎么说”，Harness 管<strong>“怎么做完”</strong></h1>
+        </div>
+        <div class="control-frame">
+          <div class="frame-label">HARNESS · OPERATING ENVIRONMENT</div>
+          <div class="prompt-ticket">
+            <div class="tag">PROMPT · INSTRUCTION</div>
+            <h2>一句任务说明</h2>
+            <p>它告诉 Agent：你希望它做什么、怎么回答、遵守哪些要求。</p>
+            <div class="quote">“帮我研究 10 家公司，并给出结论。”</div>
+          </div>
+          <div class="environment">
+            <div class="env-item"><span>01 · INPUT</span><b>Context</b><small>决定模型现在能看到什么。</small></div>
+            <div class="env-item"><span>02 · CAPABILITY</span><b>Tools</b><small>决定模型真正能调用什么。</small></div>
+            <div class="env-item"><span>03 · CONTINUITY</span><b>State</b><small>决定多步任务怎样继续。</small></div>
+            <div class="env-item"><span>04 · RESILIENCE</span><b>Recovery</b><small>决定失败后怎样恢复。</small></div>
+          </div>
+          <div class="frame-caption">Prompt 是里面的一张“任务单”；<strong>Harness 是整个工作环境。</strong></div>
+        </div>
+      </section>
+
+      <section class="scene s5" data-step="4">
+        <div class="topline">
+          <div class="chapter"><i></i>CHAPTER 01 · A REAL TASK</div>
+          <div class="progress-dots" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="heading">
+          <div class="eyebrow">Example · Research ten companies</div>
+          <h1 class="hero-title">真正的差别，是有没有<strong>执行闭环</strong></h1>
+        </div>
+        <div class="research-system">
+          <section class="research-loop surface">
+            <div class="system-top"><b>Harness · verification loop</b><span>ONE COMPANY AT A TIME</span></div>
+            <div class="company-queue" aria-label="十家公司任务队列">
+              <div class="company-dot current">01</div><div class="company-dot">02</div><div class="company-dot">03</div><div class="company-dot">04</div><div class="company-dot">05</div><div class="company-dot">06</div><div class="company-dot">07</div><div class="company-dot">08</div><div class="company-dot">09</div><div class="company-dot">10</div>
+            </div>
+            <div class="loop-map">
+              <svg class="loop-svg" viewBox="0 0 850 310" aria-hidden="true">
+                <path d="M120 110 C210 20 425 20 620 90 C750 135 735 255 590 265 C405 278 220 265 120 205 C60 168 65 137 120 110 Z"/>
+                <circle class="loop-dot" r="7" cx="0" cy="0"/>
+              </svg>
+              <div class="loop-step l1">查资料</div>
+              <div class="loop-step l2">记来源</div>
+              <div class="loop-step l3">看缺口</div>
+              <div class="loop-step l4">继续验证</div>
+              <div class="loop-step l5">确认 → 下一家</div>
+            </div>
+          </section>
+          <aside class="prompt-only surface">
+            <div>
+              <div class="system-top"><b>Prompt only</b><span>STRAIGHT TO ANSWER</span></div>
+              <div class="big10">10</div>
+              <h3>搜一圈，就给总结？</h3>
+              <p>看起来很快，但没有“来源够不够、有没有缺口、失败后从哪里继续”的检查机制。</p>
+              <div class="straight-line"><span>搜索</span><span>生成</span><span>总结</span></div>
+            </div>
+            <div class="loop-message">可靠不是“多做几步动画”，而是每一步都有检查、状态和下一步。</div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="scene s6" data-step="5">
+        <div class="topline">
+          <div class="chapter"><i></i>CHAPTER 01 · SUMMARY</div>
+          <div class="progress-dots" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="summary">
+          <div class="eyebrow">One sentence to remember</div>
+          <h1 class="hero-title">模型决定它有多聪明，<strong>Harness 决定它能不能稳稳做完。</strong></h1>
+          <div class="equation">
+            <div class="eq-card"><div><span class="num">MODEL</span><b>Intelligence</b><small>推理、理解、生成</small></div></div>
+            <div class="operator">×</div>
+            <div class="eq-card"><div><span class="num">HARNESS</span><b>Execution System</b><small>让能力进入真实任务流程</small></div></div>
+            <div class="operator">=</div>
+            <div class="eq-card result"><div><span class="num">RESULT</span><b>Reliable Agent</b><small>从“会回答”走向“能完成”</small></div></div>
+          </div>
+          <div class="foundation"><span>Context</span><i></i><span>Tools</span><i></i><span>State</span><i></i><span>Recovery</span></div>
+          <div class="final-line">下一章，再把这张<strong> Agent 工作台</strong>一层一层拆开。</div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div class="toolbar" data-no-advance>
+    <div class="left">
+      <div class="mode"><button id="modeManual" class="on" type="button">手动</button><button id="modeAuto" type="button">自动</button></div>
+      <button class="btn" id="prevBtn" type="button">← 上一页</button>
+      <button class="btn" id="nextBtn" type="button">下一页 →</button>
+      <span class="stepinfo" id="stepInfo">01 / 06</span>
+    </div>
+    <div class="center">
+      <button class="btn primary" id="speakBtn" type="button">▶ 播放当前旁白</button>
+      <div class="music">
+        <select id="musicSelect" aria-label="背景音乐">
+          <option value="none">无音乐</option>
+          <option value="tech">轻松科技</option>
+          <option value="calm">轻松氛围</option>
+          <option value="other">轻快神秘</option>
+          <option value="upload">本地上传</option>
+        </select>
+        <input id="musicUpload" type="file" accept="audio/*">
+        <input id="musicVolume" type="range" min="0" max="20" value="8" aria-label="背景音乐音量">
+      </div>
+    </div>
+    <div class="right">
+      <a class="btn" href="./design-system.html" target="_blank" rel="noopener">设计规范</a>
+      <button class="btn" id="recordBtn" type="button">● 一键录制</button>
+      <span class="record-status" id="recordStatus">同步就绪</span>
+    </div>
+  </div>
+</div>
+
+<audio id="narration" preload="auto"></audio>
+<audio id="bgm" preload="auto" loop></audio>
+<script src="../../vendor/upstream/gsap/dist/gsap.min.js"></script>
+<script src="../../vendor/upstream/gsap/dist/MotionPathPlugin.min.js"></script>
+<script src="../../vendor/upstream/gsap/dist/DrawSVGPlugin.min.js"></script>
+<script src="./chapter1-v22-garden.js?v=22"></script>
+</body>
+</html>
