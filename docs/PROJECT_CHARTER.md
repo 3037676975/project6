@@ -1,4 +1,4 @@
-# Project6 项目总纲 · v2.0
+# Project6 项目总纲 · v2.1
 
 > 最高优先级 / Source of Truth  
 > 更新时间：2026-09-09
@@ -7,209 +7,161 @@
 
 Project6 不是“视频工作台”，也不是在线剪辑 SaaS。
 
-Project6 是一个 **AI HTML 视频项目生产后台**。后台围绕“一个个独立视频项目”组织，每个项目内部管理：
+Project6 是一个 **AI HTML 视频项目生产后台**。一个视频就是一个完整 Project，内部管理：完整口播、Chapter / Scene、Garden 可视化、动画、验收 Gate、整片 TTS JSON、本地 IndexTTS 音频 ZIP、整片音画预览、最终 SFX、本地 1080P 录制以及视觉 QA。
 
-- 完整口播稿；
-- Chapter / Step；
-- 第 1 张、第 2 张、第 3 张……画面；
-- Garden 画面验收状态；
-- 本地 IndexTTS 任务 JSON；
-- 用户回传的配音 ZIP；
-- 本地音画预览；
-- 最后阶段的动画 SFX；
-- 最终项目状态。
-
-**已废弃：独立「视频工作台」产品概念。**
-
----
+**独立「视频工作台」概念已废弃。**
 
 ## 1. 最新唯一生产流程
 
 ```text
 用户给主题 / 文章
       ↓
-AI 先写完整口播稿
+AI 整理完整口播
       ↓
-拆 Chapter / Step
+拆内部 Chapter / Scene
       ↓
-Garden 生成每一张画面
+Garden 为每个 Scene 设计不同的视觉表达与 Motion
       ↓
-用户逐章 / 逐张确认画面与口播
+每 Scene 实际渲染 + 1920×1080 Screenshot QA
       ↓
-用户点击「确认口播稿」
+用户确认整片口播与整片视觉
       ↓
-Project6 解锁 TTS JSON
+一次解锁 / 复制完整 TTS JSON
       ↓
-一键复制 project6_tts_tasks JSON
+用户本地 IndexTTS 2.5 + GPU 生成 001～042
       ↓
-用户本地 IndexTTS 2.5 + GPU 生成
+一个总 ZIP 上传回来
       ↓
-本地导出 ZIP
-001.mp3 / 002.mp3 / ... / manifest.json
+浏览器自动解压 + 编号匹配 + ObjectURL 注入
       ↓
-上传回对应 Project6 视频项目
+整片本地音画预览 + timing 微调
       ↓
-浏览器自动解压 + 按编号匹配画面
+最后添加动画 SFX / BGM
       ↓
-本地音画预览
+一键 Stage-only 1080P 本地录制
       ↓
-用户确认音画
-      ↓
-最后才选择动画 SFX / BGM
-      ↓
-完成作品
+浏览器下载 WebM
 ```
 
-关键原则：**先内容和画面，再配音，最后动画音效。**
-
----
+关键原则：**先内容与可视化，再本地配音，再音画同步，最后 SFX 与录制。**
 
 ## 2. 一个视频 = 一个独立项目
 
-每个项目必须能看到自己的完整状态，而不是跳到另一个“工作台”。
-
-示例：
+Chapter 只用于内部叙事组织。用户实际交付始终是：
 
 ```text
-Harness Engineering
-├── Chapter 01
-│   ├── 第1张 / Step 001 / narration / voice 001
-│   ├── 第2张 / Step 002 / narration / voice 002
-│   ├── 第3张 / Step 003 / narration / voice 003
-│   └── ...
-├── Chapter 02（锁定）
-└── 项目 Gate
+一个完整视频
+一个完整口播
+一套完整 HTML/Garden Scene
+一个完整 TTS JSON
+一个完整配音 ZIP
+一个整片预览
+一个最终录制文件
 ```
 
-作品页是生产主入口。
-
----
+禁止退回“一章一个 TTS JSON”。
 
 ## 3. Garden Skills 是画面制作标准
 
-Project6 中用户口中的 Garden / Garden Scale，统一指 Garden Skills 的 `web-video-presentation` 制作体系。
-
-标准：
-
-```text
-Narration Script
-→ Theme
-→ Outline
-→ Chapter
-→ Step
-→ HTML / SVG / React
-→ Audio
-→ Auto Play
-```
+Project6 中 Garden / Garden Scale 统一指 Garden Skills 的 `web-video-presentation` 制作体系。
 
 必须遵守：
 
-- 一个 Step 对应一段 narration；
-- GSAP Timeline 永远只属于当前 Step；
-- 不能用随便写的固定秒数代替真实口播节奏；
-- 画面先通过用户验收，才进入本地 TTS；
-- 第一章未通过 Gate，不开发第二章。
+- 一个 Scene / Step 对应一段 narration；
+- GSAP Timeline 只属于当前 Scene；
+- Scene 要真正可视化表达关系 / 空间 / 状态 / 反馈 / 过程；
+- 禁止统一左右排版、统一卡片模板、统一 fade；
+- Scene 001 是当前 Harness Engineering 的视觉质量 Anchor；
+- Scene 002～042 必须达到同级别完成度；
+- 动画不是装饰，必须服务讲解逻辑。
 
----
+## 4. 强制 Screenshot QA
 
-## 4. 本地 IndexTTS 是正式配音路线
+**没有实际渲染截图检查，不允许宣布 Scene 完成。**
 
-当前正式路线：
+每次修改正式视频：
 
 ```text
-Project6 输出 JSON
-      ↓
-用户本机 Project6 TTS 工作台
-      ↓
-IndexTTS 2.5 + 本地 GPU
-      ↓
-001.mp3 ... manifest.json
-      ↓
-ZIP
-      ↓
-Project6 浏览器导入
+实现
+→ Chromium 渲染
+→ 1920×1080 截图
+→ 检查字号 / 遮挡 / 溢出 / 对齐 / 留白 / 重心 / 层级 / 逻辑 / 动画表达
+→ 不通过则返工
+→ 通过后才进入 USER REVIEW
 ```
 
-Project6 不需要连接用户本机公网，不需要 Cloudflare Tunnel，不需要把 IndexTTS 部署进服务器。
+自动化：
+- `scripts/visual-qa.mjs`
+- `.github/workflows/visual-qa.yml`
 
-Project5 / Edge TTS 可以保留为历史或兜底能力，但**当前第一章正式交付优先使用本地 IndexTTS 工作流**。
+输出 001～042 截图与 `qa/visual-report.json`。
 
----
+## 5. 本地 IndexTTS 是正式配音路线
 
-## 5. TTS JSON 是固定交接协议
-
-每个项目必须提供可见 JSON 预览和「一键复制」。
-
-```json
-{
-  "project": "Harness Engineering",
-  "chapter": "01-harness-engineering",
-  "engine": "IndexTTS 2.5",
-  "version": "1.0",
-  "tasks": [
-    {
-      "id": "001",
-      "chapter": "01",
-      "step": 1,
-      "scene": "scene01",
-      "text": "口播原文",
-      "filename": "001.mp3"
-    }
-  ]
-}
+```text
+Project6 完整 JSON
+→ 用户本机 Project6 TTS 工作台
+→ IndexTTS 2.5 + GPU
+→ 001.mp3 ... 042.mp3 / manifest.json
+→ 一个 ZIP
+→ Project6 浏览器导入
 ```
+
+Project6 不需要连接用户本机公网，不需要 Cloudflare Tunnel，不需要把 IndexTTS 部署到服务器。
+
+## 6. TTS JSON 是固定交接协议
+
+整片 canonical：`presentations/<project>/full-tts-tasks.json`。
 
 规则：
 
-- JSON 预览可以提前看；
-- **复制按钮必须在用户确认口播稿后才解锁**；
-- `id`、`scene`、`filename` 必须稳定；
-- Project6 后续按编号把本地声音匹配回画面。
+- JSON 可提前预览；
+- 用户确认整片口播与视觉后才正式用于最终配音；
+- `id / scene / filename` 必须稳定；
+- 001～042 与 Scene 一一对应。
 
----
-
-## 6. 配音与动画音效绝对分开
+## 7. 配音与动画音效绝对分开
 
 ### 配音
+人物说话声音，本地 IndexTTS 生成。
 
-就是人物说话声音：IndexTTS 生成的 001、002、003……
+### 动画 SFX
+元素出现、whoosh、transition、click、tick、confirm、accent、digital 等短音效。
 
-### 动画音效 SFX
+SFX 永远在整片音画通过后进入。
 
-只用于画面动作，例如：
+## 8. 本地预览是正式 Gate
 
-- 元素出现；
-- whoosh 转场；
-- UI click；
-- pop / tick；
-- confirm；
-- 提示、强调、完成反馈。
+上传本地配音后，Project6 必须提供：
 
-动画音效库必须提供真实可试听资源，并记录来源和许可证。
+- 正确 001～042 映射；
+- ObjectURL 本地播放；
+- 播放 / 暂停 / 继续；
+- 上一张 / 下一张；
+- Scene 跳转；
+- 全屏；
+- narration 结束后自动下一 Scene；
+- Pause 同时暂停当前 GSAP timeline。
 
-第一批真实资源来源：**Kenney UI Audio / Interface Sounds（CC0）**，以及 Project6 已有本地可播放音频样本。
+## 9. Stage-only 1080P 本地录制
 
-动画 SFX 永远是流程最后阶段，不允许和配音混在一起。
+正式播放器提供「一键录制 1080P」。
 
----
+要求：
 
-## 7. 本地预览是 P0，录制不是当前 P0
+- 只录中间 `.stage`；
+- 不录后台工具栏；
+- Chromium Region Capture 精确裁切；
+- 请求 1920×1080 / 60fps；
+- 当前标签页视频 + 标签页音频；
+- 低于 1080P 或不支持精确区域裁切时拒绝录制；
+- VP9/Opus 优先，高码率；
+- 从 Scene 001 一键开始整片播放；
+- END 自动停止，也可手动停止；
+- 浏览器本地下载 WebM；
+- **不上传服务器、不保存 Project6 后端。**
 
-用户上传本地配音后，Project6 必须提供浏览器内的音画预览。
-
-当前不强求录制、不强求 MP4 / WebM 导出。
-
-P0 是：
-
-```text
-画面 + 正确的配音编号 + 正确顺序
-→ 浏览器本地预览
-→ 用户确认
-```
-
----
-
-## 8. 后台信息架构
+## 10. 后台信息架构
 
 ```text
 工作台
@@ -217,62 +169,26 @@ P0 是：
 动画音效库          ← 最后阶段 SFX，不是配音
 组件库 · Galaxy
 动效库 · GSAP / Emil
-Garden 手册         ← 必须可正常打开
-项目总纲            ← 本文件的可视化版本
+Garden 手册
+项目总纲
 ```
 
-禁止恢复：
+禁止恢复 `studio.html / #/studio / 视频工作台`。
+
+## 11. Harness Engineering 当前状态
 
 ```text
-视频工作台
-#/studio
-studio.html
+A 完整口播           CODE PASS / WAITING USER CONFIRM
+B Garden v41 视觉    CODE POLISHED / QA RUNNING / USER REVIEW
+C 本地 IndexTTS      CODE READY / WAITING
+D 整片音画预览       CODE READY / WAITING AUDIO
+E 动画 SFX           LOCKED
+F 1080P 本地录制     CODE READY / BROWSER TEST
 ```
 
----
+当前优先级：**先跑完 42 Scene Screenshot QA，把细节继续修到稳定，再进入最终 TTS。**
 
-## 9. 每个项目必须显示 Gate
-
-最低状态：
-
-```text
-A 口播稿
-B Garden 画面
-C 本地 IndexTTS
-D 本地音画预览
-E 动画音效
-F 下一章节
-```
-
-每个 Gate 必须有：
-
-- PASS / WAITING / LOCKED；
-- 验收规则；
-- 当前下一步；
-- 禁止越级。
-
----
-
-## 10. 当前第一章状态
-
-Harness Engineering Chapter 01：
-
-```text
-A 口播稿         PASS / 用户可重新确认
-B Garden 画面    CODE PASS / USER REVIEW
-C 本地 IndexTTS  WAITING AUDIO ZIP
-D 本地音画预览   WAITING AUDIO
-E 动画音效       LOCKED
-F 第二章         LOCKED
-```
-
-当前唯一下一步：
-
-> 用户确认第一章口播稿 → 一键复制 TTS JSON → 本地 IndexTTS 生成 → 上传 ZIP。
-
----
-
-## 11. 强制开发门禁
+## 12. 强制开发门禁
 
 每次开发前必须：
 
@@ -281,18 +197,12 @@ Read PROJECT_CHARTER
 → Read PRD
 → Read ACTIVE_DECISIONS
 → Read DEVELOPMENT_STATUS
+→ Read 当前作品 ACCEPTANCE
 → 定位当前 Gate
-→ 只做当前 Gate 需要的事
+→ 实现
+→ 实际渲染截图 QA
 → 自检
 → 更新状态文档
 ```
 
-禁止：
-
-- 页面改了但文档不更新；
-- 恢复已经废弃的旧入口；
-- 假按钮；
-- 假数据；
-- 假资源；
-- 动画音效与配音混淆；
-- 第一章没验收就开发第二章。
+禁止：页面改了文档不更新、假按钮、假数据、假资源、配音与 SFX 混淆、没有截图就宣布视觉完成、录制上传服务器、低于 1080P 却标成高清。
