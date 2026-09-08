@@ -5,8 +5,8 @@ on:
   push:
     paths:
       - "presentations/harness-engineering/index.html"
-      - "presentations/harness-engineering/continuous-motion.js"
-      - "presentations/harness-engineering/continuous-motion.css"
+      - "presentations/harness-engineering/chapter1-redesign.css"
+      - "presentations/harness-engineering/chapter1-redesign.js"
       - "presentations/harness-engineering/audio-map.json"
       - "presentations/harness-engineering/timings.json"
       - "presentations/harness-engineering/ACCEPTANCE.md"
@@ -15,8 +15,9 @@ on:
       - "presentations/harness-engineering/public/timing/**"
       - "vendor/upstream/gsap/**"
       - "vendor/upstream/emil-skills/**"
-      - "data/projects.json"
-      - "data/motions.json"
+      - "vendor/upstream/uiverse-galaxy/**"
+      - "data/galaxy-components.json"
+      - "data/galaxy-curated.json"
       - "scripts/validate-harness-chapter1.mjs"
       - ".github/workflows/validate-harness-chapter1.yml"
 
