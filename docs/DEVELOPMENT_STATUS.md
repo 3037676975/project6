@@ -1,74 +1,80 @@
 # Project6 开发状态
 
-> 每次开发前必须依次阅读：
-> `docs/PROJECT_CHARTER.md` → `docs/PRD.md` → `docs/ACTIVE_DECISIONS.md` → 本文件。
->
-> 第一章开发还必须阅读 Garden 官方 `SKILL.md`、`CHAPTER-CRAFT.md`、`AUDIO.md`、`THEMES.md`、`RECORDING.md` 和 `presentations/harness-engineering/ACCEPTANCE.md`。
-> 只有当前 Gate PASS 后，才允许继续下一阶段。
+> 每次开发前必须依次阅读：`docs/PROJECT_CHARTER.md` → `docs/PRD.md` → `docs/ACTIVE_DECISIONS.md` → 本文件。
+> 第一章还必须阅读 Garden 官方规范、`presentations/harness-engineering/ACCEPTANCE.md`，以及 Project6 本地 Emil animation skills。
 
 ## 当前定位
 
 - 当前 Phase：**Phase 1 · 第一章返工验收**
-- 当前状态：**IN PROGRESS / 87 分后继续精修**
-- 最新用户评分：**87 / 100**
+- 当前状态：**IN PROGRESS / 40 分后动画体系重建**
+- 最新用户评分：**40 / 100**
 - 当前唯一主验收作品：`presentations/harness-engineering/`
 - 当前范围：**只做第一章，不进入第二章**
-- Garden Theme：官方 `warm-keynote`
-- 章节：1
+- Garden Theme：`warm-keynote`
 - Step：6
-- 当前 TTS：`rany2/edge-tts` / `zh-CN-YunxiNeural` / `rate=+0%` / 1.0×
-- 当前 BGM：无音乐 / 3 个 CC0 预置 / 浏览器本地上传
+- TTS：`edge-tts / zh-CN-YunxiNeural / 1.0x`
+- BGM：无音乐 / 3 个 CC0 预置 / 本地上传
 - 导出：浏览器本地 MediaRecorder → WebM
 
-## 已完成
+## 用户本轮否决原因
 
-- [x] 主题一句话明确。
-- [x] 6 段 narration 改成聊天式中文口播。
-- [x] 云希 6/6 MP3 已生成。
-- [x] Manual / Auto 模式彻底分开。
-- [x] BGM 支持无音乐 / 3 个 CC0 预置 / 本地上传 / 音量调节。
-- [x] 控制区移出 1920×1080 舞台。
-- [x] 小字字号与字重整体上调。
-- [x] 2～5 屏增加状态、组件、循环节点、进度等 secondary motion。
-- [x] 录制按钮增加授权 / 录制 / 下载状态反馈，并检查 HTTPS Secure Context。
-- [x] 视频作品页验收标准与开发状态改为页内折叠查看。
+1. 上一版自研 Beat Reveal 影响阅读。
+2. `audio.currentTime / duration` 粗比例不能准确代表中文语义。
+3. 视觉出现顺序与实际讲话内容对不上。
+4. 产生“说一的时候画面像跳到二”的体验错误。
+5. 动效缺乏成熟动画体系和严格 Review。
 
-## 2026-09-08 · 87 分反馈新增完成
+## 本轮已完成
 
-### 独立动效库
+### 上游动画体系固定到 Project6
 
-- [x] 后台资源导航增加独立「动效库」。
-- [x] 新增 `motions.html`，提供开源动效引擎卡片和可重播 Demo。
-- [x] 新增 `data/motions.json`，第一批收录：Anime.js、Motion、Lottie Web、AutoAnimate、Animate.css、React Spring。
-- [x] 第一批 Project6 Primitive：`beat-reveal-01`、`flow-build-01`、`focus-shift-01`、`counter-progress-01`。
-- [x] 动效库明确“引擎层”和“业务层”分离：业务层只认统一 Primitive / `data-beat`，底层可用 Anime.js / Motion / WAAPI 等替换。
+- [x] 新增 `.github/workflows/sync-animation-upstreams.yml`。
+- [x] GitHub Actions 已成功完整镜像 `greensock/GSAP`。
+- [x] GitHub Actions 已成功完整镜像 `emilkowalski/skills`。
+- [x] 本地路径：`vendor/upstream/gsap/`。
+- [x] 本地路径：`vendor/upstream/emil-skills/`。
+- [x] 镜像保存 upstream commit SHA。
+- [x] GSAP 许可信息保留。
+- [x] Emil MIT LICENSE 保留。
 
-### 第一章 Narration Beat Reveal
+### 后台动效库重建
 
-- [x] 第一章 6 个 Step 均加入 `data-beat` 标记。
-- [x] 播放当前旁白和 Auto 模式时使用 `audio.currentTime / duration` 驱动 Beat。
-- [x] 不再默认整屏关键内容一次性出现。
-- [x] 第二屏顺序：标题 → 失败系统 → 失败信号 → 稳定系统 → 稳定信号。
-- [x] 第三屏顺序：工作台 → 工具 / 状态 → Harness 作用 → 最终目标。
-- [x] 第四屏顺序：聪明员工 → Prompt → 工作环境 → Harness 四层 → 结论。
-- [x] 第五屏顺序：研究任务 → 执行循环 → 无 Harness → 有 Harness → 十家公司进度。
-- [x] 第六屏顺序：章节结论 → 英文主结论 → 中文解释 → Context / Tools / State / Recovery。
-- [x] Manual 非播放状态仍可看完整画面，便于检查布局。
+- [x] `motions.html` 把 GSAP 标为 CORE RUNTIME。
+- [x] `motions.html` 把 Emil Skills 标为 CORE TASTE / REVIEW。
+- [x] 后台直接读取 Project6 本地 GSAP README。
+- [x] 后台直接读取本地 Emil `animate/SKILL.md`。
+- [x] 后台直接读取本地 Emil animation standards / improve / opportunities。
+- [x] `data/motions.json` 已把 GSAP + Emil 提升为 Core。
+
+### 第一章动画逻辑重写
+
+- [x] 删除正式 `data-beat + currentTime/duration threshold` 主逻辑。
+- [x] 第一章通过本地 `vendor/upstream/gsap/dist/gsap.min.js` 加载 GSAP。
+- [x] 建立 6 条独立 GSAP timeline。
+- [x] 每条 timeline 只操作当前 Garden Step 内元素。
+- [x] Timeline 不翻页。
+- [x] Timeline 完成后保持当前 Step 最终状态。
+- [x] Manual 当前旁白结束不翻页。
+- [x] Auto 只有 narration `ended` 才进下一 Step。
+- [x] 6 屏出现顺序重新按各自口播内容编排。
 
 ## 当前待通过
 
-- [ ] 实机听看每个 Beat 是否与中文语义点足够贴合，需要按真实音频继续微调 threshold。
-- [ ] Browser Auto 6 Step 连续播放时 Beat 不闪回、不残影、不提前全亮。
-- [ ] 动效库后续补更多 SVG / 图表 /数字 / 路径动画 Primitive。
-- [ ] 录制按钮在最终 HTTPS 地址完成真实授权测试。
-- [ ] 三个 BGM 主观听感最终选择 PASS。
-- [ ] 完整 WebM 录制 / 自动下载实机 PASS。
-- [ ] 用户确认第一章达到 90+ 并最终 PASS。
+- [ ] CI Gate 更新为 GSAP v5 标准并 PASS。
+- [ ] 浏览器实机确认 GSAP 本地文件加载成功。
+- [ ] Manual：每一段旁白始终停留在对应 Step。
+- [ ] Auto：6 Step 连播无提前跳页。
+- [ ] 逐屏确认动画没有影响文字阅读。
+- [ ] 逐屏确认 stagger / ease / duration 符合 Emil 标准。
+- [ ] HTTPS 地址完成完整 WebM 本地录制。
+- [ ] 用户重新评分达到 90+。
 
 ## 当前 Gate
 
-**代码 / 资源 Gate：等待本轮 CI 复检。**
+**上游镜像 Gate：PASS。**
 
-**产品最终 Gate：IN PROGRESS。**
+**代码 Gate：等待 v5 CI。**
 
-当前主要差距已经进一步集中到：**Narration Beat 与真实语义同步精度、动效细节、浏览器实机录制、最终用户体验。** 第一章未最终 PASS 前，不进入第二章。
+**产品最终 Gate：FAIL / 继续返工。**
+
+第一章未最终 PASS 前，不进入第二章。
