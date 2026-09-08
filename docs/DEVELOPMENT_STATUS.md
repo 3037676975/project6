@@ -8,84 +8,55 @@
 
 ## 当前定位
 
-- 当前 Phase：**Phase 1 · Garden 单视频实验 / 第一章返工验收**
-- 当前状态：**IN PROGRESS / 等待用户视觉验收**
+- 当前 Phase：**Phase 1 · 第一章返工验收**
+- 当前状态：**IN PROGRESS / 用户上一版评分 50 分**
 - 当前唯一主验收作品：`presentations/harness-engineering/`
-- 参考：用户上传 Harness Engineering 案例视频
 - 当前范围：**只做第一章，不进入第二章**
-- Garden Theme：**官方 `warm-keynote`**
+- Garden Theme：官方 `warm-keynote`
 - 章节：1
 - Step：6
-- TTS：**开源 `rany2/edge-tts` / `zh-TW-YunJheNeural` / `rate=+0%` / 1.0×**
-- BGM：**Short Plingy Loop / CC0 / 低音量循环**
+- 当前 TTS：`rany2/edge-tts` / `zh-CN-YunxiNeural` / `rate=+0%` / 1.0×
+- 当前 BGM：可选预置 + 本地上传，不再锁死一首
 - 导出：浏览器本地 MediaRecorder → WebM
 
-## 最新实现决策
+## 本轮用户扣分原因
 
-- [x] 第一章已从 Project5 切换到直接 `edge-tts`。
-- [x] 云哲 Voice ID 锁定 `zh-TW-YunJheNeural`。
-- [x] 香港男声 `zh-HK-WanLungNeural` 仅作为另一音色认知，不与云哲混淆。
-- [x] 语速改为 1.0×：`rate=+0%`。
-- [x] GitHub Actions 自动安装 `edge-tts==7.2.8` 并生成 6 段音频。
-- [x] 6/6 MP3 已真实生成并提交仓库。
-- [x] `audio-map.json` 已变为 `status=ready`，6 个 segment 完整。
-- [x] CC0 BGM 已自动下载并提交仓库。
-- [x] BGM 来源与许可证已记录。
+1. 口播稿不像真人说话，主题表达不够清楚。
+2. 云哲听感偏平，需要更有聊天感的音色。
+3. BGM 选择差且被锁死，缺少上传 / 选择入口。
+4. Manual / Auto 模式不清楚，手动操作反馈差。
+5. 第二屏以后信息密度不足，画面偏空。
+6. 之前验收偏代码指标，没有把“主题讲清楚 / 口播自然 / 用户愿意听”放到硬 Gate。
 
-## 第一章视觉 / 动画
+## 已完成的新返工
 
-- [x] 固定 1920×1080 16:9 舞台。
-- [x] Garden 官方 `warm-keynote` 设计 DNA。
-- [x] 奶油底 + 40px 网格 + 白色 glass slab + 青绿 accent。
-- [x] 当前第一章无字幕组件。
-- [x] 无 emoji 图标；图示使用 SVG / CSS / 几何组件。
-- [x] 6 Step / 6 Narration 一一对应。
-- [x] 每屏控制 1～3 个主要视觉重点。
-- [x] 多组 SVG / CSS 动态演示。
-- [x] 6 个 Step 主动作不同：开场聚焦 / 对比状态 / 系统组装 / Harness 管线 / 研究任务循环 / 概念收束。
-- [x] 场景切换增加统一离场 / 入场过渡，减少闪切。
-- [x] BGM 低音量淡入 / 淡出，旁白优先。
-- [x] WebAudio 轻量 SFX 仅用于状态切换，不代替 narration。
-- [x] MediaRecorder 本地 WebM 导出；录制时隐藏控制条。
+- [x] 重新定义第一章一句话主题：模型之外的运行系统，决定 Agent 能不能稳定把任务做完。
+- [x] 6 段 narration 全部改成聊天式中文口播。
+- [x] 正式音色改为 `zh-CN-YunxiNeural`（云希，Lively / Sunshine）。
+- [x] TTS 生成脚本改为从 `narrations.json` 动态读取 voice / locale / rate，便于未来接音色选择后台。
+- [x] 第一章播放器重新实现明确的 Manual / Auto 模式。
+- [x] Manual 支持上一页 / 下一页 / 点击舞台 / ←→ / 单独播当前旁白。
+- [x] Auto 仅按正式旁白 `ended` 推进。
+- [x] 第二屏提高信息密度：同一模型分叉为失败执行系统 / 稳定执行系统，并加入状态信号。
+- [x] 第三、四、五屏分别强化“工作台 / 类比 / 十家公司闭环”视觉关系。
+- [x] BGM 面板增加：无音乐 / 3 个 CC0 预置 / 本地上传 / 音量控制。
+- [x] 本地上传只用 `URL.createObjectURL`，不上传服务器。
+- [x] 本地录制逻辑仍为 getDisplayMedia + MediaRecorder + 自动下载 WebM。
+- [x] `ACCEPTANCE.md` 升级到 v3，加入“讲什么 / 口播自然 / 手动模式 / BGM 选择”硬 Gate。
 
-## 自动化与验收
+## 当前待通过
 
-- [x] `presentations/harness-engineering/ACCEPTANCE.md` 升级到 v2。
-- [x] `scripts/validate-harness-chapter1.mjs` 已切换为 edge-tts / YunJhe / 1.0× / BGM / 动画 / 录制检查。
-- [x] GitHub Actions `Generate Harness Edge TTS` 最近一次运行成功。
-- [ ] 浏览器连续 Auto 6 Step 实机播放检查。
-- [ ] BGM 与旁白音量主观平衡检查。
-- [ ] 浏览器本地录制完整实测。
-- [ ] 用户确认第一章视觉 / 动画效果 PASS。
+- [ ] GitHub Actions 完成云希 6/6 MP3 重生成。
+- [ ] 三个预置 BGM 均真实落盘并可播放。
+- [ ] v3 自动 Gate PASS。
+- [ ] 浏览器 Manual 实机操作 PASS。
+- [ ] 浏览器 Auto 6 Step 连续播放 PASS。
+- [ ] 本地 BGM 上传实机 PASS。
+- [ ] 完整 WebM 录制 / 自动下载实机 PASS。
+- [ ] 用户确认：主题清楚、口播自然、音色合适、画面信息密度与动画效果 PASS。
 
 ## 当前 Gate
 
-**代码与资源 Gate：PASS。**
+**FAIL / 继续返工，不进入第二章。**
 
-当前已经具备：
-
-```text
-Garden warm-keynote
-+ 6 Step
-+ 6/6 edge-tts 云哲台湾男声 1.0×
-+ CC0 BGM
-+ SFX
-+ Auto
-+ Browser WebM
-```
-
-**产品最终 Gate：仍为 IN PROGRESS。**
-
-原因：还需要浏览器实机整段播放 / 录制与用户视觉验收。未通过前不进入第二章。
-
-## 禁止越级
-
-当前第一章未最终 PASS 前，不继续：
-
-- 第二章
-- 2～3 分钟完整版
-- 新视频主题实验
-- 本地 MP4
-- 大规模资源库扩建
-
-当前第一优先级：把第一章的 **画面好看 + 动画衔接自然 + 云哲正确 + BGM 舒服 + 录制稳定** 做到最终 PASS。
+本轮不是因为“功能还没堆够”，而是因为上一版产品体验只有 50 分。必须先把内容、声音、播放、BGM 和画面密度做成一条真正能看的视频，再继续扩展。
