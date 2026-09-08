@@ -54,11 +54,11 @@
 
   function initialState(i){
     const s=scenes[i];
-    if(i===0){gsap.set(s.querySelectorAll('.s1 .question-pill,.s1 .eyebrow,.s1 .cover-main,.s1 .cover-sub,.s1 .copy p,.s1 .cover-proof'),{opacity:0,y:18});gsap.set(s.querySelector('.s1 .system-card'),{opacity:0,y:24,scale:.988});gsap.set(s.querySelector('.s1 .model-core'),{opacity:0,scale:.96});gsap.set(s.querySelectorAll('.s1 .orbit-line'),{drawSVG:'0%'});gsap.set(s.querySelectorAll('.s1 .sat'),{opacity:0,y:14});gsap.set(s.querySelector('.s1 .signal-dot'),{opacity:0})}
+    if(i===0){gsap.set(s.querySelectorAll('.s1 .question-pill,.s1 .eyebrow,.s1 .cover-main,.s1 .cover-sub,.s1 .copy p,.s1 .cover-proof'),{opacity:0,y:18});gsap.set(s.querySelector('.s1 .system-card'),{opacity:0,y:24,scale:1});gsap.set(s.querySelector('.s1 .model-core'),{opacity:0,scale:1});gsap.set(s.querySelectorAll('.s1 .orbit-line'),{drawSVG:'0%'});gsap.set(s.querySelectorAll('.s1 .sat'),{opacity:0,y:14});gsap.set(s.querySelector('.s1 .signal-dot'),{opacity:0})}
     if(i===1){gsap.set(s.querySelectorAll('.s2 .eyebrow,.s2 .headline,.lane,.vs-badge'),{opacity:0,y:20});gsap.set(s.querySelectorAll('.stack-item'),{opacity:0,x:-16})}
-    if(i===2){gsap.set(s.querySelectorAll('.s3 .eyebrow,.s3 .headline,.rail,.console,.activity'),{opacity:0,y:20});gsap.set(s.querySelectorAll('.resource,.runtime-card,.event'),{opacity:0,y:12});gsap.set(s.querySelector('.core-ring'),{opacity:0,scale:.97})}
-    if(i===3){gsap.set(s.querySelectorAll('.s4 .eyebrow,.s4 .headline,.prompt-card,.control-plane'),{opacity:0,y:20});gsap.set(s.querySelector('.arrow-path'),{drawSVG:'0%'});gsap.set(s.querySelector('.prompt-orb'),{opacity:0,scale:.97});gsap.set(s.querySelectorAll('.cp-item'),{opacity:0,y:12});gsap.set(s.querySelector('.control-bottom'),{opacity:0,y:10})}
-    if(i===4){gsap.set(s.querySelectorAll('.s5 .eyebrow,.s5 .headline,.research-board,.side-case'),{opacity:0,y:20});gsap.set(s.querySelectorAll('.pipe,.row:not(.head),.loop-step'),{opacity:0,y:10});gsap.set(s.querySelector('.big-number'),{opacity:0,scale:.97})}
+    if(i===2){gsap.set(s.querySelectorAll('.s3 .eyebrow,.s3 .headline,.rail,.console,.activity'),{opacity:0,y:20});gsap.set(s.querySelectorAll('.resource,.runtime-card,.event'),{opacity:0,y:12});gsap.set(s.querySelector('.core-ring'),{opacity:0,scale:1})}
+    if(i===3){gsap.set(s.querySelectorAll('.s4 .eyebrow,.s4 .headline,.prompt-card,.control-plane'),{opacity:0,y:20});gsap.set(s.querySelector('.arrow-path'),{drawSVG:'0%'});gsap.set(s.querySelector('.prompt-orb'),{opacity:0,scale:1});gsap.set(s.querySelectorAll('.cp-item'),{opacity:0,y:12});gsap.set(s.querySelector('.control-bottom'),{opacity:0,y:10})}
+    if(i===4){gsap.set(s.querySelectorAll('.s5 .eyebrow,.s5 .headline,.research-board,.side-case'),{opacity:0,y:20});gsap.set(s.querySelectorAll('.pipe,.row:not(.head),.loop-step'),{opacity:0,y:10});gsap.set(s.querySelector('.big-number'),{opacity:0,scale:1})}
     if(i===5){gsap.set(s.querySelectorAll('.summary .eyebrow,.summary .headline,.summary .subhead,.pillar,.merge,.reliable'),{opacity:0,y:18})}
   }
 
