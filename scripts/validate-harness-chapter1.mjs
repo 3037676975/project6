@@ -28,7 +28,7 @@ check('glass toolbar restored',polish.includes('Toolbar — restore designed gla
 check('controller layers separated',js.includes('function buildTimeline')&&js.includes('function semanticSync')&&js.includes('function startAmbient'));
 check('local GSAP runtime',html.includes('../../vendor/upstream/gsap/dist/gsap.min.js')&&html.includes('MotionPathPlugin.min.js')&&html.includes('DrawSVGPlugin.min.js'));
 check('sentence cue synchronization',js.includes('narration.ontimeupdate')&&js.includes('cues[i].start')&&js.includes('semanticSync()'));
-check('current sentence target logic',js.includes('const nextLabel=`cue${idx+1}`')&&js.includes('tl.labels[nextLabel]'));
+check('current sentence target logic',js.includes('nextLabel=`cue${idx+1}`')&&js.includes('tl.labels[nextLabel]')&&js.includes('target=tl.labels[nextLabel]!==undefined?nextLabel:tl.duration()'));
 check('auto navigation narration-ended only',js.includes('narration.onended=')&&js.includes("mode==='auto'"));
 check('manual controls',html.includes('id="modeManual"')&&html.includes('id="prevBtn"')&&html.includes('id="nextBtn"'));
 check('toolbar outside stage',html.indexOf('</main></div><div class="toolbar"')>0);
