@@ -6,9 +6,15 @@ on:
     paths:
       - "presentations/harness-engineering/index.html"
       - "presentations/harness-engineering/audio-map.json"
+      - "presentations/harness-engineering/timings.json"
       - "presentations/harness-engineering/ACCEPTANCE.md"
+      - "presentations/harness-engineering/ANIMATION_REVIEW.md"
       - "presentations/harness-engineering/public/audio/**"
+      - "presentations/harness-engineering/public/timing/**"
+      - "vendor/upstream/gsap/**"
+      - "vendor/upstream/emil-skills/**"
       - "data/projects.json"
+      - "data/motions.json"
       - "scripts/validate-harness-chapter1.mjs"
       - ".github/workflows/validate-harness-chapter1.yml"
 
@@ -19,6 +25,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
       - name: Run Harness chapter 1 gate
         run: node scripts/validate-harness-chapter1.mjs
