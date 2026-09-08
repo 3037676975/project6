@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Project6 IndexTTS JSON 导出</title>
+<style>
+body{font-family:"Noto Sans SC",sans-serif;background:#f7f7f3;color:#17212b;padding:40px;line-height:1.7}.box{max-width:900px;margin:auto;background:#fff;border-radius:24px;padding:32px;box-shadow:0 20px 60px #0001}textarea{width:100%;min-height:220px;border:1px solid #ddd;border-radius:16px;padding:16px;font-size:15px}button{background:#0f9f9a;color:#fff;border:0;border-radius:12px;padding:12px 20px;cursor:pointer;margin-top:16px}.hint{background:#eef8f7;padding:16px;border-radius:14px}pre{background:#101820;color:#fff;padding:20px;border-radius:16px;overflow:auto}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>🎙 Project6 → IndexTTS 配音任务导出</h1>
+<p>生成给本地 IndexTTS 2.5 使用的 JSON 任务文件。</p>
+<div class="hint">规则：一个 Scene 对应一个音频。生成后本地 TTS 输出 001.mp3、002.mp3，并通过 manifest.json 回传 Project6。</div>
+<h3>输入旁白（每行一段）</h3>
+<textarea id="text">同一个模型，为什么有人稳，有人会崩？
+Harness就是给Agent搭一张工作台。</n模型负责智能，Harness负责可靠执行。</textarea>
+<button onclick="downloadJson()">导出 project6_tts_tasks.json</button>
+<h3>预览</h3>
+<pre id="preview"></pre>
+</div>
+<script>
+function build(){return {project:'Project6 Chapter01',engine:'IndexTTS 2.5',version:'1.0',tasks:document.getElementById('text').value.split('\n').filter(Boolean).map((t,i)=>({id:String(i+1).padStart(3,'0'),scene:'scene'+String(i+1).padStart(2,'0'),text:t,filename:String(i+1).padStart(3,'0')+'.mp3'}))}}
+function downloadJson(){const data=build();const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='project6_tts_tasks.json';a.click()}
+preview.textContent=JSON.stringify(build(),null,2);text.oninput=()=>preview.textContent=JSON.stringify(build(),null,2);
+</script>
+</body>
+</html>
