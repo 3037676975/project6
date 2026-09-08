@@ -19,7 +19,18 @@
     "repo":"https://github.com/emilkowalski/skills",
     "localPath":"./vendor/upstream/emil-skills/",
     "bestFor":["Animate decisions","Review animations","Improve motion","Find opportunities","Animation vocabulary","Design engineering"],
-    "project6Role":"Project6 动画品味与验收规范。先判断该不该动、为什么动、用什么属性/曲线/时长，再由 GSAP 或 CSS/WAAPI 执行。"
+    "project6Role":"Project6 动画品味与验收规范。先判断该不该动、为什么动、用什么属性/曲线/时长，再由 GSAP 执行。"
+  },
+  {
+    "id":"uiverse-galaxy",
+    "name":"Uiverse Galaxy",
+    "tier":"CORE",
+    "type":"UI Component Source Library",
+    "license":"MIT",
+    "repo":"https://github.com/uiverse-io/galaxy",
+    "localPath":"./vendor/upstream/uiverse-galaxy/",
+    "bestFor":["Buttons","Cards","Loaders","Patterns","Notifications","Inputs","Tooltips","Toggles","Micro-interactions"],
+    "project6Role":"Project6 第一视觉组件来源。每个 Garden Step 开始设计前先检索 Galaxy 是否已有合适组件原型，再按 Garden Theme 重构，并交给 Emil + GSAP 统一动画。"
   },
   {
     "id":"motion",
