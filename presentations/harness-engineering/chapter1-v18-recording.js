@@ -1,4 +1,5 @@
 // v18 recording capability hint. Does not change the existing recorder on secure origins.
+// This file also triggers the v18 loader so browser cache versions update together.
 (() => {
   const btn=document.getElementById('recordBtn');
   const status=document.getElementById('recordStatus');
