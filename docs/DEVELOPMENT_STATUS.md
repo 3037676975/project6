@@ -5,86 +5,102 @@
 
 ## 当前定位
 
-- 当前 Phase：**Phase 1 · 第一章 Garden v22 返工验收**
-- 当前状态：**IN PROGRESS / 等用户视觉与听感验收**
+- 当前 Phase：**Phase 1 · 第一章 Garden v22 + 本地 IndexTTS 交接流程**
+- 当前状态：**IN PROGRESS / 后台结构已改为作品优先**
 - 当前唯一主验收作品：`presentations/harness-engineering/`
-- 当前范围：**只完善第一章，不进入第二章**
+- 当前范围：**只完善第一章和作品交接流程，不进入第二章**
 - Garden Theme：`warm-keynote`
-- Step：6（沿用现有 6 段音频）
-- TTS：`edge-tts / zh-CN-YunxiNeural / 1.0x`
-- TTS timing：`SentenceBoundary / timings.json / hidden SRT`
+- Step：6
+- 本地 TTS：**IndexTTS 2.5 / 用户本机 GPU / JSON 文件交接**
+- 旧 Edge TTS：保留为历史/兜底，不再作为当前主生产方式
 - 动画 Runtime：`GSAP + MotionPathPlugin + DrawSVGPlugin`
-- BGM：无音乐 / 3 个预置 / 本地上传
+- BGM：统一从 Project6 音效库管理
 - 导出：浏览器本地 `getDisplayMedia + MediaRecorder → WebM`
 
-## v22 当前制作链
+## 用户最新确认的正式流程
 
 ```text
-现有 6 段 Narration
+AI 先写完整脚本
         ↓
-timings.json / SentenceBoundary
-唯一 Step 内同步事件源
+按 Garden 拆 Chapter / Step
         ↓
-Garden Step
-每个 Step 只承担一个主命题
+先生成每章画面
         ↓
-warm-keynote Theme Tokens
-奶油纸底 / 暖网格 / teal 单强调
+用户确认画面
         ↓
-CSS + SVG + GSAP
-空间关系 / 状态变化 / 低强度环境运动
+Project6 在具体视频作品里
+一键复制 TTS JSON
         ↓
-narration ended + 200ms
-Auto 进入下一 Garden Step
+用户把 JSON 粘贴到本地 IndexTTS 工作台
+        ↓
+本机 GPU 生成 001 / 002 / 003 ... 音频
+        ↓
+用户回到同一个视频作品
+导入本地音频
+        ↓
+Project6 按 Step 编号自动匹配
+        ↓
+用户确认
+        ↓
+音画合成预览 / 浏览器本地导出
 ```
 
-## 本轮已完成
+## 后台结构最新决策
 
-### 同步重构
+### 不再存在「视频工作台」
 
-- [x] 保留 6 Step ↔ 6 narration 的一一映射。
-- [x] 删除旧版 `semanticSync()` 中 `8.6 / 10.45 / 12.25 / 3.35 / 5.25 ...` 等手写秒数。
-- [x] Step 内只使用 Edge TTS SentenceBoundary。
-- [x] GSAP 不负责翻页。
-- [x] Auto 仅 narration `ended` 后翻页。
-- [x] 按 Garden AUDIO 规范增加 200ms 结尾缓冲。
+- [x] 删除 `studio.html`。
+- [x] 首页删除「视频工作台」入口。
+- [x] 首页改为“作品优先”的生产后台。
+- [x] 所有脚本、画面、配音、音效、合成操作收进「视频作品 → 具体项目」。
 
-### 视觉重构
+### 视频作品
 
-- [x] 第一章首页改为 Harness Runtime 空间关系图。
-- [x] Step 2 从左右卡片墙改为单一 Execution Rail。
-- [x] Step 3 从三栏后台 Console 改为中心 Agent Workbench。
-- [x] Step 4 从普通 Prompt VS Harness 卡片改为“Prompt 位于 Harness 内部”的包含关系。
-- [x] Step 5 删除虚构公司名、虚构 sources、虚构完成率；改为 01～10 概念任务队列 + verification loop。
-- [x] Step 6 改为 `Intelligence × Execution System = Reliable Agent` 收束。
-- [x] 正式第一章不使用 Emoji。
-- [x] 主题统一为 Garden 官方 `warm-keynote` token 性格。
+当前 `works.html` 已重做：
 
-### 保留能力
+- [x] 项目级页面。
+- [x] 章节列表。
+- [x] 第一章 6 Step 脚本展示。
+- [x] 第一章画面预览入口。
+- [x] 一键复制本地 IndexTTS JSON。
+- [x] 本地 001～006 音频选择与自动编号匹配。
+- [x] 匹配进度显示。
+- [x] 合成预览入口结构。
+- [x] 音效库入口。
 
-- [x] Manual / Auto。
-- [x] 本地 BGM 上传（ObjectURL）。
-- [x] Reduced Motion。
-- [x] 浏览器本地 MediaRecorder。
-- [x] Galaxy / Emil / GSAP 上游资源仍保留在 Project6 资源体系中，但 v22 不为了“用组件而用组件”。
+### 音效库
+
+- [x] 新增 `audio.html`。
+- [x] BGM / 转场 / 提示音独立管理。
+- [x] 本地试听使用 ObjectURL，不上传服务器。
+- [x] 音效资源服务于具体视频作品，不再属于“视频工作台”。
+
+## Garden v22 已完成
+
+- [x] 6 Step ↔ 6 narration 一一对应。
+- [x] 删除手写句内秒数猜测。
+- [x] Step 内 SentenceBoundary 驱动。
+- [x] Auto 仅 narration ended 后翻页。
+- [x] 第一章视觉重做为 warm-keynote。
+- [x] Step 2 / 3 / 4 / 5 去除后台卡片墙式构图。
+- [x] 删除虚构公司与虚构统计数据。
 
 ## 当前待通过
 
-- [ ] 正式 Project6 地址实机加载 v22。
-- [ ] Auto 连播 6 Step，确认旁白结束后 200ms 才换页。
-- [ ] 用户逐屏确认画面比上一版更好看。
-- [ ] 检查手机 / 小屏缩放后的文字可读性。
-- [ ] HTTPS 完成完整 WebM 本地录制。
+- [ ] 正式 Project6 地址确认新后台已部署。
+- [ ] 用户确认首页不再出现「视频工作台」。
+- [ ] 用户确认「视频作品 → Harness Engineering」结构符合预期。
+- [ ] 一键复制 JSON 在手机/电脑实机测试。
+- [ ] 本地 IndexTTS 用复制的 JSON 生成第一批 001～006 音频。
+- [ ] 将本地音频导回作品页完成真实匹配测试。
+- [ ] 本地音频与 Garden v22 做完整合成试听。
 - [ ] 用户最终体验 PASS。
-
-## 下一步（只在用户确认 v22 方向后）
-
-用户前面提出的本地 IndexTTS 方案可作为后续音频工作流：Project6 输出配音任务包 → 用户本机 GPU 批量生成 → 上传标准命名音频 → Project6 自动匹配。届时可以把当前长 narration 从源头拆成更细 Garden Step，做到比 SentenceBoundary 更严格的“一个口播节拍一个 Step”。
 
 ## 当前 Gate
 
+**后台信息架构 Gate：代码完成，WAITING USER REVIEW。**  
 **Garden v22 代码 / 结构 Gate：PASS。**  
-**浏览器实机 Gate：WAITING.**  
-**用户最终产品 Gate：WAITING.**
+**本地 IndexTTS 实机交接 Gate：WAITING FIRST AUDIO PACKAGE。**  
+**用户最终产品 Gate：WAITING。**
 
 **第一章未最终 PASS 前，不进入第二章。**
