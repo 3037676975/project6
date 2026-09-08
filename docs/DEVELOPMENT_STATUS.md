@@ -9,8 +9,8 @@
 ## 当前定位
 
 - 当前 Phase：**Phase 1 · 第一章返工验收**
-- 当前状态：**IN PROGRESS / 等待用户新一轮体验验收**
-- 上一版用户评分：**50 分**
+- 当前状态：**IN PROGRESS / 85 分后继续精修**
+- 最新用户评分：**85 / 100**
 - 当前唯一主验收作品：`presentations/harness-engineering/`
 - 当前范围：**只做第一章，不进入第二章**
 - Garden Theme：官方 `warm-keynote`
@@ -20,47 +20,56 @@
 - 当前 BGM：无音乐 / 3 个 CC0 预置 / 浏览器本地上传
 - 导出：浏览器本地 MediaRecorder → WebM
 
-## 本轮用户扣分原因
+## 已完成
 
-1. 口播稿不像真人说话，主题表达不够清楚。
-2. 云哲听感偏平，需要更有聊天感的音色。
-3. BGM 选择差且被锁死，缺少上传 / 选择入口。
-4. Manual / Auto 模式不清楚，手动操作反馈差。
-5. 第二屏以后信息密度不足，画面偏空。
-6. 之前验收偏代码指标，没有把“主题讲清楚 / 口播自然 / 用户愿意听”放到硬 Gate。
+- [x] 主题一句话明确。
+- [x] 6 段 narration 改成聊天式中文口播。
+- [x] 正式音色为 `zh-CN-YunxiNeural`，6/6 MP3 已生成。
+- [x] Manual / Auto 模式彻底分开。
+- [x] Manual 支持上一页 / 下一页 / 点击舞台 / ←→ / 当前旁白。
+- [x] Auto 由 narration ended 推进。
+- [x] BGM 支持无音乐 / 3 个 CC0 预置 / 本地上传 / 音量调节。
+- [x] 本地音乐使用 `URL.createObjectURL`，不上传服务器。
+- [x] 第一屏视觉方向保留。
+- [x] 第二屏已增加失败/稳定两套状态信号。
+- [x] 第三至第五屏分别强化工作台、员工类比、十家公司闭环。
+- [x] 2026-09-08 85 分反馈后，控制区已移出 1920×1080 舞台。
+- [x] 小字字号与字重整体上调。
+- [x] 2～5 屏继续增加状态线、组件、循环节点、进度等 secondary motion。
+- [x] 录制按钮增加等待授权 / 正在录制 / 停止并下载 / 已下载等状态反馈。
+- [x] 视频作品页的验收标准与开发状态改为页内折叠查看，不再把 Markdown 文件作为主要用户入口。
 
-## 已完成的新返工
+## 录制当前真实状态
 
-- [x] 重新定义第一章一句话主题：模型之外的运行系统，决定 Agent 能不能稳定把任务做完。
-- [x] 6 段 narration 全部改成聊天式中文口播。
-- [x] 正式音色改为 `zh-CN-YunxiNeural`（云希，Lively / Sunshine）。
-- [x] 云希 6/6 MP3 已真实重生成，`audio-map.json=status:ready`。
-- [x] TTS 生成脚本改为从 `narrations.json` 动态读取 voice / locale / rate，便于未来接音色选择后台。
-- [x] 第一章播放器重新实现明确的 Manual / Auto 模式。
-- [x] Manual 支持上一页 / 下一页 / 点击舞台 / ←→ / 单独播当前旁白。
-- [x] Auto 仅按正式旁白 `ended` 推进。
-- [x] 第二屏提高信息密度：同一模型分叉为失败执行系统 / 稳定执行系统，并加入状态信号。
-- [x] 第三、四、五屏分别强化“工作台 / 类比 / 十家公司闭环”视觉关系。
-- [x] BGM 面板增加：无音乐 / 3 个 CC0 预置 / 本地上传 / 音量控制。
-- [x] `Short Plingy Loop` / `Calm Loop` / `Other Center` 三个 BGM 文件已真实落盘，许可证文档已更新。
-- [x] 本地上传只用 `URL.createObjectURL`，不上传服务器。
-- [x] 本地录制逻辑仍为 getDisplayMedia + MediaRecorder + 自动下载 WebM。
-- [x] `ACCEPTANCE.md` 升级到 v3，加入“讲什么 / 口播自然 / 手动模式 / BGM 选择”硬 Gate。
-- [x] v3 GitHub Actions 自动代码/资源 Gate 已 PASS。
+浏览器录制仍采用：
+
+```text
+getDisplayMedia
++ MediaRecorder
++ Browser Blob
++ 自动下载 WebM
+```
+
+**服务器不保存最终视频。**
+
+但需要特别注意：`getDisplayMedia()` 通常要求 HTTPS 或 localhost。Project6 若通过 HTTP IP 打开，浏览器可能不开放该 API。当前代码会提供失败/取消状态，但还需要在实际部署环境确认 HTTPS。
 
 ## 当前待通过
 
-- [ ] 浏览器 Manual 实机操作体验 PASS。
-- [ ] 浏览器 Auto 6 Step 连续播放体验 PASS。
+- [ ] 录制按钮在最终部署地址完成真实授权测试。
+- [ ] 若当前 Project6 仍为 HTTP IP，需要给正式预览地址补 HTTPS，或明确安全上下文方案。
+- [ ] Browser Manual 实机操作 PASS。
+- [ ] Browser Auto 6 Step 连续播放 PASS。
 - [ ] 三个 BGM 主观听感选择 PASS。
 - [ ] 本地 BGM 上传实机 PASS。
 - [ ] 完整 WebM 录制 / 自动下载实机 PASS。
-- [ ] 用户确认：主题清楚、口播自然、音色合适、画面信息密度与动画效果 PASS。
+- [ ] 6 屏逐屏检查字号、留白、信息密度、动画稳定性。
+- [ ] 用户确认第一章达到 90+ 并最终 PASS。
 
 ## 当前 Gate
 
 **代码 / 资源 Gate：PASS。**
 
-**产品最终 Gate：仍为 FAIL / 等待用户体验验收。**
+**产品最终 Gate：IN PROGRESS。**
 
-这次不能再用“代码检查通过”替代产品验收。第一章只有用户实际听、看、点过以后确认体验合格，才允许进入第二章。
+当前主要差距已经从“内容方向和声音错误”转为“浏览器实机录制、控制体验、细节动效与视觉密度”。第一章未最终 PASS 前，不进入第二章。
