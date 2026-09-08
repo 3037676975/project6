@@ -57,6 +57,13 @@ Project6 不负责本地 GPU 推理。
 
 上传的新本地音频优先级必须高于历史 Edge TTS。
 
+**v42 新增硬要求：预览必须是真正的 16:9 等比缩放。**
+
+- 逻辑画布固定 1920×1080；
+- 缩放时外层 `stage-frame` 必须同步拥有缩放后的宽高；
+- 禁止只对 1920×1080 DOM 做 `transform: scale()`，却让布局仍按原尺寸占位；
+- 窗口模式、浏览器缩放、全屏都必须保持相同构图比例和坐标关系。
+
 ### 6. ZIP 导入
 
 - 支持完整 ZIP 与直接多选音频；
@@ -64,13 +71,15 @@ Project6 不负责本地 GPU 推理。
 - JSZip 失败必须明确提示并提供多选兜底；
 - “文件已识别”不等于“播放器已切换音源”，必须实际注入播放器。
 
-### 7. Garden v40/v41 视觉原则
+### 7. Garden v42 视觉原则
 
-Scene 001 是视觉 Anchor。Scene 002～042 必须逐 Scene 设计，禁止统一左右排版、统一卡片模板和统一 fade。
+Scene 001 是视觉 Anchor，但封面主题必须一眼明确：**HARNESS ENGINEERING 是主标题**，中文问题只作为副标题 / Hook。
+
+Scene 002～042 必须逐 Scene 设计，禁止统一左右排版、统一卡片模板和统一 fade。
 
 每张动画必须能解释至少一种：关系 / 空间 / 状态 / 反馈 / 过程。
 
-### 8. 新增硬门禁：渲染截图 QA
+### 8. 强制门禁：渲染截图 QA
 
 **代码写完不等于画面完成。**
 
@@ -91,16 +100,33 @@ Scene 001 是视觉 Anchor。Scene 002～042 必须逐 Scene 设计，禁止统�
 
 自动为 001～042 生成截图和 `qa/visual-report.json`。
 
-### 9. 新增正式能力：1080P 本地录制
+### 9. 1080P 本地录制：HTTP 部署使用 localhost bridge
 
-录制不是服务端渲染。要求：
+浏览器的 `getDisplayMedia / Region Capture` 要求安全上下文。Project6 正式站点当前是 HTTP IP，因此直接在服务器 URL 点录制一定会被浏览器拒绝。
 
+不引入 Cloudflare、域名或第三方隧道。正式低门槛方案：
+
+```text
+Project6 HTTP Server
+      ↓ 本机标准库代理
+http://127.0.0.1:28444
+      ↓ localhost 被浏览器视为安全上下文
+一键录制 1080P
+```
+
+仓库提供：
+- `tools/project6-recording-localhost.py`
+- `tools/start-project6-recording.bat`
+
+Windows 用户双击 BAT 后即可打开 localhost 录制入口。
+
+录制要求保持：
 - 一键录制；
 - 只录中间 `.stage`，不录 Project6 后台工具栏；
 - 请求 1920×1080 / 60fps；
 - 捕获当前标签页视频 + 标签页音频；
-- 使用 Chromium Region Capture 精确裁切中间视频区域；
-- 浏览器不支持精确裁切时直接提示，不退化成录整个后台；
+- Chromium Region Capture 精确裁切；
+- 不支持精确裁切时不退化成录整个后台；
 - VP9/Opus 优先，高码率；
 - 完成后浏览器本地下载 WebM；
 - **不上传服务器、不存 Project6 后端。**
