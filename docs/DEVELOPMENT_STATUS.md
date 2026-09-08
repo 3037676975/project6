@@ -4,65 +4,77 @@
 
 ## 当前 Phase
 
-**Phase 1 · Harness Engineering Garden v41 视觉精修 + 自动截图 QA + 本地录制**
+**Phase 1 · Harness Engineering Garden v42 视觉精修 + 等比预览 + 本地录制**
 
 ## 用户最新硬要求
 
-- Scene 001 继续作为视觉 Anchor；
+- Scene 001 主题必须以 **HARNESS ENGINEERING** 为主标题；
 - Scene 002～042 保持逐 Scene 独立构图；
 - 不能统一左右排版；
-- 不能只是文字卡片；
 - 动画要解释内容本身；
-- 字体与层级必须适合 1080P 视频；
-- 每一页开发完成后必须实际渲染截图检查；
-- 增加只录中间 Stage 的一键 1080P 本地录制，带标签页声音，不上传服务器。
+- 字体与层级必须适合 1080P；
+- 每一页开发完成后必须真实渲染截图检查；
+- 窗口预览必须保持 16:9 等比缩放，不能全屏正常、缩小时错位；
+- 一键录制只录中间 Stage，1080P + 标签页声音，不上传服务器；
+- 当前 HTTP 服务器录制必须有不依赖 Cloudflare / 域名 / HTTPS 证书的低门槛方案。
 
-## v40 当前评价
+## v42 已完成
 
-用户评价约 90 分：整体方向已明显改善，但仍存在细节问题：部分字体偏小、层级和留白不够统一、个别 Scene 动画信息量不足、部分视觉与口播逻辑的衔接还需要继续 polish。
+### Cover / Readability
 
-因此 v40 不作最终 PASS，进入 v41 视觉精修。
+- [x] Scene 001 主标题改为 `HARNESS ENGINEERING`。
+- [x] 中文问题改为副标题 / Hook。
+- [x] 中文字体栈统一为 Noto Sans SC / PingFang SC / Microsoft YaHei / Source Han Sans SC。
+- [x] 第一轮 QA 报告发现的 004 / 009 / 025 / 040 tiny text 已修。
+- [x] 人工复核发现的 036 拥挤，以及 010 / 015 / 018 局部标签可读性问题已修。
+- [x] 第二轮 QA 剩余 009 / 040 tiny text 已继续修到 0。
 
-## v41 已完成代码改造
+### Screenshot QA · 最终自动检查
 
-### Readability / Typography
+- [x] Chromium 自动遍历 001～042。
+- [x] 42/42 Scene 真实渲染并生成截图。
+- [x] tiny text = **0**。
+- [x] DOM overflow = **0**。
+- [x] Console Errors = **0**。
+- [x] 15 组缩放视口检查通过：1366×768 / 1440×900 / 1280×720 × Scene 001 / 009 / 025 / 036 / 042。
+- [x] 响应式检查中 Stage 比例全部为 **1.7778 (16:9)**。
+- [x] `stage-frame` 布局尺寸与实际 Stage 绘制尺寸全部一致。
+- [x] 所有代表 Scene 在缩放模式下均保持在 viewer 内。
+- [x] responsiveFails = **0**。
 
-- [x] 新建 `full-video-v41-polish.css`。
-- [x] 正式中文字体栈统一为 Noto Sans SC / PingFang SC / Microsoft YaHei / Source Han Sans SC。
-- [x] 主标题字号提高。
-- [x] Compact 标题字号提高。
-- [x] Scene 内主要 node / label / small text 提升到更适合 1080P 的尺寸。
-- [x] HUD 与控制条重新平衡。
+### 等比缩放修复
 
-### Screenshot QA · 第一轮已真实完成
+旧问题：只对 1920×1080 `.stage` 使用 `transform: scale()`，但外层布局仍按 1920×1080 原始尺寸占位。
 
-- [x] 新建 `scripts/visual-qa.mjs`。
-- [x] 新建 `.github/workflows/visual-qa.yml`。
-- [x] Chromium 自动遍历 Scene 001～042。
-- [x] 42/42 Scene 已实际渲染并截图 `#stage`。
-- [x] 42 张 1920×1080 PNG 已作为 GitHub Actions artifact 生成。
-- [x] `qa/visual-report.json` 已生成。
-- [x] 浏览器 Console Errors = 0。
-- [x] DOM overflow 自动检查 = 0。
-- [x] 自动字号检查发现 Scene 004 / 009 / 025 / 040 存在 tiny text。
-- [x] 已人工查看 42 张截图 contact sheet，额外发现 Scene 036 标题与浏览器演示区偏拥挤，Scene 010 / 015 / 018 等语义小标签可读性需要提升。
-- [x] v41 polish 已针对上述场景追加修复：004 外围标签、009 拨盘标签、010 spec、015 JSON slot、018 portal labels、025 六层楼层、036 title/browser spacing、040 equation typography。
-- [ ] v41 修复后的第二轮 Screenshot QA 仍需再次执行并确认。
+v42：
 
-### 本地 1080P 录制
+```text
+viewer
+  ↓ 计算可用空间
+stage-frame = 1920×scale × 1080×scale
+  ↓
+stage 固定 1920×1080
+  ↓ transform-origin: 0 0
+scale(scale)
+```
 
-- [x] 正式播放器增加 `● 一键录制 1080P`。
-- [x] 新建 `full-video-v41-recording.js`。
-- [x] 使用 `getDisplayMedia` 请求当前标签页视频 + 音频。
-- [x] 使用 Region Capture (`CropTarget.fromElement(stage)` / `cropTo`) 精确裁到中间 `.stage`。
-- [x] 不支持精确裁切时直接拒绝录整个后台。
-- [x] 请求 1920×1080 / 60fps。
-- [x] 低于 1080P 时明确拒绝并提示提升窗口/屏幕分辨率。
-- [x] VP9/Opus 优先，12Mbps video + 192kbps audio。
-- [x] 一键录制会回到 Scene 001 并开始整片播放。
-- [x] 播放器到 END 后自动停止录制。
-- [x] 也可以手动停止。
-- [x] WebM 只在浏览器本地下载，不上传服务器。
+因此窗口模式 / 缩放模式 / 全屏都使用同一套 16:9 坐标关系。
+
+### HTTP 下的 1080P 本地录制
+
+浏览器 `getDisplayMedia / Region Capture` 要求 secure context，因此服务器 HTTP IP 地址直接录制必然失败。
+
+v42 正式方案：
+
+- [x] 保留 Stage-only Region Capture。
+- [x] 新增 `tools/project6-recording-localhost.py`。
+- [x] 新增 `tools/start-project6-recording.bat`。
+- [x] Windows 用户双击 BAT 后，将现有 Project6 HTTP 页面代理到 `127.0.0.1:28444`。
+- [x] localhost 属于浏览器安全上下文，不需要域名 / Cloudflare / HTTPS 证书。
+- [x] HTTP 页面点击录制时会明确提示 localhost 方案，不再只报“需要 HTTPS”。
+- [x] 录制仍请求 1920×1080 / 60fps、标签页声音、VP9/Opus、高码率。
+- [x] 结果只在浏览器下载 WebM，不上传服务器。
+- [ ] 最后仍需用户在真实 Windows Chrome / Edge 上完成一次录制验收。
 
 ## TTS / 音频规则保持不变
 
@@ -78,15 +90,15 @@
 | Gate | 状态 | 通过条件 |
 |---|---|---|
 | A 完整口播 | CODE PASS / WAITING USER CONFIRM | 用户确认整片口播 |
-| B Garden v41 视觉 | QA ROUND 1 PASS / FIXES APPLIED / ROUND 2 + USER REVIEW | v41 第二轮截图 + 用户复核 |
-| C 本地 IndexTTS | CODE READY / WAITING | Gate B 稳定后生成真实总 ZIP |
+| B Garden v42 视觉 | **AUTOMATED QA PASS / USER REVIEW** | 用户最终视觉复核 |
+| C 本地 IndexTTS | CODE READY / WAITING | Gate B 用户确认后生成真实总 ZIP |
 | D 整片音画 | CODE READY / WAITING AUDIO | 真实音频注入 + timing 调整 |
 | E 动画 SFX | LOCKED | D PASS 后进入 |
-| F 1080P 本地录制 | CODE READY / BROWSER TEST | Chrome/Edge 实机 Stage-only + Tab Audio 验收 |
+| F 1080P 本地录制 | CODE READY / LOCALHOST BROWSER TEST | Windows Chrome/Edge 实机验收 |
 
-## 当前唯一下一步
+## 当前下一步
 
-1. 对 v41 修复版本再次执行 42 Scene Screenshot QA；
-2. 继续返工第二轮截图暴露的问题；
-3. 用户打开 v41 整片播放器复核；
-4. 视觉稳定后才进入最终 IndexTTS 生成。
+1. 用户打开 v42 检查封面、缩放和整体视觉；
+2. 用户确认后进入完整 IndexTTS JSON → 001～042；
+3. 回传总 ZIP 后做真实音画 timing；
+4. 最后添加 SFX，并在 localhost 录制入口完成 1080P 实机录制。
