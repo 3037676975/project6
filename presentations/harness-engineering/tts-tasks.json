@@ -1,0 +1,56 @@
+{
+  "project": "Harness Engineering",
+  "chapter": "01-harness-engineering",
+  "engine": "IndexTTS 2.5",
+  "version": "1.0",
+  "tasks": [
+    {
+      "id": "001",
+      "chapter": "01",
+      "step": 1,
+      "scene": "scene01",
+      "text": "你有没有发现一个挺奇怪的事？明明用的是同一个大模型，有的人做出来的 Agent 特别稳，有的人呢，跑两步就崩。你第一反应是不是：模型不行？其实还真不一定。",
+      "filename": "001.mp3"
+    },
+    {
+      "id": "002",
+      "chapter": "01",
+      "step": 2,
+      "scene": "scene02",
+      "text": "很多人这时候就开始疯狂折腾：换模型、改 Prompt、再补一层 RAG。结果呢？前面看着都挺聪明，一到真正干活，工具没接上、状态丢了、任务卡住。问题其实已经跑到模型外面去了。",
+      "filename": "002.mp3"
+    },
+    {
+      "id": "003",
+      "chapter": "01",
+      "step": 3,
+      "scene": "scene03",
+      "text": "那模型外面到底是什么？你可以把它想成给 Agent 搭的一张工作台：资料放哪儿、工具怎么用、做到一半怎么记住、失败了怎么接着跑。把这些东西组织起来，就是 Harness。",
+      "filename": "003.mp3"
+    },
+    {
+      "id": "004",
+      "chapter": "01",
+      "step": 4,
+      "scene": "scene04",
+      "text": "所以 Prompt 和 Harness 其实不是一回事。Prompt 更像你跟一个员工说：这件事你这么做。Harness 呢？是把电脑、资料、工具、流程、检查表都给他准备好。一个管怎么说，一个管怎么把事真的做完。",
+      "filename": "004.mp3"
+    },
+    {
+      "id": "005",
+      "chapter": "01",
+      "step": 5,
+      "scene": "scene05",
+      "text": "举个最直观的例子。你让 Agent 研究十家公司。没有 Harness，它可能搜一圈，马上给你一个总结。有 Harness 呢？第一家先查资料、记来源、看还有没有缺口；没查够就继续补，确认完再去第二家。是不是一下就稳多了？",
+      "filename": "005.mp3"
+    },
+    {
+      "id": "006",
+      "chapter": "01",
+      "step": 6,
+      "scene": "scene06",
+      "text": "所以这一章你先记住一句最重要的：模型决定它有多聪明，Harness 决定它能不能把事情稳稳做完。后面我们再把这张工作台一层一层拆开看。",
+      "filename": "006.mp3"
+    }
+  ]
+}
