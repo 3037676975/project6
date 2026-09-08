@@ -1,1 +1,0 @@
-The visual binary asset for Scene 1 is committed via Git object API so it remains a real WebP file. Do not replace it with text/base64 via the contents text endpoint.
