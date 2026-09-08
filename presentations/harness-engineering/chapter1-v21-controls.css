@@ -1,0 +1,104 @@
+/* Project6 Chapter1 v21 — clean playback/music dock, no recorder */
+.app{
+  grid-template-rows:minmax(0,1fr) 88px!important;
+  gap:28px!important;
+  padding:18px 22px 22px!important;
+}
+.viewer{
+  min-height:0!important;
+  display:grid!important;
+  place-items:center!important;
+  overflow:hidden!important;
+}
+/* Stage remains 1920x1080; existing scaler may only change transform scale. */
+.stage{transform-origin:center center!important;flex:none!important}
+.toolbar{
+  width:min(1780px,calc(100vw - 64px))!important;
+  height:88px!important;
+  margin:0 auto!important;
+  padding:12px 18px!important;
+  border-radius:24px!important;
+  display:grid!important;
+  grid-template-columns:minmax(470px,.95fr) minmax(720px,1.35fr)!important;
+  gap:28px!important;
+  align-items:center!important;
+  overflow:visible!important;
+  background:rgba(246,251,255,.90)!important;
+  border:1px solid rgba(77,171,247,.20)!important;
+  box-shadow:0 16px 44px rgba(62,107,151,.12)!important;
+  backdrop-filter:blur(22px)!important;
+}
+.toolbar .left,.toolbar .center{
+  min-width:0!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:12px!important;
+  white-space:nowrap!important;
+}
+.toolbar .left{justify-content:flex-start!important}
+.toolbar .center{justify-content:flex-end!important}
+.toolbar .right{display:none!important}
+.toolbar .btn{
+  height:48px!important;
+  padding:0 17px!important;
+  border-radius:15px!important;
+  flex:0 0 auto!important;
+  font-size:15px!important;
+  font-weight:800!important;
+}
+.toolbar .mode{height:52px!important;display:flex!important;align-items:center!important;flex:0 0 auto!important}
+.toolbar .mode button{height:42px!important;padding:0 15px!important}
+.toolbar .stepinfo{min-width:66px!important;text-align:center!important;flex:0 0 auto!important}
+.toolbar .center>.primary{min-width:164px!important}
+.toolbar .music{
+  position:relative!important;
+  min-width:0!important;
+  flex:1 1 auto!important;
+  display:grid!important;
+  grid-template-columns:minmax(150px,180px) minmax(180px,260px) minmax(140px,220px)!important;
+  gap:12px!important;
+  align-items:center!important;
+  padding-left:16px!important;
+  border-left:1px solid rgba(77,171,247,.16)!important;
+}
+.toolbar .music:before{
+  content:"背景音乐";
+  position:absolute;
+  left:16px;
+  top:-17px;
+  font-size:11px;
+  font-weight:850;
+  letter-spacing:.06em;
+  color:#7390a6;
+}
+.toolbar .music select{
+  width:100%!important;
+  min-width:0!important;
+  height:46px!important;
+  padding:0 13px!important;
+  border-radius:14px!important;
+  background:#fff!important;
+}
+.toolbar .music input[type=file]{
+  width:100%!important;
+  min-width:0!important;
+  font-size:13px!important;
+  color:#5d7488!important;
+}
+.toolbar .music input[type=file]::file-selector-button{
+  height:38px;
+  margin-right:8px;
+  padding:0 11px;
+  border-radius:11px;
+  border:1px solid rgba(77,171,247,.18);
+  background:#f2f9ff;
+  color:#31536f;
+  font-weight:800;
+}
+.toolbar .music input[type=range]{width:100%!important;min-width:140px!important}
+@media(max-width:1450px){
+  .app{gap:22px!important;padding-left:14px!important;padding-right:14px!important}
+  .toolbar{width:calc(100vw - 28px)!important;grid-template-columns:auto minmax(620px,1fr)!important;gap:16px!important;padding-left:12px!important;padding-right:12px!important}
+  .toolbar .music{grid-template-columns:150px 180px 150px!important}
+  .toolbar .btn{padding:0 12px!important}
+}
