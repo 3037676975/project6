@@ -1,94 +1,116 @@
 # Project6 开发状态
 
-> 每次开发前阅读：PROJECT_CHARTER → PRD → ACTIVE_DECISIONS → DEVELOPMENT_STATUS → 当前作品 ACCEPTANCE → Garden `web-video-presentation` / `CHAPTER-CRAFT.md`。
+> 每次开发前阅读：PROJECT_CHARTER → PRD → ACTIVE_DECISIONS → DEVELOPMENT_STATUS → 当前作品 ACCEPTANCE → Garden CHAPTER-CRAFT → Project6 motions/components 学习层。
 
 ## 当前 Phase
 
-**Phase 1 · Harness Engineering 整片 Garden v31 视觉返工 + 本地 IndexTTS 整包交接**
+**Phase 1 · Harness Engineering Garden v40 全视觉重构**
 
-## 当前状态
+## 用户最新硬要求
 
-- 后台：作品优先结构；视频工作台已废弃。
-- 整片内容：7 个内部章节 / 42 Scene / 42 段完整口播。
-- Canonical 画面数据：`presentations/harness-engineering/full-video-data.js`。
-- Canonical 整片播放器：`presentations/harness-engineering/full-video.html`。
-- Canonical 整片 TTS JSON：`presentations/harness-engineering/full-tts-tasks.json`。
-- TTS 交接：只允许一次复制完整 42 段 JSON；用户本机 IndexTTS 2.5 负责生成。
-- 音频回传：一个总 ZIP，编号 `001`～`042`。
-- 整片预览：播放 / 暂停 / 继续 / 上一张 / 下一张 / Scene 进度 / 全屏。
-- 动画 SFX：最后环节，当前锁定。
+- Scene 001 保留。
+- Scene 002～042 全部推翻重做。
+- 后续画面必须彼此明显不同，不能继续统一左右排版。
+- 画面必须“可视化表达”，不能只是把口播放到卡片里。
+- 动画必须按照 Garden + Project6 motions 体系设计：解释关系 / 空间 / 状态 / 反馈，而不是统一 fade。
 
-## 2026-09-09 · Garden v31 视觉返工
+## v31 为什么判失败
 
-### 用户反馈
+v31 虽然给 42 Scene 写了不同 HTML，但仍然存在这些问题：
 
-v30 虽然完成 42 Scene，但视觉过度模板化：少数 `cards / rail / loop / timeline` 模板反复套用，导致大量画面“长得一样”。
+1. 大量 Scene 共用同一个视频外壳，视觉重心接近。
+2. 很多 Scene 仍然是标题 + 图形容器的 PPT 思维。
+3. Motion 主要停留在入场动画，没有让内容本身发生可视化变化。
+4. 没有充分使用 Project6 已经整理的 GSAP / Emil / Galaxy 学习层。
 
-### 根因
+因此：**v31 Gate B = FAIL / SUPERSEDED。**
 
-错误地把 Garden 当成“主题皮肤 + 通用组件库”。Garden 官方要求相反：
+## v40 已完成代码改造
 
-- 这是视频，不是 PPT；
-- 每个 Step 先根据内容决定“这一拍演什么”；
-- outline 不提前写死动画；
-- 每章至少有 1～2 处真正的 CSS / SVG / Canvas / JS 视觉演示；
-- 画面信息要承担关系表达，不是把 narration 打字放上去；
-- 不允许整章一种动画 / 一种卡片结构重复到底。
+### 视觉层
 
-### v31 已完成
+- [x] 新建 `VISUAL_REBUILD_V40.md`，为 001～042 建立逐张视觉命题。
+- [x] 新建 `full-video-v40.css`。
+- [x] 新建 `full-video-v40.js`。
+- [x] 正式 `full-video.html` 已切换到 v40。
+- [x] Scene 001 保留 Anchor。
+- [x] Scene 002～042 全部从统一模板渲染改成逐 Scene markup。
+- [x] 不再存在全片统一左文案 / 右卡片骨架。
 
-- [x] 重新阅读 Garden `SKILL.md`、`CHAPTER-CRAFT.md`、官方 `warm-keynote/tokens.css`。
-- [x] 正式主题 token 对齐官方 warm-keynote：cream canvas / sepia ink / teal accent / warm 40px grid。
-- [x] 删除 v30 通用 `visualMarkup(type)` 思路。
-- [x] `full-video.js` 改为 `switch(scene.id)`，42 Scene 分别定义内容驱动视觉。
-- [x] Scene 001：同模型双轨稳定性对照。
-- [x] Scene 002：执行链真实断裂。
-- [x] Scene 003：LLM Harness Workbench。
-- [x] Scene 004：系统边界同心扩张。
-- [x] Scene 005：Harness 四问空间布局。
-- [x] Scene 007：Prompt → Context → Harness 迁移曲线。
-- [x] Scene 014：概率空间聚束。
-- [x] Scene 019：Context 决策网络。
-- [x] Scene 020：RAG 检索输送链。
-- [x] Scene 023：Progressive Disclosure 抽屉展开。
-- [x] Scene 025：Harness 六层系统。
-- [x] Scene 026：Tool Switchboard。
-- [x] Scene 027：执行编排闭环。
-- [x] Scene 028：State 三类信息板。
-- [x] Scene 029：Evaluation Radar。
-- [x] Scene 030：失败 → 重试 → 回滚路径。
-- [x] Scene 032：Context Reset + State Handoff。
-- [x] Scene 033：Planner / Generator / Evaluator 三角分工。
-- [x] Scene 035：Index → 子文档渐进式目录树。
-- [x] Scene 036：浏览器 RUN → SEE → FIX → VERIFY。
-- [x] Scene 040：Model × Harness = Stable Delivery。
-- [x] Scene 041：AI Engineer 环境设计能力图。
-- [x] Scene 042：Reliable AI 最终收束。
-- [x] SVG 路径类 Scene 使用 line draw；Reset / Radar / Probability / Final 等按语义使用不同主导动作。
-- [x] 新增 `full-video-v31-fixes.css` 做 Scene-local class 隔离，避免 `.l1/.s1` 跨画面污染。
-- [x] 全屏对象保持为整个播放器 shell，全屏仍可操作暂停与进度。
-- [x] `full-video.html` 资源版本升级到 v31，避免旧模板缓存。
+### 视觉类型覆盖
+
+- [x] 断裂执行管线
+- [x] Harness 工作台鸟瞰
+- [x] Model / Agent / Harness 同心边界
+- [x] 四问 Radar
+- [x] 三次工程迁移山路
+- [x] Prompt 光束 / 概率输出
+- [x] Role / Task / Constraint 机械拨盘
+- [x] Prompt compiler
+- [x] Few-shot 示例墙
+- [x] Prompt 能力玻璃墙
+- [x] 概率粒子场
+- [x] 清晰度 vs 长度天平
+- [x] 输出格式冲压机
+- [x] 冲突 Prompt 漏斗
+- [x] Prompt 罗盘
+- [x] Prompt→Context 空间门
+- [x] Context 知识网络
+- [x] Context Budget 仪表
+- [x] RAG 检索传送带
+- [x] Memory 双时间轴
+- [x] Skills 渐进披露抽屉
+- [x] Context Switchboard
+- [x] Harness 六层建筑剖面
+- [x] Tool Socket 插槽
+- [x] Orchestration 泳道
+- [x] State Machine
+- [x] Evaluation Radar
+- [x] Recovery 决策树
+- [x] Same Model A/B
+- [x] Context Reset / State Handoff
+- [x] Planner / Generator / Evaluator 三角闭环
+- [x] Harness 故障诊断
+- [x] Progressive Docs 文件树
+- [x] Browser RUN → SEE → FIX → VERIFY
+- [x] Prompt 全屏大字提炼
+- [x] Context 信息云
+- [x] Harness 轨道系统
+- [x] Model × Harness 动态公式
+- [x] Engineer → Environment Designer
+- [x] Final 三环收束
+
+### Motion 层
+
+- [x] 正式加载本地 GSAP。
+- [x] 正式加载本地 DrawSVGPlugin。
+- [x] 正式加载本地 MotionPathPlugin。
+- [x] 每个 Scene 单独写 motion recipe。
+- [x] 动画类型包含：路径自绘、信号断裂、结构搭建、系统边界扩张、雷达扫描、轨迹移动、拨盘锁定、编译输出、粒子聚束、天平摆动、机械冲压、门开启、传送带、状态机、评估扫描、Reset 闪断、角色转移、最终环收束。
+- [x] Pause 同时暂停 narration 与当前 Scene GSAP timeline。
+- [x] Reduced Motion 保留。
+
+## TTS / 音频规则保持不变
+
+- 整片仍然是一个完整视频项目。
+- Canonical TTS JSON：`full-tts-tasks.json`。
+- 用户只复制一次完整 JSON。
+- 本地 IndexTTS 生成 001～042。
+- 用户回传一个总 ZIP。
+- Project6 自动匹配并注入整片播放器。
 
 ## 当前 Gate
 
 | Gate | 状态 | 通过条件 |
 |---|---|---|
-| A 完整口播 | CODE PASS / WAITING USER CONFIRM | 用户一次确认 42 段完整口播 |
-| B 全部 Garden 画面 | V31 CODE PASS / USER REVIEW | 用户整片检查，不能再有连续模板感 |
-| C 本地 IndexTTS | CODE READY / WAITING REAL ZIP | 真实 001～042 音频 42/42 匹配 |
-| D 整片音画预览 | CODE READY / WAITING REAL AUDIO | 播放器实际使用本地音频连续播放通过 |
+| A 完整口播 | CODE PASS / WAITING USER CONFIRM | 用户确认整片口播 |
+| B Garden v40 视觉 | CODE REBUILT / USER REVIEW | 用户逐张检查 002～042，确认达到第一张 Anchor 的质量 |
+| C 本地 IndexTTS | CODE READY / WAITING | Gate B 稳定后生成真实总 ZIP |
+| D 整片音画 | CODE READY / WAITING AUDIO | 真实音频注入 + timing 调整 |
 | E 动画 SFX | LOCKED | D PASS 后进入 |
-
-## Garden 强制防回归规则
-
-1. 连续 3 Scene 主要构图相同，只替换文字 → FAIL。
-2. 画面只有 narration 文本，没有关系演示 → FAIL。
-3. 整章只有 card grid / timeline / rail 一种结构 → FAIL。
-4. 每张只用同一种 fade-in → FAIL。
-5. 为填画面编假数据 / 假 Logo / emoji → FAIL。
-6. 每次开发新 Scene 先回答：主角是谁？关系是什么？观众这一拍应该看见什么变化？再写代码。
-7. 用户真实 IndexTTS 上传后，再根据真实 duration 调整每 Scene 内动画时长。
 
 ## 当前唯一下一步
 
-**先验收 Garden v31 视觉，不进入 TTS。** 用户打开 v31 整片播放器重点抽查 Scene 001、002、003、007、014、019、023、025、029、032、033、035、036、040、042；若仍有明显模板感，继续返工 Gate B。
+**只做视觉验收。**
+
+用户打开 v40 完整播放器，重点抽查 Scene 002、005、007、008、013、018、021、023、025、027、029、032、033、035、036、040、042；如果仍然有“像同一个模板 / 不像视频 / 可视化太弱”的 Scene，继续返工 Gate B，不进入 TTS。
