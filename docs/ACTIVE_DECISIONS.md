@@ -2,104 +2,93 @@
 
 > 最新用户明确决策，优先级高于旧实现细节。
 
-## 2026-09-09 · 后台与生产流程最新决策
+## 2026-09-09 · 整片生产模式
 
-### 1. 废弃“视频工作台”
+### 1. 一个视频就是一个完整 Project
 
-- 删除 `studio.html`。
-- 禁止恢复 `#/studio`。
-- 后台核心入口改为「视频作品」。
-- 一个视频就是一个独立 Project。
-
-### 2. 每个视频项目内部排列
-
-项目内按 Chapter 展示；每个 Chapter 里的 Step 要直接排成：
+后台不再按章节分别做 TTS 交接。章节只用于内部组织和导航，用户实际操作面对的是：
 
 ```text
-第1张 / 001
-第2张 / 002
-第3张 / 003
-第4张 / 004
-...
+一个完整视频项目
+→ 一份完整口播稿
+→ 一套完整 HTML / Garden 画面
+→ 一个完整 TTS JSON
+→ 一个完整本地音频 ZIP
+→ 一个完整本地音画预览
+→ 最后统一加动画 SFX
 ```
 
-每一张必须同时显示：
+### 2. AI / Project6 / 用户三方职责
 
-- Garden 画面状态；
-- 对应口播稿；
-- 对应本地配音状态；
-- 验收状态。
+AI / ChatGPT 负责：
+- 整理完整口播；
+- 拆内部 Chapter / Scene；
+- 设计并实现全部 Garden 画面；
+- 维护画面与口播编号；
+- 输出整片 TTS JSON；
+- 接收本地音频后完成整片预览映射。
 
-### 3. 口播稿先确认，TTS JSON 后解锁
+用户负责：
+- 确认整片口播和画面；
+- 一次复制整片 TTS JSON；
+- 在本地 IndexTTS 2.5 生成全部语音；
+- 上传一个完整 ZIP。
 
-正确顺序：
+Project6 不负责本地 GPU 推理。
+
+### 3. Harness Engineering 当前整片规格
+
+- 7 个内部章节；
+- 42 个 Scene；
+- 42 段连续口播；
+- 文件编号固定 `001`～`042`；
+- canonical JSON：`presentations/harness-engineering/full-tts-tasks.json`；
+- canonical 画面数据：`presentations/harness-engineering/full-video-data.js`；
+- canonical 整片播放器：`presentations/harness-engineering/full-video.html`。
+
+### 4. TTS 交接必须是整片一次完成
+
+正确流程：
 
 ```text
-AI 写完整口播稿
-→ 用户确认口播稿
-→ Garden 画面确认
-→ 解锁 TTS JSON
-→ 一键复制 JSON
-→ 本地 IndexTTS 生成
+完整口播 + 全部画面
+→ 用户一次确认
+→ 一键复制 full-video JSON
+→ 本地 IndexTTS 生成 001～042
+→ 导出一个 ZIP
+→ 上传 Project6
+→ 浏览器自动识别 42/42
+→ 注入整片播放器
+→ 完整音画预览
 ```
 
-JSON 预览可以提前看，但复制动作要由“已确认口播稿”Gate 控制。
+禁止重新退回“第一章一份 JSON、第二章再一份 JSON”的旧做法。
 
-### 4. 本地 IndexTTS 是正式配音交接路线
+### 5. 整片预览播放器要求
 
-Project6 不直接连接用户本机 GPU。
+必须提供：
+- 播放；
+- 暂停 / 继续；
+- 上一张 / 下一张；
+- 整片进度跳转；
+- 全屏；
+- 本地 IndexTTS 音频注入；
+- 音频结束后自动进入下一 Scene。
 
-```text
-Project6 tts-tasks.json
-→ 用户复制到本地 Project6 TTS 工作台
-→ IndexTTS 2.5 生成 001/002/003...
-→ 导出 ZIP
-→ 上传回 Project6
-→ 浏览器 JSZip 自动解压
-→ 按编号自动匹配
-```
+上传的新本地音频优先级必须高于旧 Edge TTS。
 
-### 5. 必须提供本地音画预览
+### 6. ZIP 导入
 
-- 当前不要求录制。
-- 必须支持逐张试听和顺序预览。
-- 本地音频只用 ObjectURL，不要求服务器保存。
+- 支持一个完整 ZIP；
+- 兼容 ZIP 内 `audio/001.mp3` 这类子目录；
+- 也兼容直接多选 001～042；
+- JSZip 加载失败时必须明确提示，并保留直接多选音频兜底；
+- “上传成功”不等于“播放器已切换音源”，必须实际注入播放器才算通过。
 
-### 6. 动画音效库 ≠ 配音库
+### 7. 动画音效库 ≠ 人物配音
 
-动画音效库只管理短 SFX：
+动画音效是整片最后一个环节，只管理：reveal、whoosh、transition、click、tick、confirm、accent、digital 等短 SFX。
 
-- element reveal；
-- whoosh / transition；
-- click；
-- pop / tick；
-- confirm；
-- accent / notification；
-- digital / tech。
+### 8. Garden 手册、项目总纲、PRD、开发状态、验收规则必须和整片模式同步
 
-动画音效是整个项目最后一个环节。
-
-第一批真实来源：Kenney UI Audio / Interface Sounds（CC0）。
-
-### 7. Garden 手册必须保留并可正常打开
-
-`garden.html` 不能再跳转旧 `#/lab`；必须是真正中文手册页面。
-
-### 8. 项目总纲、PRD、开发状态、验收规则必须同步更新
-
-禁止出现：页面已经改了，但文档仍然写旧“视频工作台 / Project5 主流程 / 录制优先”。
-
----
-
-## Harness Engineering 第一章当前 Gate
-
-| Gate | 状态 |
-|---|---|
-| A 口播稿 | PASS / 用户可重新确认 |
-| B Garden 画面 | CODE PASS / USER REVIEW |
-| C 本地 IndexTTS | WAITING AUDIO ZIP |
-| D 本地音画预览 | WAITING AUDIO |
-| E 动画音效 | LOCKED |
-| F 第二章 | LOCKED |
-
-当前唯一下一步：**确认口播 → 复制 JSON → 本地 IndexTTS → 上传 ZIP。**
+禁止页面已经是整片模式，而文档仍写“第一章未 PASS 禁止开发第二章”。
