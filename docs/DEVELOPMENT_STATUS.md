@@ -5,130 +5,92 @@
 
 ## 当前定位
 
-- 当前 Phase：**Phase 1 · 第一章返工验收**
-- 当前状态：**IN PROGRESS / v6 动画设计链重建完成，等待用户体验验收**
-- 最近一次用户明确评分基线：**40 / 100（否决旧 Beat 方案）**
+- 当前 Phase：**Phase 1 · 第一章返工验收 + 资源体系增强**
+- 当前状态：**IN PROGRESS / Galaxy 组件层接入中**
 - 当前唯一主验收作品：`presentations/harness-engineering/`
-- 当前范围：**只做第一章，不进入第二章**
+- 当前范围：**只完善第一章与资源体系，不进入第二章**
 - Garden Theme：`warm-keynote`
 - Step：6
 - TTS：`edge-tts / zh-CN-YunxiNeural / 1.0x`
 - TTS timing：`SentenceBoundary / timings.json / hidden SRT`
 - 动画 Runtime：`GSAP + MotionPathPlugin + DrawSVGPlugin`
 - 动画设计/Review：`emilkowalski/skills`
+- 视觉组件来源：`uiverse-io/galaxy`
 - BGM：无音乐 / 3 个 CC0 预置 / 本地上传
 - 导出：浏览器本地 MediaRecorder → WebM
 
-## 已否决的旧方案
-
-以下不再作为正式动画主逻辑：
-
-```text
-data-beat
-+
-audio.currentTime / duration
-+
-粗百分比 threshold
-```
-
-原因：语义错位、影响阅读、动画机械、容易产生“说一画面已跳二”的体验。
-
-## 当前动画体系
+## 当前制作链
 
 ```text
 Garden Step / Narration
         ↓
-find-animation-opportunities
+Uiverse Galaxy Search
+寻找现成视觉组件 / micro-interaction 原型
         ↓
-animate / animation-vocabulary / emil-design-eng
+Garden Theme Adaptation
+统一视觉语言
         ↓
-GSAP Timeline / DrawSVG / MotionPath
+Emil Skills
+find opportunities → animate → review → improve
         ↓
-Edge TTS SentenceBoundary cue
+GSAP
+Timeline / DrawSVG / MotionPath / Continuous Motion
         ↓
-review-animations
-        ↓
-improve-animations
+Edge TTS SentenceBoundary
+语义时间码
 ```
 
-## 本轮已完成
+## 已完成
 
-### 上游动画体系固定
+### 上游资源体系
 
-- [x] `vendor/upstream/gsap/` 完整镜像 `greensock/GSAP`。
-- [x] `vendor/upstream/emil-skills/` 完整镜像 `emilkowalski/skills`。
-- [x] `.github/workflows/sync-animation-upstreams.yml` 自动同步。
-- [x] 上游 commit SHA 和许可证保留。
-- [x] GSAP Standard License 信息保留。
-- [x] Emil MIT LICENSE 保留。
+- [x] `vendor/upstream/gsap/` 完整镜像 GSAP。
+- [x] `vendor/upstream/emil-skills/` 完整镜像 Emil Skills。
+- [x] 同步 Workflow 已升级，加入 `uiverse-io/galaxy`。
+- [x] Galaxy 许可证确认 MIT。
+- [x] 同步流程会生成 `data/galaxy-components.json`。
+- [x] `data/motions.json` 把 Galaxy 提升为 CORE 视觉组件来源。
 
-### Edge TTS 隐藏时间码
+### 后台资源入口
 
-- [x] `scripts/generate-harness-edge-tts.py` 改成 stream 模式。
-- [x] MP3 生成时同时采集 `SentenceBoundary`。
-- [x] 新增 `presentations/harness-engineering/timings.json`。
-- [x] 每 Step 同时生成隐藏 SRT timing 文件。
-- [x] GitHub Actions 已生成并验证 timing metadata。
-- [x] 可见字幕仍然禁止；SRT 只做动画 cue。
+- [x] 新增 `components.html`。
+- [x] 首页侧栏增加「组件库 · Galaxy」。
+- [x] 顶部快捷入口增加「组件库」。
+- [x] 移动端导航增加组件入口。
+- [x] 组件页支持搜索 / 分类 / 随机 / 分页。
+- [x] 组件页支持本地 iframe 预览。
+- [x] 组件页支持本地源码查看。
 
-### 第一章 GSAP 空间故事重建
+### 第一章已有能力
 
-- [x] 本地加载 `gsap.min.js`。
-- [x] 本地加载 `MotionPathPlugin.min.js`。
-- [x] 本地加载 `DrawSVGPlugin.min.js`。
-- [x] 6 个 Step 对应 6 个独立 GSAP Timeline。
-- [x] GSAP timeline 不负责 Step 翻页。
-- [x] Auto 仍只有 narration `ended` 才切下一 Step。
-- [x] SentenceBoundary `start` 只驱动当前 Step 内 cue。
-- [x] Step 1：关系路径绘制 + traveler 路径运动。
-- [x] Step 2：同一模型分叉到失败 / 稳定两种系统。
-- [x] Step 3：Agent Core → 四条连接 → 四个工作台组件展开。
-- [x] Step 4：Prompt token 沿路径进入 Harness 工作环境。
-- [x] Step 5：执行循环路径 + runner + 10 家公司状态推进。
-- [x] Step 6：四层 Harness 聚合到 Reliable Agent。
-- [x] SVG 图标替代 emoji 图标。
-- [x] 公司 01–10 静态模板残留 bug 已通过 Normalize Action 修复。
-
-### Emil 交互 / Physicality
-
-- [x] Toolbar press 采用约 160ms 的 `scale(.97)` 反馈。
-- [x] Hover 使用 `(hover:hover) and (pointer:fine)` gating。
-- [x] `focus-visible` 明确可见。
-- [x] `prefers-reduced-motion` 已加入。
-- [x] 禁止 `transition: all`。
-- [x] 禁止 `scale(0)` 进入。
-- [x] 普通 UI 优先 transform / opacity。
-- [x] 键盘左右导航不强制播放长场景动画。
-
-### Review / Gate
-
-- [x] 新增 `ANIMATION_REVIEW.md`。
-- [x] 记录采用的 animation opportunities。
-- [x] 记录主动拒绝的无意义动画。
-- [x] 逐屏记录目的 / 工具 / physicality。
-- [x] `ACCEPTANCE.md` 升级到 v6。
-- [x] `validate-harness-chapter1.mjs` 升级到 v6。
-- [x] v6 GitHub Actions Code Gate：**PASS**。
+- [x] Garden 6 Step。
+- [x] Edge TTS 6/6 + SentenceBoundary timing。
+- [x] GSAP / MotionPath / DrawSVG。
+- [x] Emil Review。
+- [x] 主动画 + continuous ambient motion。
+- [x] emoji 作为低层级辅助视觉已允许。
+- [x] Manual / Auto。
+- [x] 本地 BGM 上传。
+- [x] 浏览器本地 MediaRecorder。
 
 ## 当前待通过
 
+- [ ] Creative Upstream Action 完成 Galaxy 整仓镜像。
+- [ ] `data/galaxy-components.json` 实际总数确认 3000+。
+- [ ] 组件页在正式 Project6 地址实机加载大索引。
+- [ ] 从 Galaxy 选取首批 8–12 个适合知识视频的组件原型，建立 Project6 curated shortlist。
+- [ ] 第一章选取 2–4 个 Galaxy 细节语言进行 Theme-adapted 重构，不直接照搬原色。
 - [ ] 浏览器实机逐句确认 SentenceBoundary 与视觉动作语义贴合。
-- [ ] 0.5× / 0.25× 慢放检查动画节奏断点。
-- [ ] DevTools frame-by-frame 检查 scene transition / DrawSVG / MotionPath。
-- [ ] Manual：每一段旁白始终停留在对应 Step。
-- [ ] Auto：6 Step 连播无提前跳页。
-- [ ] Reduced Motion 完整播放一次。
+- [ ] Manual / Auto 完整实机验证。
 - [ ] HTTPS 地址完成完整 WebM 本地录制。
-- [ ] 用户重新评分并最终 PASS。
+- [ ] 用户最终体验验收。
 
 ## 当前 Gate
 
-**上游镜像 Gate：PASS。**
+**GSAP / Emil：PASS。**
 
-**TTS Timing Gate：PASS。**
+**Galaxy 集成 Gate：IN PROGRESS。**
 
-**GSAP + Emil v6 代码 Gate：PASS。**
-
-**产品最终 Gate：IN PROGRESS / 仍需用户实际观看。**
+**第一章产品最终 Gate：IN PROGRESS。**
 
 第一章未最终 PASS 前，不进入第二章。
