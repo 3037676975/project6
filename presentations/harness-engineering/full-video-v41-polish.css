@@ -1,6 +1,6 @@
-/* Project6 Harness Engineering · Garden v41 polish
- * Purpose: readability, typographic hierarchy, screenshot-reviewed refinements,
- * and recording controls. This file only overrides v40.
+/* Project6 Harness Engineering · Garden v42 polish
+ * Purpose: readability, screenshot-reviewed refinements, true responsive 16:9 scaling,
+ * and recording controls. This file overrides v40 scene CSS without replacing recipes.
  */
 :root{
   --font-display-cn:"Noto Sans SC","PingFang SC","Microsoft YaHei","Source Han Sans SC",system-ui,sans-serif;
@@ -41,10 +41,7 @@
 .s041 .sys-node{font-size:19px}
 .s042 .final-tag{font-size:18px}
 
-/* Screenshot QA round 1: scene-specific corrections.
- * QA report flagged tiny text in 004 / 009 / 025 / 040.
- * Visual review also found 036 title/browser crowding and some dense semantic labels.
- */
+/* Screenshot QA round 1 corrections. */
 .s004 .orbit-copy{font-size:19px!important;font-family:var(--font-body)!important;font-weight:800!important;letter-spacing:0!important}
 .s004 .r3{font-size:37px!important}.s004 .r2{font-size:35px!important}
 .s009 .dial span{font-size:16px!important}.s009 .dial b{font-size:41px!important}.s009 .dial{width:380px!important;height:380px!important}
@@ -55,21 +52,41 @@
 .s036 .scene-title{top:105px!important;max-width:760px!important}.s036 .scene-title h1{font-size:62px!important;line-height:1.05!important}.s036 .browser{top:255px!important;bottom:85px!important}
 .s040 .scene-title h1{font-size:70px!important}.s040 .micro{font-size:17px!important}.s040 .equation2{top:355px!important}
 
+/* v42: real proportional preview.
+ * Stage stays logically 1920×1080. stage-frame owns the scaled layout footprint,
+ * so the browser never lays out a 1920px box and merely paints it smaller.
+ */
+.viewer{position:relative;overflow:hidden;display:grid;place-items:center;min-width:0;min-height:0}
+.stage-frame{position:relative;display:block;flex:0 0 auto;overflow:visible;aspect-ratio:16/9}
+.stage-frame>.stage{margin:0!important;max-width:none!important;max-height:none!important}
+.stage{width:1920px!important;height:1080px!important;contain:layout paint style;will-change:transform}
+.stage[data-recording="true"]{box-shadow:none}
+
+/* v42 cover: the topic is the hero, not a tiny HUD label. */
+.s001 .copy{max-width:760px}
+.s001 .copy>.eyebrow{display:none}
+.s001 .legacy-cover-question{display:none!important}
+.s001 .cover-brand-v42{display:grid;gap:20px;align-content:center}
+.s001 .cover-code{font:900 15px/1.2 var(--font-mono);letter-spacing:.12em;color:var(--accent);text-transform:uppercase}
+.s001 .cover-brand-v42 h1{margin:0;font-family:var(--font-display-en),var(--font-display-cn);font-size:88px;line-height:.90;letter-spacing:-.065em;font-weight:950;color:var(--text)}
+.s001 .cover-brand-v42 h1 span,.s001 .cover-brand-v42 h1 em{display:block;font-style:normal}
+.s001 .cover-brand-v42 h1 em{color:var(--accent);font-size:82px}
+.s001 .cover-question-v42{font-size:35px;line-height:1.22;font-weight:900;letter-spacing:-.035em;color:var(--text-2);margin-top:4px}
+.s001 .copy p{font-size:25px!important;line-height:1.62!important;max-width:700px!important;margin-top:10px!important}
+
 /* Keep reading areas stable after their construction animation. */
 .s010 .spec,.s015 .slot,.s023 .skill-sheet,.s029 .qa-metric,.s035 .doc-preview,.s036 .browser{backface-visibility:hidden;transform:translateZ(0)}
 
 /* Make the control strip calm and recording-friendly. */
-.toolbar{grid-template-columns:minmax(360px,1fr) auto minmax(360px,1fr);min-height:78px}
+.toolbar{grid-template-columns:minmax(320px,1fr) auto minmax(320px,1fr);min-height:78px}
 .toolbar .center{gap:8px;flex-wrap:nowrap}
 .btn.record{background:var(--text);color:var(--surface);border-color:var(--text);min-width:148px}
 .btn.record.live{background:#7c2d2d;color:#fff;border-color:#7c2d2d}
 .record-meta{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 11px;border:1px solid var(--rule);border-radius:12px;background:rgba(255,255,255,.78);font:800 11px/1.2 var(--font-mono);color:var(--text-mute);white-space:nowrap}
 .record-meta::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
 .record-meta.live::before{background:#b91c1c;box-shadow:0 0 0 5px rgba(185,28,28,.12)}
-
-/* Recording only targets the stage; keep stage ratio and pixel design immutable. */
-.stage{contain:layout paint style}
-.stage[data-recording="true"]{box-shadow:none}
+.record-meta.warn{color:#8a4b11;border-color:#e3c39a;background:#fff9ef}
+.record-meta.warn::before{background:#d97706}
 
 @media(max-width:1180px){
   .toolbar{grid-template-columns:1fr auto 1fr}.record-meta{display:none}.btn.record{min-width:116px}
