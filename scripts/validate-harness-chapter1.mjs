@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 
 const root=new URL('../presentations/harness-engineering/',import.meta.url);
 const repoRoot=new URL('../',import.meta.url);
-const htmlPath=new URL('index.html',root),audioPath=new URL('audio-map.json',root),timingsPath=new URL('timings.json',root),acceptancePath=new URL('ACCEPTANCE.md',root),projectsPath=new URL('../data/projects.json',import.meta.url),motionsPath=new URL('../data/motions.json',import.meta.url);
+const htmlPath=new URL('index.html',root),audioPath=new URL('audio-map.json',root),timingsPath=new URL('timings.json',root),acceptancePath=new URL('ACCEPTANCE.md',root),projectsPath=new URL('../data/projects.json',import.meta.url),motionsPath=new URL('../data/motions.json',import.meta.url),ambientJsPath=new URL('continuous-motion.js',root),ambientCssPath=new URL('continuous-motion.css',root);
 const bgmFiles=['public/audio/bgm/short-plingy-loop.ogg','public/audio/bgm/calm-loop.mp3','public/audio/bgm/other-center.ogg'];
 const vendorFiles=[
   new URL('vendor/upstream/gsap/dist/gsap.min.js',repoRoot),
@@ -13,8 +13,8 @@ const vendorFiles=[
   new URL('vendor/upstream/emil-skills/skills/review-animations/STANDARDS.md',repoRoot),
   new URL('vendor/upstream/emil-skills/skills/improve-animations/SKILL.md',repoRoot)
 ];
-const [html,audioRaw,timingsRaw,acceptance,projectsRaw,motionsRaw,...stats]=await Promise.all([
-  fs.readFile(htmlPath,'utf8'),fs.readFile(audioPath,'utf8'),fs.readFile(timingsPath,'utf8'),fs.readFile(acceptancePath,'utf8'),fs.readFile(projectsPath,'utf8'),fs.readFile(motionsPath,'utf8'),
+const [html,audioRaw,timingsRaw,acceptance,projectsRaw,motionsRaw,ambientJs,ambientCss,...stats]=await Promise.all([
+  fs.readFile(htmlPath,'utf8'),fs.readFile(audioPath,'utf8'),fs.readFile(timingsPath,'utf8'),fs.readFile(acceptancePath,'utf8'),fs.readFile(projectsPath,'utf8'),fs.readFile(motionsPath,'utf8'),fs.readFile(ambientJsPath,'utf8'),fs.readFile(ambientCssPath,'utf8'),
   ...bgmFiles.map(p=>fs.stat(new URL(p,root))),...vendorFiles.map(p=>fs.stat(p))
 ]);
 const audio=JSON.parse(audioRaw),timings=JSON.parse(timingsRaw),projects=JSON.parse(projectsRaw),motions=JSON.parse(motionsRaw),p=projects.find(x=>x.id==='P0026');
@@ -60,9 +60,14 @@ check('browser local MediaRecorder',html.includes('getDisplayMedia')&&html.inclu
 check('vendored GSAP + Emil files present',vendorStats.every(s=>s.size>0),vendorStats.map(s=>s.size).join('/'));
 check('motion catalog promotes GSAP',motions.some(x=>x.id==='gsap'&&x.tier==='CORE'));
 check('motion catalog promotes Emil Skills',motions.some(x=>x.id==='emil-skills'&&x.tier==='CORE'));
-check('acceptance v6 exists',acceptance.includes('第一章验收标准 v6')&&acceptance.includes('SentenceBoundary')&&acceptance.includes('Emil Review Gate'));
+check('continuous motion assets wired',html.includes('./continuous-motion.css')&&html.includes('./continuous-motion.js'));
+check('ambient layer uses active-scene lifecycle',ambientJs.includes('MutationObserver')&&ambientJs.includes("classList.contains('active')")&&ambientJs.includes('killScene'));
+check('ambient layer has sustainable flow motion',ambientJs.includes('repeat:-1')&&ambientJs.includes('motionPath')&&ambientJs.includes('work-flow-')&&ambientJs.includes('repeatDelay'));
+check('ambient emoji is auxiliary',ambientJs.includes("'🧠'")&&ambientJs.includes("'⚙️'")&&ambientCss.includes('.ambient-emoji'));
+check('ambient reduced motion guard',ambientJs.includes("prefers-reduced-motion: reduce")&&ambientCss.includes('prefers-reduced-motion:reduce'));
+check('acceptance v7 exists',acceptance.includes('第一章验收标准 v7')&&acceptance.includes('持续动画规则')&&acceptance.includes('Emoji 辅助视觉规则')&&acceptance.includes('Emil Review Gate'));
 check('no authored JS template artifact',!html.includes('${Array.from')&&!html.includes('${String(i+1)'));
 const staticPass=checks.every(c=>c.ok);
 const audioReady=audio?.status==='ready'&&audio?.provider==='edge-tts'&&audio?.voice==='zh-CN-YunxiNeural'&&audio?.rate==='+0%'&&Object.keys(audio?.segments||{}).length===6;
-console.log('\nHarness Chapter 1 Gate v6 — Garden + Edge timing + GSAP + Emil\n');for(const c of checks)console.log(`${c.ok?'PASS':'FAIL'}  ${c.name}${c.detail?` · ${c.detail}`:''}`);
+console.log('\nHarness Chapter 1 Gate v7 — Garden + Edge timing + GSAP + Emil + Ambient\n');for(const c of checks)console.log(`${c.ok?'PASS':'FAIL'}  ${c.name}${c.detail?` · ${c.detail}`:''}`);
 console.log(`\nSTATIC: ${staticPass?'PASS':'FAIL'}`);console.log(`YUNXI AUDIO: ${audioReady?'PASS':'FAIL'}`);console.log(`CODE GATE: ${staticPass&&audioReady?'PASS':'FAIL'}`);console.log('USER REVIEW: REQUIRED');if(!staticPass||!audioReady)process.exitCode=1;
