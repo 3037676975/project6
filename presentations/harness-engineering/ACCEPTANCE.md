@@ -1,117 +1,137 @@
-# Harness Engineering · 第一章验收标准 v4
+# Harness Engineering · 第一章验收标准 v5
 
-> 本文件是第一章硬 Gate。每次继续开发前必须依次阅读：
-> `docs/PROJECT_CHARTER.md` → `docs/PRD.md` → `docs/ACTIVE_DECISIONS.md` → `docs/DEVELOPMENT_STATUS.md` → Garden 官方 `SKILL.md` / `CHAPTER-CRAFT.md` / `AUDIO.md` / `RECORDING.md` → 本文件。
+> 每次继续开发前必须依次阅读：`PROJECT_CHARTER.md` → `PRD.md` → `ACTIVE_DECISIONS.md` → `DEVELOPMENT_STATUS.md` → Garden 官方规范 → 本文件 → Project6 本地 `vendor/upstream/emil-skills/skills/animate/SKILL.md` 与 `review-animations/STANDARDS.md`。
 
-## 1. 先验收“讲什么”
+## 1. 内容与口播
 
-- [x] 第一章一句话主题明确：**模型之外的运行系统，决定 Agent 能不能稳定把任务做完。**
-- [x] 每个 Step 只承担一个口播节拍，不把整段说明书搬上屏。
-- [x] 口播像日常讲解，不是论文 / PRD / 产品说明书。
-- [x] 有自然转折和可想象的案例。
-- [ ] 用户听完整章后确认：主题清楚、口播自然、愿意继续听。
+- [x] 一句话主题：**模型之外的运行系统，决定 Agent 能不能稳定把任务做完。**
+- [x] 6 个 Step 各自只有一段 narration。
+- [x] 口播是聊天式中文，不是 PRD / 论文。
+- [ ] 用户听完整章后确认内容自然、愿意继续听。
 
-## 2. 配音自然
-
-当前正式 Voice：
+## 2. TTS
 
 ```text
-provider = edge-tts
-client   = rany2/edge-tts
-voice    = zh-CN-YunxiNeural
-locale   = zh-CN
-rate     = +0%
-speed    = 1.0x
+edge-tts
+zh-CN-YunxiNeural
+rate = +0%
+1.0x
 ```
 
-- [x] 不经过 Project5。
-- [x] 禁止 SpeechSynthesis fallback。
-- [x] 6/6 云希 MP3 已真实生成。
-- [ ] 实机听感最终 PASS：不机械、不像新闻播报、停顿自然。
+- [x] 6/6 MP3 已生成。
+- [x] 无 SpeechSynthesis fallback。
+- [ ] 最终实机听感 PASS。
 
-## 3. 画面好看
+## 3. 画面
 
-- [x] 固定 1920×1080 / 16:9 Garden 舞台。
-- [x] 使用 Garden 官方 `warm-keynote` 设计 DNA。
-- [x] 无字幕条、无 emoji 图标。
-- [x] 第一屏保持强开场视觉。
-- [x] 2～5 屏信息密度已提高。
-- [x] 工具栏完全位于舞台外，不侵占成片画面。
-- [x] 小字字号和字重已整体提升。
-- [ ] 6 屏逐屏最终检查：构图、字号、留白、信息密度均衡。
+- [x] 1920×1080 固定 Garden 舞台。
+- [x] warm-keynote 设计 DNA。
+- [x] 控制条完全在舞台外。
+- [x] 无字幕条。
+- [x] 小字字号与字重已提高。
+- [ ] 6 屏最终主观构图 PASS。
 
-## 4. Narration Beat 动效（新增硬 Gate）
+## 4. GSAP 动画核心（v5 新硬 Gate）
 
-核心原则：**观众现在听到什么，就让对应视觉现在出现。**
+Project6 当前动画核心：
 
-- [x] 第一章已经建立 `data-beat` 视觉标记。
-- [x] 播放当前旁白 / Auto 时进入 Beat Reveal 模式。
-- [x] Beat 进度使用真实 `audio.currentTime / audio.duration`。
-- [x] Manual 纯浏览状态可以显示完整画面，方便检查。
-- [x] 第二屏按“问题 → 失败侧 → 失败信号 → 稳定侧 → 稳定信号”顺序出现。
-- [x] 第三屏按“工作台 → 工具/状态 → Harness 作用 → 最终目标”顺序出现。
-- [x] 第四屏按“聪明员工 → Prompt → 工作环境 → Context/Tools/State/Recovery → 结论”顺序出现。
-- [x] 第五屏按“任务 → 循环流程 → 无 Harness → 有 Harness → 10 家公司进度”顺序出现。
-- [x] 第六屏按“结论标签 → 主结论 → 中文解释 → 四层 Harness”顺序收束。
-- [ ] 实机听看确认：每个 Reveal 与真实语义点基本对应，没有过早或过晚。
-- [ ] 连续 Auto 6 Step 不出现元素闪回、残影或一开始全亮。
+```text
+Garden Step / Narration
+        ↓
+Emil Skills 做动画设计判断与 Review
+        ↓
+GSAP Timeline 执行当前 Step 内动画
+```
 
-## 5. 动画资源库
+### 4.1 上游必须本地存在
 
-- [x] 后台新增独立 `motions.html` 动效库。
-- [x] 新增 `data/motions.json` 开源动效库目录。
-- [x] 第一批收录 Anime.js / Motion / Lottie Web / AutoAnimate / Animate.css / React Spring。
-- [x] 动效库包含可直接重播的 Project6 Primitive 示例。
-- [x] 建立 Primitive ID：`beat-reveal-01` / `flow-build-01` / `focus-shift-01` / `counter-progress-01`。
-- [ ] 后续视频正式调用时，为每个使用的 Primitive 写进 manifest / scene metadata。
+- [x] `vendor/upstream/gsap/` 完整镜像官方 `greensock/GSAP`。
+- [x] `vendor/upstream/emil-skills/` 完整镜像官方 `emilkowalski/skills`。
+- [x] GSAP 原 README/package/许可证信息保留。
+- [x] Emil MIT LICENSE 保留。
+- [x] 后台 `motions.html` 能直接读取本地上游原始文档。
 
-## 6. 手动 / 自动播放
+### 4.2 严格 Step 边界
+
+- [x] 第一章存在 6 条独立 GSAP timeline。
+- [x] 每条 timeline 只查询/操作自己的 `.scene[data-step]` 内容。
+- [x] GSAP timeline 不调用下一 Step。
+- [x] timeline 完成后保持当前 Step 最终状态。
+- [x] Manual 播放当前旁白后不自动翻页。
+- [x] Auto 唯一翻页条件是当前 narration `ended`。
+- [ ] 实机验证：绝不再出现“旁白还在一，画面已跳到二”。
+
+### 4.3 废弃错误同步方案
+
+以下正式禁止：
+
+```text
+audio.currentTime / duration
+→ 粗百分比 threshold
+→ data-beat 作为正式语义同步
+```
+
+- [x] 正式第一章已删除该主逻辑。
+- [x] 不再使用 `narration.ontimeupdate` 驱动跨元素粗同步。
+
+### 4.4 Emil 动画规则
+
+- [x] 每个动画必须有 Explanation / State / Spatial / Feedback 等目的。
+- [x] 进入优先 strong ease-out。
+- [x] 顺序内容使用 stagger，而不是整屏一次出现。
+- [x] 正在阅读的文字不会无意义持续漂移。
+- [x] 不用 `scale(0)`。
+- [x] 优先 transform / opacity；SVG 路径例外用于解释关系。
+- [ ] 实机 Review：动画没有影响阅读、没有抢注意力、没有拖沓。
+
+## 5. 第一章 6 条动画逻辑
+
+1. Step 1：标签 → 标题 → 核心问题 → SVG 关系线。
+2. Step 2：问题 → 执行翻车 → 失败信号 → VS → 稳定闭环 → 稳定信号。
+3. Step 3：工作台 → 4 个模块 → Harness 作用卡片。
+4. Step 4：员工 / Prompt → 工作环境 → 4 个 Harness 条件 → 结论。
+5. Step 5：十家公司任务 → 执行循环 → 4 个节点 → 对比 → 公司进度。
+6. Step 6：章节提示 → 英文主结论 → 中文解释 → 四层 Harness。
+
+这些顺序只属于各自当前 narration，不得跨 Step 提前展示下一段内容。
+
+## 6. Manual / Auto
 
 ### Manual
-- [x] 手动模式明确可见。
-- [x] 上一页 / 下一页可用。
-- [x] 点击舞台和 ← / → 可导航。
-- [x] 可单独播放当前旁白。
-- [x] 手动模式旁白结束不会自动翻页。
+- [x] 上一页 / 下一页 / ←→ / 点击舞台可导航。
+- [x] “当前旁白”只播放当前 Step narration 和当前 Step GSAP timeline。
+- [x] narration 结束后保持当前 Step。
 
 ### Auto
-- [x] 自动模式明确可见。
-- [x] Auto 由正式旁白 `ended` 推进下一 Step。
-- [x] Auto 播放时同步启动 Narration Beat Reveal。
-- [ ] 实机 Auto 6 Step 连续播放 PASS。
+- [x] 从当前 Step 播 narration + 当前 Step timeline。
+- [x] narration `ended` 后才进入下一个 Step。
+- [ ] 实机完整 Auto 6 Step PASS。
 
 ## 7. BGM
 
-第一章提供：无音乐 / Short Plingy / Calm Loop / Other Center / 本地上传。
+- [x] 无音乐 / 3 个 CC0 预置 / 本地上传。
+- [x] 本地音乐不上传服务器。
+- [ ] 用户最终选择满意。
 
-- [x] 3 个 CC0 预置。
-- [x] 本地上传只使用 `URL.createObjectURL`，不上传服务器。
-- [x] 独立音量控制。
-- [ ] 用户主观确认最终 BGM 选择舒服。
+## 8. 浏览器本地录制
 
-## 8. 本地录制 / 下载
-
-- [x] 使用浏览器 `getDisplayMedia + MediaRecorder`。
-- [x] 检查 Secure Context；HTTP 环境不再静默失败。
-- [x] 录制数据留在浏览器内存，不上传 Project6。
-- [x] 录制结束自动下载 WebM。
-- [x] 录制时工具栏弱化，不作为成片视觉。
-- [ ] HTTPS / localhost 实机完整录制一次并检查画面、旁白、BGM。
+- [x] `getDisplayMedia + MediaRecorder`。
+- [x] Secure Context 检查。
+- [x] 浏览器内存 → 自动下载 WebM。
+- [x] Project6 服务器不保存成片。
+- [ ] HTTPS 实机完整录制 PASS。
 
 ## 最终 Gate
 
-必须同时满足：
-
-- 主题清楚：PASS
-- 口播自然：≥ 90 / 100
-- 配音听感：≥ 90 / 100
-- 画面好看：≥ 90 / 100
-- Narration Beat 动效：≥ 90 / 100
-- 动画衔接：≥ 90 / 100
+- 内容：PASS
+- 配音：≥ 90
+- 画面：≥ 90
+- **GSAP Step 边界：必须 PASS**
+- **动画不影响阅读：≥ 90**
 - Manual：PASS
 - Auto：PASS
 - BGM：PASS
 - 本地录制：PASS
-- 用户验收：PASS
+- 用户最终验收：PASS
 
 任一项 FAIL：**继续修改，不进入第二章。**
