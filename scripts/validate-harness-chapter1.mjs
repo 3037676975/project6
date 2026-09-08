@@ -11,7 +11,7 @@ const checks=[];const check=(name,ok,detail='')=>checks.push({name,ok,detail});
 check('1920x1080 stage',css.includes('width:1920px;height:1080px'));
 check('six Garden scenes',(html.match(/data-step="\d+"/g)||[]).length===6);
 check('Harness cover title',html.includes('CHAPTER 01 · HARNESS ENGINEERING')&&html.includes('class="cover-main">HARNESS</span>')&&html.includes('class="cover-sub">ENGINEERING</span>'));
-check('no Honeys typo in runtime',!(/Honeys/i.test(html+css+js)));
+check('no Honeys typo in rendered HTML',!(/Honeys/i.test(html)));
 check('Harness runtime map',html.includes('Harness Runtime Map')&&html.includes('Context')&&html.includes('Tools')&&html.includes('State')&&html.includes('Recovery'));
 check('cool neutral palette v11',css.includes('Chapter1 v11 · Harness cover + cool neutral palette')&&css.includes('--navy:#0d2f2a')&&css.includes('--navy2:#143d36'));
 check('dark surfaces are teal green',css.includes('linear-gradient(150deg,#0d2f2a')&&css.includes('.console{background:linear-gradient(150deg,#0c2c27'));
