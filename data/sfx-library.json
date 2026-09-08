@@ -1,0 +1,71 @@
+{
+  "version": "1.0",
+  "updated_at": "2026-09-09",
+  "sources": [
+    {
+      "name": "Kenney UI Audio",
+      "homepage": "https://kenney.nl/assets/ui-audio",
+      "license": "CC0 1.0",
+      "files": 50
+    },
+    {
+      "name": "Kenney Interface Sounds",
+      "homepage": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0 1.0",
+      "files": 100
+    },
+    {
+      "name": "SoundBooth Kenney mirror",
+      "homepage": "https://github.com/mnsvz23/SoundBooth/tree/main/sounds/kenney",
+      "license": "CC0 subset / source documented in repository",
+      "files": 67
+    }
+  ],
+  "items": [
+    {
+      "id": "kenney-click-001",
+      "name": "Click 001",
+      "category": "UI Click",
+      "recommended_for": "按钮点击、卡片确认、操作反馈",
+      "src": "https://raw.githubusercontent.com/mnsvz23/SoundBooth/main/sounds/kenney/click_001.ogg",
+      "source": "Kenney Interface Sounds",
+      "license": "CC0 1.0"
+    },
+    {
+      "id": "kenney-click-002",
+      "name": "Click 002",
+      "category": "UI Click",
+      "recommended_for": "轻点击、选项切换、文字出现前的小反馈",
+      "src": "https://raw.githubusercontent.com/mnsvz23/SoundBooth/main/sounds/kenney/click_002.ogg",
+      "source": "Kenney Interface Sounds",
+      "license": "CC0 1.0"
+    },
+    {
+      "id": "kenney-back-001",
+      "name": "Back 001",
+      "category": "Transition",
+      "recommended_for": "返回、轻转场、章节回收",
+      "src": "https://raw.githubusercontent.com/mnsvz23/SoundBooth/main/sounds/kenney/back_001.ogg",
+      "source": "Kenney Interface Sounds",
+      "license": "CC0 1.0"
+    },
+    {
+      "id": "kenney-back-002",
+      "name": "Back 002",
+      "category": "Transition",
+      "recommended_for": "短转场、画面切换",
+      "src": "https://raw.githubusercontent.com/mnsvz23/SoundBooth/main/sounds/kenney/back_002.ogg",
+      "source": "Kenney Interface Sounds",
+      "license": "CC0 1.0"
+    },
+    {
+      "id": "kenney-bong-001",
+      "name": "Bong 001",
+      "category": "Accent",
+      "recommended_for": "重点结论、数字强调、章节落点",
+      "src": "https://raw.githubusercontent.com/mnsvz23/SoundBooth/main/sounds/kenney/bong_001.ogg",
+      "source": "Kenney Interface Sounds",
+      "license": "CC0 1.0"
+    }
+  ]
+}
