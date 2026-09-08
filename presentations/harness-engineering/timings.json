@@ -1,0 +1,182 @@
+{
+  "provider": "edge-tts",
+  "boundary": "SentenceBoundary",
+  "voice": "zh-CN-YunxiNeural",
+  "rate": "+0%",
+  "segments": {
+    "01-harness-engineering/1": {
+      "srt": "./public/timing/01-harness-engineering/1.srt",
+      "cues": [
+        {
+          "start": 0.1,
+          "duration": 2.9625,
+          "end": 3.0625,
+          "text": "你有没有发现一个挺奇怪的事？"
+        },
+        {
+          "start": 3.0125,
+          "duration": 7.0125,
+          "end": 10.025,
+          "text": "明明用的是同一个大模型，有的人做出来的 Agent 特别稳，有的人呢，跑两步就崩。"
+        },
+        {
+          "start": 10.025,
+          "duration": 2.9875,
+          "end": 13.0125,
+          "text": "你第一反应是不是：模型不行？"
+        },
+        {
+          "start": 13.0125,
+          "duration": 2.0375,
+          "end": 15.05,
+          "text": "其实还真不一定。"
+        }
+      ]
+    },
+    "01-harness-engineering/2": {
+      "srt": "./public/timing/01-harness-engineering/2.srt",
+      "cues": [
+        {
+          "start": 0.1,
+          "duration": 5.825,
+          "end": 5.925,
+          "text": "很多人这时候就开始疯狂折腾：换模型、改 Prompt、再补一层 RAG。"
+        },
+        {
+          "start": 5.875,
+          "duration": 1.225,
+          "end": 7.1,
+          "text": "结果呢？"
+        },
+        {
+          "start": 7.1,
+          "duration": 6.8,
+          "end": 13.9,
+          "text": "前面看着都挺聪明，一到真正干活，工具没接上、状态丢了、任务卡住。"
+        },
+        {
+          "start": 13.9,
+          "duration": 3.2125,
+          "end": 17.1125,
+          "text": "问题其实已经跑到模型外面去了。"
+        }
+      ]
+    },
+    "01-harness-engineering/3": {
+      "srt": "./public/timing/01-harness-engineering/3.srt",
+      "cues": [
+        {
+          "start": 0.1,
+          "duration": 2.4875,
+          "end": 2.5875,
+          "text": "那模型外面到底是什么？"
+        },
+        {
+          "start": 2.5375,
+          "duration": 8.35,
+          "end": 10.8875,
+          "text": "你可以把它想成给 Agent 搭的一张工作台：资料放哪儿、工具怎么用、做到一半怎么记住、失败了怎么接着跑。"
+        },
+        {
+          "start": 10.8875,
+          "duration": 4.175,
+          "end": 15.0625,
+          "text": "把这些东西组织起来，就是 Harness。"
+        }
+      ]
+    },
+    "01-harness-engineering/4": {
+      "srt": "./public/timing/01-harness-engineering/4.srt",
+      "cues": [
+        {
+          "start": 0.1,
+          "duration": 3.775,
+          "end": 3.875,
+          "text": "所以 Prompt 和 Harness 其实不是一回事。"
+        },
+        {
+          "start": 3.825,
+          "duration": 4.275,
+          "end": 8.1,
+          "text": "Prompt 更像你跟一个员工说：这件事你这么做。"
+        },
+        {
+          "start": 8.1,
+          "duration": 1.2625,
+          "end": 9.3625,
+          "text": "Harness 呢？"
+        },
+        {
+          "start": 9.3625,
+          "duration": 5.85,
+          "end": 15.2125,
+          "text": "是把电脑、资料、工具、流程、检查表都给他准备好。"
+        },
+        {
+          "start": 15.2125,
+          "duration": 3.875,
+          "end": 19.0875,
+          "text": "一个管怎么说，一个管怎么把事真的做完。"
+        }
+      ]
+    },
+    "01-harness-engineering/5": {
+      "srt": "./public/timing/01-harness-engineering/5.srt",
+      "cues": [
+        {
+          "start": 0.1,
+          "duration": 1.975,
+          "end": 2.075,
+          "text": "举个最直观的例子。"
+        },
+        {
+          "start": 2.025,
+          "duration": 2.725,
+          "end": 4.75,
+          "text": "你让 Agent 研究十家公司。"
+        },
+        {
+          "start": 4.75,
+          "duration": 4.625,
+          "end": 9.375,
+          "text": "没有 Harness，它可能搜一圈，马上给你一个总结。"
+        },
+        {
+          "start": 9.375,
+          "duration": 1.4375,
+          "end": 10.8125,
+          "text": "有 Harness 呢？"
+        },
+        {
+          "start": 10.8125,
+          "duration": 6.8875,
+          "end": 17.7,
+          "text": "第一家先查资料、记来源、看还有没有缺口；没查够就继续补，确认完再去第二家。"
+        },
+        {
+          "start": 17.7,
+          "duration": 2.2125,
+          "end": 19.9125,
+          "text": "是不是一下就稳多了？"
+        }
+      ]
+    },
+    "01-harness-engineering/6": {
+      "srt": "./public/timing/01-harness-engineering/6.srt",
+      "cues": [
+        {
+          "start": 0.1,
+          "duration": 8.0375,
+          "end": 8.1375,
+          "text": "所以这一章你先记住一句最重要的：模型决定它有多聪明，Harness 决定它能不能把事情稳稳做完。"
+        },
+        {
+          "start": 8.0875,
+          "duration": 4.425,
+          "end": 12.5125,
+          "text": "后面我们再把这张工作台一层一层拆开看。"
+        }
+      ]
+    }
+  }
+}
