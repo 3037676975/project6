@@ -1,0 +1,65 @@
+window.P6_FULL_VIDEO = {
+  project: 'Harness Engineering',
+  version: '30.0',
+  theme: 'warm-keynote',
+  totalScenes: 42,
+  chapters: [
+    {id:'C01',title:'为什么需要 Harness',range:[1,6]},
+    {id:'C02',title:'AI 工程的三次迁移',range:[7,12]},
+    {id:'C03',title:'Prompt Engineering',range:[13,18]},
+    {id:'C04',title:'Context Engineering',range:[19,24]},
+    {id:'C05',title:'Harness 的六层系统',range:[25,30]},
+    {id:'C06',title:'一线团队怎么做',range:[31,36]},
+    {id:'C07',title:'从聪明到稳定交付',range:[37,42]}
+  ],
+  scenes: [
+    {id:'001',chapter:'C01',title:'同一个模型，为什么结果差这么多？',kicker:'THE REAL GAP',type:'orbit',accent:'MODEL ≠ SYSTEM',narration:'今天我们聊一个最近在 AI 圈越来越重要的词：Harness Engineering。你可能也遇到过这种情况，同样的大模型，别人做出来的 Agent 可以连续运行很久，到了自己手里却经常跑两步就偏。第一反应通常是模型不够强，但真正的问题，很多时候已经不在模型里面。',points:['同一个模型','不同稳定性','问题在模型之外']},
+    {id:'002',chapter:'C01',title:'换模型、改 Prompt，为什么还是不稳？',kicker:'SYMPTOM',type:'rail',accent:'OUTSIDE THE MODEL',narration:'很多团队遇到不稳定以后，会本能地换更强的模型、继续修改 Prompt、再补一层检索。这样当然有帮助，但一进入真实执行，工具没接上、状态丢失、任务中断的问题还是会出现。你会发现，模型可能很聪明，但整个系统并没有把它托住。',points:['模型更强','Prompt 更长','执行仍然断链']},
+    {id:'003',chapter:'C01',title:'真正影响成功率的是运行环境',kicker:'SYSTEM VIEW',type:'workbench',accent:'HARNESS',narration:'把 Agent 想成一个很聪明的新员工。模型是他的脑子，但他还需要资料、工具、任务状态、检查机制，以及出错之后重新恢复的方法。把这些东西组织成一个持续运行的工作环境，就是我们今天要讲的 Harness。',points:['Context','Tools','State','Recovery']},
+    {id:'004',chapter:'C01',title:'Harness 不只是一个新名词',kicker:'ENGINEERING SHIFT',type:'layers',accent:'OPERATING SYSTEM',narration:'Harness 不是给 Prompt 换一个更潮的名字。它代表 AI 应用正在从单次回答，走向长链路的真实执行。过去我们关心模型能不能回答对，现在更重要的问题是：它能不能连续做对、能不能被观察、能不能在失败以后继续完成任务。',points:['持续执行','可观察','可恢复']},
+    {id:'005',chapter:'C01',title:'一套 Harness，要回答四个问题',kicker:'FOUR QUESTIONS',type:'quadrant',accent:'WORKBENCH',narration:'一个最基础的 Harness 至少要回答四个问题：模型现在应该看到什么？它可以调用什么工具？任务进行到哪里？失败以后从哪里继续？这四件事如果没有系统化，Agent 就会像一个聪明但没有工作台的人，能力很强，却很难稳定交付。',points:['看到什么','能做什么','做到哪里','怎么恢复']},
+    {id:'006',chapter:'C01',title:'先记住这一句话',kicker:'CHAPTER SUMMARY',type:'equation',accent:'RELIABLE AGENT',narration:'所以第一部分你先记住一句话：模型决定它有多聪明，Harness 决定它能不能把事情稳稳做完。接下来我们从 AI 工程的演进开始，看 Prompt、Context 和 Harness 是怎么一层一层扩展出来的。',points:['Intelligence','Execution System','Reliable Agent']},
+
+    {id:'007',chapter:'C02',title:'AI 工程经历了三次中心迁移',kicker:'THREE SHIFTS',type:'timeline',accent:'PROMPT → CONTEXT → HARNESS',narration:'过去两年，AI 工程有三次非常明显的中心迁移：最早是 Prompt Engineering，后来是 Context Engineering，现在越来越多团队开始讨论 Harness Engineering。表面看只是几个术语在流行，实际上它们分别对应 AI 系统三个不同阶段的问题。',points:['Prompt','Context','Harness']},
+    {id:'008',chapter:'C02',title:'第一层：模型有没有听懂？',kicker:'QUESTION 01',type:'focus',accent:'INTENT',narration:'Prompt Engineering 解决的核心问题是：模型到底有没有听懂你要什么。同一个任务换一种表达，结果可能完全不同。于是大家开始研究角色设定、输出格式、示例、约束，希望把模型的生成方向引导到正确范围。',points:['角色','任务','约束']},
+    {id:'009',chapter:'C02',title:'第二层：模型有没有拿到正确的信息？',kicker:'QUESTION 02',type:'focus',accent:'INFORMATION',narration:'当任务开始依赖企业文档、最新资料、工具返回和历史状态时，光把话说明白已经不够。模型可能理解任务，却根本没有足够的信息。于是工程重点从“怎么说”扩大到“什么时候把什么信息送进模型”。这就是 Context Engineering。',points:['检索','历史','工具结果','任务状态']},
+    {id:'010',chapter:'C02',title:'第三层：模型能不能持续做对？',kicker:'QUESTION 03',type:'focus',accent:'EXECUTION',narration:'再往后，Agent 开始连续调用工具、修改计划、保存结果、执行多个步骤。问题又变了：即使信息给对了，模型也可能在长链路里慢慢偏航。于是系统必须开始监督执行过程，而不只是优化输入。',points:['连续行动','偏航','监督','纠偏']},
+    {id:'011',chapter:'C02',title:'三个问题，一层一层向外扩',kicker:'EXPANDING BOUNDARY',type:'rings',accent:'SYSTEM BOUNDARY',narration:'你可以把这三种工程方式理解成三个不断扩大的圆。Prompt 关注一次指令，Context 关注当前决策环境，Harness 则把边界扩展到整个运行系统。它们不是互相替代，而是一层包含一层。',points:['Prompt ⊂ Context','Context ⊂ Harness']},
+    {id:'012',chapter:'C02',title:'从回答问题，到完成任务',kicker:'FROM ANSWER TO ACTION',type:'beforeafter',accent:'TASK COMPLETION',narration:'当 AI 只负责回答问题时，Prompt 可能已经够用；当它要读取动态信息时，Context 变得关键；当它真正进入长链路、低容错、可执行的业务场景时，Harness 几乎不可避免。因为系统的目标已经从“回答像不像”变成“任务到底有没有完成”。',points:['回答','执行','交付']},
+
+    {id:'013',chapter:'C03',title:'Prompt Engineering 的本质',kicker:'PROMPT ENGINEERING',type:'prompt',accent:'SHAPE THE OUTPUT',narration:'大模型刚火起来时，大家发现同一个模型只要换一种问法，效果就会有明显差异。于是 Prompt Engineering 成为第一代 AI 应用最重要的工程能力。它的核心不是神秘咒语，而是通过语言，把模型的注意力和生成方向引到你希望的位置。',points:['身份','目标','格式','示例']},
+    {id:'014',chapter:'C03',title:'模型是概率生成系统',kicker:'WHY PROMPTS WORK',type:'probability',accent:'PROBABILITY SPACE',narration:'Prompt 为什么有效？因为大模型本质上是一个对上下文非常敏感的概率生成系统。你给它什么身份、样例和约束，它就更容易沿着对应的范式继续生成。所以 Prompt 更像是在塑造一个局部的概率空间，而不是给程序下一个百分之百确定的命令。',points:['身份影响','样例影响','约束影响']},
+    {id:'015',chapter:'C03',title:'一个稳定 Prompt 的三个部分',kicker:'PROMPT STRUCTURE',type:'steps',accent:'ROLE · TASK · CRITERIA',narration:'一个稳定的 Prompt 通常至少有三个部分。第一，定义角色和背景；第二，说明当前任务和目标；第三，明确输出标准和限制。如果需要，还可以加入示例和格式要求。它们共同解决的是“把任务说明白”这件事。',points:['Role','Task','Criteria']},
+    {id:'016',chapter:'C03',title:'Prompt 很快遇到天花板',kicker:'LIMIT',type:'wall',accent:'WORDS ARE NOT FACTS',narration:'但很多真实任务，不是说清楚就够了。分析企业内部文档、回答最新产品配置、按照长规范写代码、跨多个工具完成任务，都依赖外部事实和动态状态。Prompt 再漂亮，也不能凭空补齐系统没有的信息。',points:['内部知识','最新数据','长规范','多工具']},
+    {id:'017',chapter:'C03',title:'Prompt 擅长表达，不擅长补知识',kicker:'BOUNDARY',type:'split',accent:'EXPRESSION ≠ INFORMATION',narration:'所以 Prompt 擅长的是长期约束输出、激发模型已有能力、指定风格和结构；它不擅长的是凭空弥补缺失知识、管理大量动态信息，以及维护长链路中的任务状态。说白了，Prompt 主要解决表达问题，不是信息问题。',points:['表达 ✓','知识 ×','状态 ×']},
+    {id:'018',chapter:'C03',title:'下一步：把正确的信息送进去',kicker:'NEXT SHIFT',type:'bridge',accent:'CONTEXT ENGINEERING',narration:'当 Agent 开始进入真实环境，模型不只要听懂任务，还要拿到正确的信息。于是工程重点自然从 Prompt 走向 Context：不是一开始把所有东西都塞给模型，而是在合适的时间，把真正相关的内容送进去。',points:['正确时间','正确信息','正确粒度']},
+
+    {id:'019',chapter:'C04',title:'Context 不只是“背景资料”',kicker:'CONTEXT ENGINEERING',type:'contextmap',accent:'DECISION ENVIRONMENT',narration:'在工程意义上，Context 不是几段背景资料，而是所有会影响模型当前决策的信息总和。它包括用户输入、历史对话、检索结果、工具返回、任务状态、中间产物、系统规则、安全约束，甚至其他 Agent 传过来的结构化结果。',points:['用户输入','历史','检索','工具','状态','规则']},
+    {id:'020',chapter:'C04',title:'Prompt 只是 Context 的一部分',kicker:'INCLUSION',type:'rings',accent:'PROMPT ⊂ CONTEXT',narration:'从这个角度看，Prompt 其实只是 Context 的一部分。真正成熟的系统需要决定哪些信息应该保留、哪些应该摘要、哪些应该删除、哪些应该在需要时再动态加载。Context Engineering 关注的是整个信息供给机制。',points:['保留','摘要','删除','按需加载']},
+    {id:'021',chapter:'C04',title:'RAG 只是 Context 的一个入口',kicker:'RAG',type:'pipeline',accent:'RETRIEVE → FILTER → INJECT',narration:'RAG 是 Context Engineering 里最典型的实践之一：模型参数里没有的知识，在运行时先检索，再把相关内容送进上下文。但成熟系统不只关心检索，还要处理切块、排序、压缩、去重和相关性，避免把几十条结果原封不动地塞回模型。',points:['切块','召回','排序','压缩']},
+    {id:'022',chapter:'C04',title:'上下文窗口是一种稀缺资源',kicker:'SCARCE RESOURCE',type:'meter',accent:'LESS, BUT RELEVANT',narration:'上下文不是越多越好。信息一多，模型的注意力就会分散，重点和约束反而更容易被淹没。一个成熟的 Context 系统，追求的不是“给得更多”，而是“给得更相关、更及时、更结构化”。',points:['相关性','时机','结构']},
+    {id:'023',chapter:'C04',title:'Skills 的关键：渐进式披露',kicker:'PROGRESSIVE DISCLOSURE',type:'drawer',accent:'LOAD ON DEMAND',narration:'这也是 Skills 很重要的地方。系统不应该一开始就把十几个工具的全部说明、参数和 SOP 一次性塞给模型，而是先暴露最少量的索引信息，真正触发某个能力时，再把对应的详细文档和脚本加载进来。',points:['先索引','后详情','按需加载']},
+    {id:'024',chapter:'C04',title:'信息给对了，执行还是会失败',kicker:'CONTEXT LIMIT',type:'warning',accent:'INPUT IS NOT EXECUTION',narration:'Context Engineering 也不是终点。后来团队发现，就算信息完全给对了，模型在长时间执行里还是可能偏航：计划正确，执行却跑偏；工具调用了，但结果理解错了；任务已经出问题，系统却没有及时发现。于是第三阶段真正开始了。',points:['计划正确','执行偏航','无人纠偏']},
+
+    {id:'025',chapter:'C05',title:'Harness：驾驭整个执行过程',kicker:'HARNESS ENGINEERING',type:'harness',accent:'CONTROL THE PROCESS',narration:'Harness 这个词本身就有缰绳、马具和约束装置的含义。放到 AI 系统里，它提醒我们：当模型从回答问题走向执行任务，系统不只要负责给信息，还要负责驾驭整个过程，让它别跑偏、跑得稳，出了错还能拉回来。',points:['约束','观测','纠偏','恢复']},
+    {id:'026',chapter:'C05',title:'一个成熟 Harness 的第一层：Context',kicker:'LAYER 01',type:'layer',accent:'CONTEXT',narration:'第一层仍然是 Context。Harness 要确保模型在正确的边界内思考：角色和目标清楚，成功标准明确，信息经过裁剪和选择，固定规则、当前任务、运行状态和外部证据分层组织。信息一旦混乱，模型就很容易漏重点、忘约束。',points:['目标','裁剪','结构化']},
+    {id:'027',chapter:'C05',title:'第二层：Tools',kicker:'LAYER 02',type:'layer',accent:'TOOLS',narration:'第二层是工具系统。没有工具，大模型仍然主要是一个文本生成器；连接搜索、浏览器、数据库、代码和 API 以后，它才真正能做事。但 Harness 不是简单挂工具，而是要决定给什么工具、什么时候调用，以及工具结果如何清洗后再送回模型。',points:['工具选择','调用时机','结果回灌']},
+    {id:'028',chapter:'C05',title:'第三层：Execution Orchestration',kicker:'LAYER 03',type:'loop',accent:'ORCHESTRATION',narration:'第三层是执行编排。很多 Agent 不是某一步不会，而是不会把步骤串起来。一个完整任务需要明确轨道：理解目标、检查信息、继续补充、分析结果、生成输出、验证输出，不满足要求就重新修正。Harness 把这些步骤组织成可以持续运行的循环。',points:['理解','补信息','执行','检查','修正']},
+    {id:'029',chapter:'C05',title:'第四层：Memory & State',kicker:'LAYER 04',type:'state',accent:'MEMORY & STATE',narration:'第四层是记忆和状态。没有状态的 Agent 每一轮都像失忆一样，不知道已经确认了什么、还有什么没完成。系统至少要分清当前任务状态、会话中的中间结果，以及长期记忆和用户偏好，避免所有信息混在一起越跑越乱。',points:['任务状态','中间结果','长期记忆']},
+    {id:'030',chapter:'C05',title:'第五、六层：评估、约束与恢复',kicker:'LAYER 05 · 06',type:'guardrail',accent:'EVALUATE · RECOVER',narration:'最后两层决定系统能不能真正上线。第五层负责评估和观测：日志、指标、测试、输出验收和错误归因。第六层负责约束、校验和失败恢复：哪些能做、哪些不能做，输出前后怎么检查，失败后从哪里重试，必要时怎样回滚到稳定状态。',points:['评估观测','约束校验','失败恢复']},
+
+    {id:'031',chapter:'C06',title:'真正的价值来自“把系统做稳”',kicker:'REAL PRACTICE',type:'case',accent:'SAME MODEL · BETTER SYSTEM',narration:'当我们回到真实团队，会发现 Harness 的价值往往不是换一个更大的模型，而是在模型不变的情况下持续改造运行环境。把任务拆得更清楚、状态管得更稳定、关键步骤加入检查、失败加入恢复，整个系统的成功率就可能出现非常明显的变化。',points:['任务拆解','状态管理','关键校验','恢复']},
+    {id:'032',chapter:'C06',title:'长任务的敌人：上下文疲劳',kicker:'LONG-HORIZON TASKS',type:'decay',accent:'CONTEXT RESET',narration:'长时间自主任务里，一个典型问题是上下文越来越满，模型开始丢细节、丢重点，甚至提前收尾。单纯压缩历史有时还不够，更激进的方法是做 Context Reset：让一个干净的新 Agent 接手当前状态，相当于工程里重启进程再恢复任务。',points:['上下文膨胀','压缩','Reset','状态交接']},
+    {id:'033',chapter:'C06',title:'生产者和验收者要分开',kicker:'INDEPENDENT EVALUATION',type:'roles',accent:'PLANNER · GENERATOR · EVALUATOR',narration:'第二个关键实践，是不要让一个 Agent 一边干活一边给自己打分。更稳的做法是把 Planner、Generator 和 Evaluator 分开：规划者明确规格，执行者完成任务，评估者像 QA 一样真实测试结果。生产和验收分离以后，系统才能形成有效反馈循环。',points:['Planner','Generator','Evaluator']},
+    {id:'034',chapter:'C06',title:'失败时，不要只让 Agent“再努力一点”',kicker:'ENVIRONMENT THINKING',type:'diagnose',accent:'WHAT IS MISSING?',narration:'当 Agent 失败时，一个非常典型的 Harness 思维是：不要只让它再试一次，而是问运行环境缺了什么结构能力。是不是缺工具？缺反馈？缺状态？缺验收标准？人类工程师的角色，逐渐从亲自完成每一步，转向设计一个让 Agent 可以稳定工作的环境。',points:['缺工具？','缺反馈？','缺状态？','缺标准？']},
+    {id:'035',chapter:'C06',title:'渐进式披露，也是一种 Harness',kicker:'PROGRESSIVE SYSTEM',type:'docs',accent:'INDEX FIRST',narration:'很多团队早期会把所有规范一次性塞进一个巨大的说明文件，结果模型反而更糊涂。更好的做法是把入口文档变成目录页，只保留核心索引，更详细的架构、设计、执行计划、质量规则和安全要求按需加载。这和 Skills 的思路完全一致。',points:['目录','子文档','按需暴露']},
+    {id:'036',chapter:'C06',title:'让 Agent 真正“看见”自己的工作结果',kicker:'FEEDBACK LOOP',type:'browser',accent:'RUN · SEE · FIX · VERIFY',narration:'当 Agent 的执行速度越来越快，人类已经不可能逐行验收所有产出。于是系统开始给 Agent 接浏览器、截图、日志和监控，让它真实运行应用、观察结果、发现 Bug、修复以后再验证。这样，Agent 才不再是“写完就说完成”，而是能形成执行、检查、修复、再检查的闭环。',points:['运行','观察','修复','验证']},
+
+    {id:'037',chapter:'C07',title:'Prompt 解决：把任务讲清楚',kicker:'SUMMARY 01',type:'summarycard',accent:'PROMPT',narration:'最后我们把整条演进线重新收回来。Prompt Engineering 解决的是怎么把任务讲清楚：定义角色、目标、约束、示例和输出格式，让模型知道你希望它沿着什么方向回答。',points:['表达意图','约束输出']},
+    {id:'038',chapter:'C07',title:'Context 解决：把信息给正确',kicker:'SUMMARY 02',type:'summarycard',accent:'CONTEXT',narration:'Context Engineering 解决的是怎么把信息给正确：在正确时间提供相关文档、历史状态、工具结果和结构化信息，同时控制上下文的容量和噪声。它让模型不是“凭印象回答”，而是基于当前环境做决定。',points:['正确内容','正确时间','正确粒度']},
+    {id:'039',chapter:'C07',title:'Harness 解决：让模型持续做对',kicker:'SUMMARY 03',type:'summarycard',accent:'HARNESS',narration:'Harness Engineering 解决的是怎么让模型在真实执行里持续做对。它把 Prompt 和 Context 包含进一个更大的系统边界，再加入工具、编排、状态、评估、约束和恢复，让 Agent 从一次聪明回答变成可持续交付的系统。',points:['工具','编排','状态','评估','恢复']},
+    {id:'040',chapter:'C07',title:'真正决定上限的是模型，决定落地的是系统',kicker:'THE REAL DIVIDE',type:'equation',accent:'MODEL × HARNESS',narration:'所以同样的模型，在不同产品里的表现可以差得非常大。模型能力决定系统可能达到的上限，但能不能真正落地、能不能稳定交付，往往由 Harness 决定。AI 应用竞争正在从“谁的模型看起来更聪明”，转向“谁能让模型稳定工作”。',points:['模型上限','系统落地']},
+    {id:'041',chapter:'C07',title:'AI 工程师的工作，也正在变化',kicker:'NEW ENGINEERING ROLE',type:'people',accent:'DESIGN THE ENVIRONMENT',narration:'这也意味着 AI 工程师的工作正在变化。未来越来越重要的能力，不只是会写 Prompt 或会接一个模型 API，而是能不能设计任务结构、信息流、工具、状态、反馈和验收机制。也就是：设计一个 Agent 可以长期稳定工作的环境。',points:['任务结构','信息流','工具','反馈','验收']},
+    {id:'042',chapter:'C07',title:'从“更聪明”走向“稳定工作”',kicker:'FINAL',type:'final',accent:'RELIABLE AI',narration:'如果你正在做 Agent，我建议你尽早把这件事想明白：AI 落地的核心挑战，正在从让模型看起来更聪明，转向让模型在真实世界里稳定地工作。Prompt、Context、Harness 不是三个孤立概念，而是一条越来越完整的工程路径。整个视频你只需要记住最后一句：聪明是模型的能力，稳定交付是系统的能力。',points:['Prompt','Context','Harness','Stable Delivery']}
+  ]
+};
