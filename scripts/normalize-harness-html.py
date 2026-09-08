@@ -2,8 +2,8 @@
 """Normalize authored static HTML after large generated edits.
 
 This guard prevents JavaScript template expressions from accidentally being left
-as literal HTML in committed static pages. It is intentionally narrow and
-idempotent.
+as literal HTML in committed static pages and keeps required local runtime assets
+wired into the Harness presentation. It is intentionally narrow and idempotent.
 """
 from pathlib import Path
 import re
@@ -24,6 +24,16 @@ def normalize_harness() -> int:
     text, count = pattern.subn(company_markup, text)
     if "${Array.from" in text or "${String(i+1)" in text:
         raise SystemExit("Harness template literal artifact still present")
+
+    css_tag = '<link rel="stylesheet" href="./continuous-motion.css">'
+    js_tag = '<script src="./continuous-motion.js"></script>'
+    if css_tag not in text:
+        text = text.replace('</head>', f'{css_tag}\n</head>', 1)
+        count += 1
+    if js_tag not in text:
+        text = text.replace('</body>', f'{js_tag}\n</body>', 1)
+        count += 1
+
     path.write_text(text, encoding="utf-8")
     return count
 
