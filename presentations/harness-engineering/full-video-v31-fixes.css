@@ -1,0 +1,18 @@
+/* Garden v31 scene-isolation overrides. Keep generic local names from leaking across motifs. */
+.v-control-tower .lane.l1{left:3%;top:5%;position:absolute}.v-control-tower .lane.l2{right:3%;top:18%;position:absolute}.v-control-tower .lane.l3{left:5%;bottom:12%;position:absolute}.v-control-tower .lane.l4{right:5%;bottom:3%;position:absolute}
+.v-context-stack .ctx-layer,.v-sixlayers .six,.v-doc-tree .tree-leaf,.v-engineer-map .skill{position:relative;left:auto;right:auto;top:auto;bottom:auto;transform:none}
+.v-examples .sample.s1{left:1%;top:6%;position:absolute}.v-examples .sample.s2{left:1%;bottom:6%;position:absolute}
+.v-control-tower .signal.s1{left:30%;top:30%;position:absolute}.v-control-tower .signal.s2{right:27%;top:50%;position:absolute}.v-control-tower .signal.s3{left:31%;bottom:23%;position:absolute}
+.v-state-board .state-column{position:relative;left:auto;right:auto;top:auto;bottom:auto}
+.v-sixlayers .six{min-height:140px}
+.v-doc-tree .tree-leaf{position:absolute}.v-doc-tree .tree-leaf.l1{left:3%;top:42%}.v-doc-tree .tree-leaf.l2{left:26%;top:62%}.v-doc-tree .tree-leaf.l3{left:45%;top:76%}.v-doc-tree .tree-leaf.l4{right:22%;top:62%}.v-doc-tree .tree-leaf.l5{right:0;top:42%}
+.v-engineer-map .skill{position:absolute}.v-engineer-map .skill.s1{left:0;top:0}.v-engineer-map .skill.s2{left:41%;top:0}.v-engineer-map .skill.s3{right:0;top:0}.v-engineer-map .skill.s4{left:0;bottom:0}.v-engineer-map .skill.s5{left:43%;bottom:0}.v-engineer-map .skill.s6{right:0;bottom:0}
+.v-radar .r1,.v-radar .r2,.v-radar .r3{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.v-boundary .r1,.v-boundary .r2,.v-boundary .r3{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+/* Scene heroes intentionally break the default left-copy/right-visual composition. */
+.scene-006,.scene-012,.scene-025,.scene-037,.scene-038,.scene-039,.scene-040,.scene-042{padding-top:118px}
+.scene-037 .copy,.scene-038 .copy,.scene-039 .copy{display:none}
+.scene-037 .visual,.scene-038 .visual,.scene-039 .visual{height:760px}
+/* Preserve controls while fullscreen. */
+.shell:fullscreen .viewer{background:var(--shell)}
+.shell:fullscreen .stage{transform-origin:center}
