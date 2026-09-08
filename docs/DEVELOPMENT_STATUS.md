@@ -34,17 +34,20 @@
 - [x] Scene 内主要 node / label / small text 提升到更适合 1080P 的尺寸。
 - [x] HUD 与控制条重新平衡。
 
-### Screenshot QA
+### Screenshot QA · 第一轮已真实完成
 
 - [x] 新建 `scripts/visual-qa.mjs`。
 - [x] 新建 `.github/workflows/visual-qa.yml`。
-- [x] 自动使用 Chromium 1920×1200 viewport 加载正式播放器。
-- [x] 自动遍历 Scene 001～042。
-- [x] 每 Scene 等待语义动画基本完成后截图 `#stage`。
-- [x] 输出 42 张 1920×1080 PNG。
-- [x] 自动检查 visible text 过小与 DOM overflow。
-- [x] 输出 `qa/visual-report.json`。
-- [ ] 等 GitHub Actions 首次执行完成后查看截图报告并继续返工异常 Scene。
+- [x] Chromium 自动遍历 Scene 001～042。
+- [x] 42/42 Scene 已实际渲染并截图 `#stage`。
+- [x] 42 张 1920×1080 PNG 已作为 GitHub Actions artifact 生成。
+- [x] `qa/visual-report.json` 已生成。
+- [x] 浏览器 Console Errors = 0。
+- [x] DOM overflow 自动检查 = 0。
+- [x] 自动字号检查发现 Scene 004 / 009 / 025 / 040 存在 tiny text。
+- [x] 已人工查看 42 张截图 contact sheet，额外发现 Scene 036 标题与浏览器演示区偏拥挤，Scene 010 / 015 / 018 等语义小标签可读性需要提升。
+- [x] v41 polish 已针对上述场景追加修复：004 外围标签、009 拨盘标签、010 spec、015 JSON slot、018 portal labels、025 六层楼层、036 title/browser spacing、040 equation typography。
+- [ ] v41 修复后的第二轮 Screenshot QA 仍需再次执行并确认。
 
 ### 本地 1080P 录制
 
@@ -75,7 +78,7 @@
 | Gate | 状态 | 通过条件 |
 |---|---|---|
 | A 完整口播 | CODE PASS / WAITING USER CONFIRM | 用户确认整片口播 |
-| B Garden v41 视觉 | CODE POLISHED / QA RUNNING / USER REVIEW | 42 张 Screenshot QA + 用户复核 |
+| B Garden v41 视觉 | QA ROUND 1 PASS / FIXES APPLIED / ROUND 2 + USER REVIEW | v41 第二轮截图 + 用户复核 |
 | C 本地 IndexTTS | CODE READY / WAITING | Gate B 稳定后生成真实总 ZIP |
 | D 整片音画 | CODE READY / WAITING AUDIO | 真实音频注入 + timing 调整 |
 | E 动画 SFX | LOCKED | D PASS 后进入 |
@@ -83,7 +86,7 @@
 
 ## 当前唯一下一步
 
-1. 等 Visual QA workflow 生成 42 张真实截图和 report；
-2. 对截图里出现的小字 / 越界 / 失衡 Scene 继续返工；
+1. 对 v41 修复版本再次执行 42 Scene Screenshot QA；
+2. 继续返工第二轮截图暴露的问题；
 3. 用户打开 v41 整片播放器复核；
 4. 视觉稳定后才进入最终 IndexTTS 生成。
