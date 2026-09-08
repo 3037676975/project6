@@ -1,0 +1,60 @@
+/* Project6 Harness Engineering · Garden v41 polish
+ * Purpose: readability, typographic hierarchy, recording controls.
+ * This file only overrides v40. Visual recipes stay scene-specific.
+ */
+:root{
+  --font-display-cn:"Noto Sans SC","PingFang SC","Microsoft YaHei","Source Han Sans SC",system-ui,sans-serif;
+  --font-body:"Noto Sans SC","PingFang SC","Microsoft YaHei","Source Han Sans SC",system-ui,sans-serif;
+}
+.scene{font-family:var(--font-body)}
+.scene h1{font-size:84px;line-height:1.04;letter-spacing:-.045em;text-wrap:balance}
+.scene-title.compact h1{font-size:66px;line-height:1.08}
+.scene .eyebrow{font-size:17px;line-height:1.4;letter-spacing:.09em}
+.scene .micro{font-size:16px;line-height:1.5}
+.scene .node{font-size:20px;line-height:1.45}
+.scene small{font-size:17px!important;line-height:1.5!important}
+.scene .label{font-size:18px;line-height:1.4}
+.chapter{font-size:16px}.count{font-size:15px}
+
+/* Primary semantic labels should read comfortably in 1080p exports. */
+.pipe-node,.bench-node,.peak,.spec,.example,.answer-ray,.input-source,.selected-stream,.drawer,.lane-row,.qa-metric,.check,.cloud-item,.final-tag{font-size:19px}
+.pipe-node b,.bench-node b,.peak b{font-size:29px!important}
+.s008 .prompt-source{font-size:30px;line-height:1.55}
+.s010 .raw-prompt{font-size:34px;line-height:1.55}
+.s010 .spec{font-size:20px}
+.s011 .example{font-size:20px}
+.s017 .road-note{font-size:25px!important;line-height:1.7}
+.s020 .gauge-labels{font-size:18px}
+.s021 .rag-step,.s021 .doc-chip{font-size:19px!important}
+.s022 .memory-point{font-size:18px!important}
+.s023 .drawer,.s023 .skill-sheet{font-size:19px}
+.s025 .floor{font-size:21px!important}
+.s026 .socket,.s026 .plug{font-size:19px!important}
+.s027 .lane-row{font-size:20px}
+.s029 .qa-metric{font-size:19px}
+.s032 .agent-box,.s032 .capsule{font-size:20px}
+.s033 .role{font-size:21px}
+.s035 .tree-line,.s035 .doc-preview{font-size:18px}
+.s036 .log-step{font-size:18px}
+.s038 .cloud-item{font-size:19px}
+.s040 .model-k,.s040 .harness-k,.s040 .stable{font-size:22px}
+.s041 .sys-node{font-size:19px}
+.s042 .final-tag{font-size:18px}
+
+/* Make the control strip calm and recording-friendly. */
+.toolbar{grid-template-columns:minmax(360px,1fr) auto minmax(360px,1fr);min-height:78px}
+.toolbar .center{gap:8px;flex-wrap:nowrap}
+.btn.record{background:var(--text);color:var(--surface);border-color:var(--text);min-width:148px}
+.btn.record.live{background:#7c2d2d;color:#fff;border-color:#7c2d2d}
+.record-meta{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 11px;border:1px solid var(--rule);border-radius:12px;background:rgba(255,255,255,.78);font:800 11px/1.2 var(--font-mono);color:var(--text-mute);white-space:nowrap}
+.record-meta::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.record-meta.live::before{background:#b91c1c;box-shadow:0 0 0 5px rgba(185,28,28,.12)}
+
+/* Recording only targets the stage; keep stage ratio and pixel design immutable. */
+.stage{contain:layout paint style}
+.stage[data-recording="true"]{box-shadow:none}
+
+@media(max-width:1180px){
+  .toolbar{grid-template-columns:1fr auto 1fr}.record-meta{display:none}.btn.record{min-width:116px}
+}
+@media(prefers-reduced-motion:reduce){.record-meta.live::before{box-shadow:none}}
