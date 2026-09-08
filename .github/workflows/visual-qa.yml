@@ -1,0 +1,41 @@
+name: Project6 Visual QA
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'presentations/harness-engineering/full-video*.html'
+      - 'presentations/harness-engineering/full-video*.css'
+      - 'presentations/harness-engineering/full-video*.js'
+      - 'scripts/visual-qa.mjs'
+      - '.github/workflows/visual-qa.yml'
+
+jobs:
+  screenshot-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve Project6 locally
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/project6-http.log 2>&1 &
+          sleep 2
+      - name: Render and screenshot all 42 scenes
+        run: node scripts/visual-qa.mjs
+      - name: Upload visual QA artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: project6-visual-qa
+          path: |
+            qa/screenshots/*.png
+            qa/visual-report.json
+          if-no-files-found: error
+          retention-days: 14
