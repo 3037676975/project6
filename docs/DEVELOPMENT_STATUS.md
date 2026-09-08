@@ -1,96 +1,90 @@
 # Project6 开发状态
 
-> 每次开发前必须依次阅读：`docs/PROJECT_CHARTER.md` → `docs/PRD.md` → `docs/ACTIVE_DECISIONS.md` → 本文件。
-> 第一章还必须阅读 Garden 官方规范、`presentations/harness-engineering/ACCEPTANCE.md`、`ANIMATION_REVIEW.md`，以及 Project6 本地 Emil animation skills。
+> 每次开发前必须依次阅读：`docs/PROJECT_CHARTER.md` → `docs/PRD.md` → `docs/ACTIVE_DECISIONS.md` → 本文件。  
+> 第一章还必须阅读 Garden 官方 `web-video-presentation`、`CHAPTER-CRAFT.md`、`AUDIO.md`，以及 `presentations/harness-engineering/ACCEPTANCE.md`。
 
 ## 当前定位
 
-- 当前 Phase：**Phase 1 · 第一章返工验收 + 资源体系增强**
-- 当前状态：**IN PROGRESS / Galaxy 组件层接入中**
+- 当前 Phase：**Phase 1 · 第一章 Garden v22 返工验收**
+- 当前状态：**IN PROGRESS / 等用户视觉与听感验收**
 - 当前唯一主验收作品：`presentations/harness-engineering/`
-- 当前范围：**只完善第一章与资源体系，不进入第二章**
+- 当前范围：**只完善第一章，不进入第二章**
 - Garden Theme：`warm-keynote`
-- Step：6
+- Step：6（沿用现有 6 段音频）
 - TTS：`edge-tts / zh-CN-YunxiNeural / 1.0x`
 - TTS timing：`SentenceBoundary / timings.json / hidden SRT`
 - 动画 Runtime：`GSAP + MotionPathPlugin + DrawSVGPlugin`
-- 动画设计/Review：`emilkowalski/skills`
-- 视觉组件来源：`uiverse-io/galaxy`
-- BGM：无音乐 / 3 个 CC0 预置 / 本地上传
-- 导出：浏览器本地 MediaRecorder → WebM
+- BGM：无音乐 / 3 个预置 / 本地上传
+- 导出：浏览器本地 `getDisplayMedia + MediaRecorder → WebM`
 
-## 当前制作链
+## v22 当前制作链
 
 ```text
-Garden Step / Narration
+现有 6 段 Narration
         ↓
-Uiverse Galaxy Search
-寻找现成视觉组件 / micro-interaction 原型
+timings.json / SentenceBoundary
+唯一 Step 内同步事件源
         ↓
-Garden Theme Adaptation
-统一视觉语言
+Garden Step
+每个 Step 只承担一个主命题
         ↓
-Emil Skills
-find opportunities → animate → review → improve
+warm-keynote Theme Tokens
+奶油纸底 / 暖网格 / teal 单强调
         ↓
-GSAP
-Timeline / DrawSVG / MotionPath / Continuous Motion
+CSS + SVG + GSAP
+空间关系 / 状态变化 / 低强度环境运动
         ↓
-Edge TTS SentenceBoundary
-语义时间码
+narration ended + 200ms
+Auto 进入下一 Garden Step
 ```
 
-## 已完成
+## 本轮已完成
 
-### 上游资源体系
+### 同步重构
 
-- [x] `vendor/upstream/gsap/` 完整镜像 GSAP。
-- [x] `vendor/upstream/emil-skills/` 完整镜像 Emil Skills。
-- [x] 同步 Workflow 已升级，加入 `uiverse-io/galaxy`。
-- [x] Galaxy 许可证确认 MIT。
-- [x] 同步流程会生成 `data/galaxy-components.json`。
-- [x] `data/motions.json` 把 Galaxy 提升为 CORE 视觉组件来源。
+- [x] 保留 6 Step ↔ 6 narration 的一一映射。
+- [x] 删除旧版 `semanticSync()` 中 `8.6 / 10.45 / 12.25 / 3.35 / 5.25 ...` 等手写秒数。
+- [x] Step 内只使用 Edge TTS SentenceBoundary。
+- [x] GSAP 不负责翻页。
+- [x] Auto 仅 narration `ended` 后翻页。
+- [x] 按 Garden AUDIO 规范增加 200ms 结尾缓冲。
 
-### 后台资源入口
+### 视觉重构
 
-- [x] 新增 `components.html`。
-- [x] 首页侧栏增加「组件库 · Galaxy」。
-- [x] 顶部快捷入口增加「组件库」。
-- [x] 移动端导航增加组件入口。
-- [x] 组件页支持搜索 / 分类 / 随机 / 分页。
-- [x] 组件页支持本地 iframe 预览。
-- [x] 组件页支持本地源码查看。
+- [x] 第一章首页改为 Harness Runtime 空间关系图。
+- [x] Step 2 从左右卡片墙改为单一 Execution Rail。
+- [x] Step 3 从三栏后台 Console 改为中心 Agent Workbench。
+- [x] Step 4 从普通 Prompt VS Harness 卡片改为“Prompt 位于 Harness 内部”的包含关系。
+- [x] Step 5 删除虚构公司名、虚构 sources、虚构完成率；改为 01～10 概念任务队列 + verification loop。
+- [x] Step 6 改为 `Intelligence × Execution System = Reliable Agent` 收束。
+- [x] 正式第一章不使用 Emoji。
+- [x] 主题统一为 Garden 官方 `warm-keynote` token 性格。
 
-### 第一章已有能力
+### 保留能力
 
-- [x] Garden 6 Step。
-- [x] Edge TTS 6/6 + SentenceBoundary timing。
-- [x] GSAP / MotionPath / DrawSVG。
-- [x] Emil Review。
-- [x] 主动画 + continuous ambient motion。
-- [x] emoji 作为低层级辅助视觉已允许。
 - [x] Manual / Auto。
-- [x] 本地 BGM 上传。
+- [x] 本地 BGM 上传（ObjectURL）。
+- [x] Reduced Motion。
 - [x] 浏览器本地 MediaRecorder。
+- [x] Galaxy / Emil / GSAP 上游资源仍保留在 Project6 资源体系中，但 v22 不为了“用组件而用组件”。
 
 ## 当前待通过
 
-- [ ] Creative Upstream Action 完成 Galaxy 整仓镜像。
-- [ ] `data/galaxy-components.json` 实际总数确认 3000+。
-- [ ] 组件页在正式 Project6 地址实机加载大索引。
-- [ ] 从 Galaxy 选取首批 8–12 个适合知识视频的组件原型，建立 Project6 curated shortlist。
-- [ ] 第一章选取 2–4 个 Galaxy 细节语言进行 Theme-adapted 重构，不直接照搬原色。
-- [ ] 浏览器实机逐句确认 SentenceBoundary 与视觉动作语义贴合。
-- [ ] Manual / Auto 完整实机验证。
-- [ ] HTTPS 地址完成完整 WebM 本地录制。
-- [ ] 用户最终体验验收。
+- [ ] 正式 Project6 地址实机加载 v22。
+- [ ] Auto 连播 6 Step，确认旁白结束后 200ms 才换页。
+- [ ] 用户逐屏确认画面比上一版更好看。
+- [ ] 检查手机 / 小屏缩放后的文字可读性。
+- [ ] HTTPS 完成完整 WebM 本地录制。
+- [ ] 用户最终体验 PASS。
+
+## 下一步（只在用户确认 v22 方向后）
+
+用户前面提出的本地 IndexTTS 方案可作为后续音频工作流：Project6 输出配音任务包 → 用户本机 GPU 批量生成 → 上传标准命名音频 → Project6 自动匹配。届时可以把当前长 narration 从源头拆成更细 Garden Step，做到比 SentenceBoundary 更严格的“一个口播节拍一个 Step”。
 
 ## 当前 Gate
 
-**GSAP / Emil：PASS。**
+**Garden v22 代码 / 结构 Gate：PASS。**  
+**浏览器实机 Gate：WAITING.**  
+**用户最终产品 Gate：WAITING.**
 
-**Galaxy 集成 Gate：IN PROGRESS。**
-
-**第一章产品最终 Gate：IN PROGRESS。**
-
-第一章未最终 PASS 前，不进入第二章。
+**第一章未最终 PASS 前，不进入第二章。**
