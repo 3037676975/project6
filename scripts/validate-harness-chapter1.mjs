@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 
 const root=new URL('../presentations/harness-engineering/',import.meta.url);
-const repoRoot=new URL('../',root);
+const repoRoot=new URL('../',import.meta.url);
 const htmlPath=new URL('index.html',root),audioPath=new URL('audio-map.json',root),acceptancePath=new URL('ACCEPTANCE.md',root),projectsPath=new URL('../data/projects.json',import.meta.url),motionsPath=new URL('../data/motions.json',import.meta.url);
 const bgmFiles=['public/audio/bgm/short-plingy-loop.ogg','public/audio/bgm/calm-loop.mp3','public/audio/bgm/other-center.ogg'];
 const vendorFiles=[
