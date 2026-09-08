@@ -33,3 +33,18 @@
 .console{background:linear-gradient(150deg,#0c2c27,#113b34 62%,#16473e)}.runtime{background:rgba(2,20,17,.44)}.runtime-card{background:rgba(255,255,255,.065);border-color:rgba(255,255,255,.10)}.runtime-card small{color:#bfd8d1}.lights i{background:#4f756b}.control-bottom{background:linear-gradient(135deg,#10362f,#174a40)}
 .arrow-stage:before{content:"";position:absolute;left:50%;top:86px;bottom:86px;width:1px;background:linear-gradient(to bottom,transparent,#9bd8cd 20%,#9bd8cd 80%,transparent);transform:translateX(-50%);opacity:.65}.prompt-orb{background:linear-gradient(145deg,#20b8a6,#0d8f80);box-shadow:0 14px 34px rgba(13,143,128,.22)}
 .toolbar{border-color:rgba(20,47,42,.09);box-shadow:0 12px 36px rgba(20,47,42,.09)}
+/* === Project6 Chapter1 v12 · graphite + aqua palette === */
+:root{--canvas:#f1eee8;--paper:#fcfbf8;--paper2:#f5f6f5;--ink:#20292d;--ink2:#48545a;--muted:#7b858a;--line:#e0e5e5;--line2:#d2d9da;--mint:#16b8b0;--mint2:#0e8f8a;--mintSoft:#e8f8f6;--navy:#263238;--navy2:#34434a;--shadow:0 22px 70px rgba(32,41,45,.09);--shadowSm:0 10px 30px rgba(32,41,45,.06)}
+.dark-surface{background:linear-gradient(150deg,#263238 0%,#2e3a40 58%,#39484f 100%);box-shadow:0 26px 72px rgba(32,41,45,.18)}
+.system-card .model-core{background:linear-gradient(145deg,#263238,#34434a)}
+.console{background:linear-gradient(150deg,#253137,#303d43 62%,#3a484e)}
+.runtime{background:rgba(15,23,27,.46)}
+.control-bottom{background:linear-gradient(135deg,#28353a,#37454b)}
+.vs-badge{background:#2b373d;box-shadow:0 14px 34px rgba(32,41,45,.15)}
+.s1 .copy h1 .cover-main{color:#20292d}.s1 .copy h1 .cover-sub{color:#16b8b0}.s1 .copy p strong{color:#20292d}
+.question-pill{background:#eef8f7;border-color:#d8ece9;color:#3c5e5b}
+.system-card.harness-map{background:linear-gradient(160deg,rgba(255,255,255,.98),rgba(240,249,248,.84));border-color:rgba(32,41,45,.07);box-shadow:0 28px 82px rgba(32,41,45,.09)}
+.model-core .chip{color:#8bdcd5}.model-core small{color:#d0dadd}.runtime-card small{color:#c6d1d4}.lights i{background:#64757c}
+.arrow-stage:before{background:linear-gradient(to bottom,transparent,#8bd9d2 20%,#8bd9d2 80%,transparent)}
+.prompt-orb{background:linear-gradient(145deg,#18bbb2,#0e8f8a);box-shadow:0 14px 34px rgba(14,143,138,.21)}
+.orbit-line{stroke:rgba(22,184,176,.32)}.orbit-line.bad{stroke:rgba(22,184,176,.32)}
