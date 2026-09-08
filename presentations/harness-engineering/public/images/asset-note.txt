@@ -1,0 +1,1 @@
+Binary asset is stored separately and referenced by Scene 1 only.
