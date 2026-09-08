@@ -1,8 +1,8 @@
 {
   "provider": "edge-tts",
   "client": "rany2/edge-tts",
-  "voice": "zh-TW-YunJheNeural",
-  "locale": "zh-TW",
+  "voice": "zh-CN-YunxiNeural",
+  "locale": "zh-CN",
   "rate": "+0%",
   "speed": 1.0,
   "status": "ready",
