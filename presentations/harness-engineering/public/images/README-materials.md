@@ -2,7 +2,9 @@
 
 This folder stores visual materials used by the Harness Engineering presentation.
 
-- `harness-ai-core-material.webp`: isolated AI/LLM core visual material used only in Scene 1. It is a supporting visual asset, not a full-page UI screenshot.
-- HTML remains responsible for titles, labels, Context/Tools/State/Recovery nodes, interactions and animation.
+- `harness-runtime-hero.webp`: generated source artwork. Scene 1 uses only a cropped AI/LLM core region from this image as a supporting material.
+- The full generated composition is **not** used as the page UI.
+- HTML/CSS owns titles, labels, Context / Tools / State / Recovery nodes, layout and interactions.
+- GSAP owns motion and data-flow behavior.
 
-Rule: generated images must be used as local visual materials, not as replacements for the full HTML interface.
+Rule: generated images are visual materials only. Never replace the full Garden HTML scene with a generated screenshot.
