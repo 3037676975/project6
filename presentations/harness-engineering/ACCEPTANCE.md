@@ -1,93 +1,118 @@
-# Harness Engineering · 第一章验收标准 v2
+# Harness Engineering · 第一章验收标准 v3
 
 > 本文件是第一章硬 Gate。每次继续开发前必须依次阅读：
-> `docs/PROJECT_CHARTER.md` → `docs/PRD.md` → `docs/DEVELOPMENT_STATUS.md` → Garden 官方 `SKILL.md` / `CHAPTER-CRAFT.md` / `AUDIO.md` / `RECORDING.md` → 本文件。
->
-> 最新用户决策优先：第一章 TTS 已从 Project5 切换为开源 `rany2/edge-tts`，正式音色锁定 `zh-TW-YunJheNeural`，1.0×（`rate=+0%`）。
+> `docs/PROJECT_CHARTER.md` → `docs/PRD.md` → `docs/ACTIVE_DECISIONS.md` → `docs/DEVELOPMENT_STATUS.md` → Garden 官方 `SKILL.md` / `CHAPTER-CRAFT.md` / `AUDIO.md` / `RECORDING.md` → 本文件。
 
-## 1. 画面好看（必须 PASS）
+## 1. 先验收“讲什么”
 
-- [x] 固定 1920×1080 / 16:9 Garden 舞台。
-- [x] 使用 Garden 官方 `warm-keynote` 设计 DNA：暖奶油、40px 网格、白色 glass slab、青绿 accent、轻弹簧动效。
-- [x] 颜色与字体家族走 Theme token，不在章节里随意造新视觉体系。
-- [x] 每屏只保留 1～3 个主视觉重点，不把口播全文搬到屏幕。
-- [x] 无固定字幕条；本章不显示字幕。
-- [x] 不使用 emoji 充当图标；图示使用 SVG / CSS / 几何组件。
-- [x] 不使用假 Logo、假数据、无来源百分比。
-- [ ] 6 个 Step 逐屏检查后，构图、字号、留白、层级均无明显失衡。
+- [x] 第一章必须一句话说清主题：**模型之外的运行系统，决定 Agent 能不能稳定把任务做完。**
+- [x] 每个 Step 只承担一个口播节拍，不把整段说明书搬上屏。
+- [x] 口播必须像日常讲解，而不是论文 / PRD / 产品说明书。
+- [x] 优先使用“你有没有发现 / 你第一反应是不是 / 结果呢 / 你可以把它想成”等自然转折。
+- [x] 例子必须让观众能立刻想象：研究十家公司 → 查资料 → 记来源 → 看缺口 → 继续下一家。
+- [ ] 用户听完整章后确认：主题清楚、口播自然、愿意继续听。
 
-## 2. 动画衔接合适（必须 PASS）
+## 2. 配音自然
 
-- [x] 每章至少有 2 处真正的 CSS / SVG 动态视觉演示。
-- [x] 6 个 Step 主导动作不同：开场聚焦 / 问题拆解 / 系统组装 / Harness 管线 / 研究案例循环 / 总结收束。
-- [x] 不使用 `setTimeout` / `setInterval` 驱动章节进度。
-- [x] Step 切换采用离场 + 入场两阶段过渡，不做生硬闪切。
-- [x] 元素内部动画使用错峰，但不会一次性把清单所有内容全部展示。
-- [ ] 每个 Step 的主动画在对应旁白结束前完成。
-- [ ] 连续自动播放 6 Step 不出现跳帧、重叠、残影、音频重复。
-
-## 3. 整体效果不错（必须 PASS）
-
-- [x] 第一章保持统一 warm-keynote 视觉，不跨 Step 翻转主题。
-- [x] 背景音乐只作为气氛层，音量远低于 narration。
-- [x] BGM 使用可公开使用的 CC0 资源，并记录来源 / 许可证。
-- [x] WebAudio SFX 只用于卡片出现、连线、状态切换，不抢口播。
-- [ ] 从 Step 1 自动播放到 Step 6，整体节奏自然，没有明显“PPT 翻页感”。
-- [ ] 用户主观视觉验收 PASS。
-
-## 4. 配音必须正确（硬 Gate）
-
-唯一正式语音：
+当前第一章正式 Voice：
 
 ```text
 provider = edge-tts
 client   = rany2/edge-tts
-voice    = zh-TW-YunJheNeural
-locale   = zh-TW
+voice    = zh-CN-YunxiNeural
+locale   = zh-CN
 rate     = +0%
 speed    = 1.0x
 ```
 
-注意：
+选择原因：云希的 voice metadata 更偏 Lively / Sunshine / Novel，比云哲更适合轻松聊天式知识讲解。
 
-- `zh-TW-YunJheNeural` = 云哲 / 台湾国语男声。
-- 香港男声是 `zh-HK-WanLungNeural`，不是云哲，不允许混淆。
-- [x] 不再经过 Project5。
-- [x] 禁止 SpeechSynthesis / macOS say / 其它音色作为正式 fallback。
-- [x] GitHub Actions 自动安装 `edge-tts` 并生成本章 6 段 MP3。
-- [ ] 6/6 MP3 真实生成并进入仓库。
-- [ ] 浏览器实测 6/6 均为云哲台湾男声。
-- [ ] Auto 严格按 `audio ended + 200ms` 推进。
+- [x] 不经过 Project5。
+- [x] 禁止 SpeechSynthesis 等 fallback 冒充正式旁白。
+- [ ] 6/6 云希 MP3 真实生成并进入仓库。
+- [ ] 实机听感 PASS：不机械、不像新闻播报、停顿自然。
 
-## 5. 背景音乐 / 音效
+> 后续会做 TTS 音色选择后台，但**本轮不开发完整音色中心**。
 
-默认 BGM：`Short Plingy Loop`，OpenGameArt，CC0。
+## 3. 画面好看
 
-- [x] 轻快、科技感、不会太活泼。
-- [x] 默认循环播放。
-- [x] 默认音量约 6%～8%，旁白优先。
-- [x] Auto 开始时淡入，结束时淡出。
-- [x] BGM 失败时不影响 narration / Step 主流程。
-- [ ] 浏览器实测人声清楚、不被 BGM 遮盖。
+- [x] 固定 1920×1080 / 16:9 Garden 舞台。
+- [x] 使用 Garden 官方 `warm-keynote` 设计 DNA。
+- [x] 无字幕条、无 emoji 图标。
+- [x] 第一屏保留强开场视觉。
+- [x] 第二屏增加信息密度：同一模型分叉为“执行翻车 / 稳定闭环”，两侧均有状态信号，不允许大面积空白。
+- [x] 第三屏做 Agent 工作台；第四屏做 Prompt vs Harness 类比；第五屏做十家公司执行循环；第六屏收束主结论。
+- [ ] 6 屏逐屏检查：构图、字号、留白、信息密度均衡。
 
-## 6. 录制 / 导出
+## 4. 动画衔接
 
-- [x] Manual 可用点击 / ← / → 检查 Step。
-- [x] Auto 只有正式 edge-tts 6/6 ready 才允许启动。
-- [x] 浏览器 MediaRecorder 本地 WebM，不上传 Project6 服务器。
-- [x] 录制时控制条默认隐藏，不污染画面。
-- [ ] 完整录制一次并检查文件可播放、声音完整、结尾无截断。
+- [x] 每个 Step 有独立主动作，不使用全章同一种淡入。
+- [x] Scene 使用统一离场 / 入场语言，避免闪切。
+- [x] SVG / CSS 动画至少 2 处，且用于“演示关系”而非装饰。
+- [x] 不用 `setTimeout` / `setInterval` 驱动章节动画生命周期。
+- [ ] 连续播放 6 Step 不重叠、不残影、不卡顿。
 
-## 最终评分与 Gate
+## 5. 手动 / 自动播放必须真的可用
 
-第一章必须同时满足：
+### 手动模式
 
+- [x] 明确显示“手动”模式。
+- [x] 上一页 / 下一页按钮可用。
+- [x] 点击舞台可推进下一 Step。
+- [x] ← / → 键可导航。
+- [x] 可单独点击“播放当前旁白”。
+- [x] 手动模式不会因为旁白结束自己翻页。
+
+### 自动模式
+
+- [x] 明确显示“自动”模式。
+- [x] 自动模式从当前 Step 播放正式旁白。
+- [x] 严格由 `audio ended` 推进下一 Step。
+- [x] 最后一段结束后停止 BGM 并退出 Auto。
+- [ ] 实机 Auto 6 Step 连续播放 PASS。
+
+## 6. 背景音乐不能锁死
+
+第一章提供：
+
+- 无音乐
+- 轻松科技 · Short Plingy Loop（CC0）
+- 轻松氛围 · Calm Loop（CC0）
+- 轻快神秘 · Other Center（CC0）
+- 本地上传音乐
+
+硬要求：
+
+- [x] 有预置音乐选择入口。
+- [x] 有本地上传入口。
+- [x] 本地文件只通过浏览器 `URL.createObjectURL` 使用，不上传服务器。
+- [x] 有独立 BGM 音量滑杆。
+- [x] 默认音量低，旁白优先。
+- [ ] 三个预置资源实际可播放。
+- [ ] 用户主观确认 BGM 舒服。
+
+## 7. 本地录制 / 下载
+
+- [x] 用户主动点击“录制并下载”。
+- [x] 使用浏览器 `getDisplayMedia + MediaRecorder`。
+- [x] 录制开始后隐藏播放器和音乐面板。
+- [x] 录制数据留在浏览器内存，不上传 Project6。
+- [x] 录制结束后直接触发 `harness-engineering-chapter1.webm` 本地下载。
+- [ ] 实机完整录制一次，检查画面、旁白、BGM 都进入文件。
+
+## 最终 Gate
+
+必须同时满足：
+
+- 主题清楚：PASS
+- 口播自然：≥ 90 / 100
+- 配音听感：≥ 90 / 100
 - 画面好看：≥ 90 / 100
 - 动画衔接：≥ 90 / 100
-- 音画同步：100% 6/6
-- 正确云哲语音：100% 6/6
-- BGM / SFX 不抢人声：PASS
-- 本地录制：PASS
-- 用户视觉验收：PASS
+- 手动模式：PASS
+- 自动模式：PASS
+- BGM 选择 / 本地上传：PASS
+- 本地录制 / 自动下载：PASS
+- 用户验收：PASS
 
-任一硬项 FAIL：**继续修改，不进入第二章。**
+任一项 FAIL：**继续修改，不进入第二章。**
