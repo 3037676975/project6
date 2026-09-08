@@ -61,27 +61,7 @@ speed    = 1.0x
 3. 出现“旁白还在 Step 1，视觉已经像 Step 2”的错位感。
 4. 自研 Beat Reveal 没有达到成熟动画体系的质量。
 
-### 5.1 固定两套上游到 Project6
-
-Project6 已建立完整上游镜像：
-
-```text
-vendor/upstream/gsap/
-vendor/upstream/emil-skills/
-```
-
-并由 `.github/workflows/sync-animation-upstreams.yml` 自动同步完整仓库。
-
-- GSAP：`https://github.com/greensock/GSAP`
-  - 当前主动画 Runtime。
-  - GreenSock Standard “no charge” license；许可证/README/package 信息必须原样保留。
-- Emil Kowalski Skills：`https://github.com/emilkowalski/skills`
-  - 当前动画设计/审查规范。
-  - MIT；LICENSE 必须随镜像保留。
-
-后台 `motions.html` 必须能够直接读取 Project6 本地镜像中的原始文档，不把 GitHub 外链当成主要内容。
-
-### 5.2 动画职责固定
+### 动画职责固定
 
 ```text
 Garden Skills
@@ -94,9 +74,7 @@ GSAP
 负责当前 Step 内真正 Timeline / Stagger / SVG / Text / Flip / Path 动画
 ```
 
-### 5.3 废弃上一版 Beat Ratio
-
-以下方案正式废弃：
+### 废弃上一版 Beat Ratio
 
 ```text
 audio.currentTime / audio.duration
@@ -104,123 +82,115 @@ audio.currentTime / audio.duration
 → data-beat Reveal
 ```
 
-不得再用这一套作为第一章正式动画主逻辑。
+不得再作为正式动画主逻辑。
 
-### 5.4 新的 Step 安全边界
+### Step 安全边界
 
-**一个 GSAP timeline 永远只属于一个 Garden Step。**
-
-硬规则：
-
-- GSAP timeline 不允许调用 `go(nextStep)`。
-- timeline `onComplete` 不允许自动翻页。
-- 当前 Step 动画播完后，画面保持当前 Step 最终状态。
+- 一个 GSAP timeline 永远只属于一个 Garden Step。
+- GSAP timeline 不允许调用下一 Step。
+- timeline 完成后保持当前 Step 最终状态。
 - Auto 进入下一 Step 的唯一条件：当前 narration `ended`。
 - Manual 播放当前旁白后仍停留当前 Step。
-- Step 内视觉元素只能解释当前 narration；不得提前出现下一 Step 的概念。
 
 ---
 
-## 2026-09-08 · Emil Skills 必须进入完整动画设计链（最新）
-
-用户要求：**不能只把 `emilkowalski/skills` 当参考文档或最终验收清单，必须充分利用它来决定动画怎么设计、怎么构建、怎么审查。**
-
-从本决策开始，Project6 每个视频章节的动画工作流固定为：
+## 2026-09-08 · Emil Skills 必须进入完整动画设计链
 
 ```text
 Garden Chapter / Step / Narration
         ↓
 Emil · find-animation-opportunities
-扫描：哪些地方真的值得动画，哪些应该保持静态
         ↓
-Emil · animate
-明确：目的 / 工具 / properties / easing / duration / interruption / exit
-        ↓
-Emil · animation-vocabulary / emil-design-eng
-补齐：空间关系、连续状态、motion personality、细节语言
+Emil · animate / vocabulary / design-eng
         ↓
 GSAP Runtime
-Timeline / Stagger / DrawSVG / MotionPath / Flip / Morph（按需要）
         ↓
 Edge TTS SentenceBoundary
-真实口播句子起始时间驱动当前 Step 内 cue
         ↓
 Emil · review-animations
-逐动画检查十条 Non-negotiable standards
         ↓
 Emil · improve-animations
-对整章做高杠杆审计与优化
 ```
 
-### A. 动画不是“蹦出来”
+正式成片优先使用路径生长、对象沿路径移动、共享对象连续状态、Flow / Connector / State Change；禁止把单纯 opacity + translateY 当统一答案。
 
-正式成片优先使用：
+工具栏必须遵守 Emil 交互规范：短按压反馈、hover gating、focus-visible、禁止 transition:all、支持 reduced motion。
 
-- 路径生长；
-- 对象沿路径移动；
-- 同一对象从一个状态连续过渡到另一个状态；
-- 空间来源与去向一致；
-- Flow / Connector / State Change；
-- stagger 作为组内顺序，而不是所有东西逐个弹出；
-- 解释完后画面稳定下来，允许观众阅读。
+---
 
-禁止把“opacity 0 → 1 + translateY”当成所有动画的统一答案。
+## 2026-09-08 · Uiverse Galaxy 成为 Project6 核心视觉组件层（最新）
 
-### B. TTS 真实时间码
+用户要求把 `uiverse-io/galaxy` 的 3000+ UI 元素正式放进 Project6，并在以后所有视频制作中充分利用。
 
-`edge-tts` 生成 MP3 时必须同步保存 `SentenceBoundary`：
+### A. 本地镜像
+
+Project6 必须完整镜像：
 
 ```text
-MP3
-+
-timings.json
-+
-SRT（仅隐藏时间码，不显示字幕）
+vendor/upstream/uiverse-galaxy/
 ```
 
-动画 cue 根据真实 `SentenceBoundary.start` 启动，不再按音频总时长百分比猜测。
+来源：`https://github.com/uiverse-io/galaxy`
 
-### C. Emil 交互规则也适用于后台工具栏
+- 许可证：MIT。
+- 上游 README / LICENSE 必须保留。
+- 由现有 Creative Upstream GitHub Actions 自动同步。
+- 同步时自动生成 `data/galaxy-components.json`。
 
-- Button press：100–160ms 级别、`scale(.97)` 附近。
-- Hover 只能在 `hover:hover` + `pointer:fine` 生效。
-- Focus-visible 必须可见。
-- 不使用 `transition: all`。
-- 不使用 UI `ease-in`。
-- 高频工具栏不加长、炫、阻塞操作的动画。
-- `prefers-reduced-motion` 必须存在。
-- 触觉/Haptic 只在平台支持、且低频“反馈”动作真正受益时采用；不为了存在感强行震动。
+### B. 后台组件库
 
-### D. 当前第一章的空间故事
+Project6 后台新增独立：
 
-1. **Step 1**：标题建立 → SVG 关系路径长出来 → traveler 沿路径走。
-2. **Step 2**：同一个模型 → 失败分叉 → 失败状态 → 稳定分叉 → 稳定状态。
-3. **Step 3**：Agent Core → 四条连接线 → Context / Tools / State / Recovery 从中心关系展开。
-4. **Step 4**：员工 → Prompt token 沿路径进入工作环境 → Harness 四层环境建立。
-5. **Step 5**：循环路径 → runner 跑一圈 → 执行节点 → 两种模式 → 01–10 连续完成。
-6. **Step 6**：四层 Harness → 聚合成 Reliable Agent。
+**组件库 · Galaxy**
 
-### E. Review 产物
+最低能力：
 
-每章必须有实际 Review 文件，例如第一章：
+- 分类浏览；
+- 搜索组件名 / 作者 / slug；
+- 随机组件；
+- 本地 iframe 预览；
+- 本地源码查看；
+- 显示组件总数和分类数量。
 
-`presentations/harness-engineering/ANIMATION_REVIEW.md`
+Galaxy 不是一个外链收藏页。主要浏览和读取必须基于 Project6 本地镜像。
 
-Review 必须记录：
+### C. 视频制作链升级
 
-- 哪些动画机会被采用；
-- 哪些候选被主动拒绝；
-- 每个动画的目的；
-- 使用的工具 / easing / duration / physicality；
-- Emil 十条标准是否 PASS；
-- 慢放 / frame-by-frame / reduced motion 的 feel-check 项。
+从现在开始每个 Garden Step 的视觉设计顺序改成：
 
-### F. 当前 Gate
+```text
+Garden Step / Narration
+        ↓
+Galaxy Search
+先查有没有合适的 Card / Loader / Pattern / Button / State / Notification / Toggle / Micro-interaction 原型
+        ↓
+Garden Theme Adaptation
+把颜色、字体、圆角、阴影、尺寸改成当前 Theme
+        ↓
+Emil Skills
+判断该不该动、动哪里、持续多久、是否影响阅读
+        ↓
+GSAP
+统一编排进当前 Step timeline / continuous motion
+```
 
-- 上游镜像：PASS。
-- SentenceBoundary timing：PASS。
-- GSAP / MotionPath / DrawSVG 代码 Gate：PASS。
-- Emil Review 文件：已建立。
-- 产品最终体验：仍由用户实际观看决定。
+### D. 使用原则
 
-第一章未通过用户最终验收前，不进入第二章。
+- 不允许把 Galaxy 原组件不加判断地整块塞进视频。
+- 优先复用结构和细节语言：边框、glow、loader、状态点、hover/press、pattern、micro-interaction。
+- 当前 Theme 永远高于组件原始配色。
+- 组件内部动画不能拥有 Garden Step 导航权。
+- Galaxy 负责“丰富视觉组件”，Emil 负责“动画品味”，GSAP 负责“时间线执行”。
+- 以后如果画面又退化成四张普通白卡片，应先检查 Galaxy 是否有更合适的视觉原型。
+
+### E. 当前核心三层资源
+
+```text
+Uiverse Galaxy = 视觉组件 / 微交互素材
+Emil Skills     = 动画设计 / 审查 / 品味
+GSAP            = 动画运行时 / Timeline / SVG / MotionPath
+```
+
+再由 Garden Skills 负责最上层 Chapter / Step / Narration 结构。
+
+第一章未通过用户最终验收前仍不进入第二章。
