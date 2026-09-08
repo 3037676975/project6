@@ -26,7 +26,7 @@ jobs:
       - name: Install edge-tts
         run: pip install "edge-tts==7.2.8"
 
-      - name: Generate selected narration voice
+      - name: Generate selected narration voice and timing metadata
         run: python scripts/generate-harness-edge-tts.py
 
       - name: Download CC0 BGM presets
@@ -46,6 +46,9 @@ jobs:
         run: |
           test -s presentations/harness-engineering/public/audio/01-harness-engineering/1.mp3
           test -s presentations/harness-engineering/public/audio/01-harness-engineering/6.mp3
+          test -s presentations/harness-engineering/public/timing/01-harness-engineering/1.srt
+          test -s presentations/harness-engineering/public/timing/01-harness-engineering/6.srt
+          test -s presentations/harness-engineering/timings.json
           test -s presentations/harness-engineering/public/audio/bgm/short-plingy-loop.ogg
           test -s presentations/harness-engineering/public/audio/bgm/calm-loop.mp3
           test -s presentations/harness-engineering/public/audio/bgm/other-center.ogg
@@ -54,23 +57,31 @@ jobs:
           from pathlib import Path
           n = json.loads(Path('presentations/harness-engineering/narrations.json').read_text())
           a = json.loads(Path('presentations/harness-engineering/audio-map.json').read_text())
+          t = json.loads(Path('presentations/harness-engineering/timings.json').read_text())
           assert a['provider'] == 'edge-tts'
           assert a['voice'] == n['voice']['voice']
           assert a['rate'] == n['voice']['rate']
           assert a['status'] == 'ready'
           assert len(a['segments']) == len(n['steps']) == 6
-          print('audio verification PASS:', a['voice'])
+          assert t['boundary'] == 'SentenceBoundary'
+          assert t['voice'] == a['voice']
+          assert len(t['segments']) == 6
+          for key, item in t['segments'].items():
+              assert item['cues'], f'no cues for {key}'
+          print('audio + timing verification PASS:', a['voice'])
           PY
 
-      - name: Commit generated audio
+      - name: Commit generated audio and timing metadata
         run: |
           git config user.name "project6-audio-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add presentations/harness-engineering/audio-map.json \
-                  presentations/harness-engineering/public/audio
+                  presentations/harness-engineering/timings.json \
+                  presentations/harness-engineering/public/audio \
+                  presentations/harness-engineering/public/timing
           if git diff --cached --quiet; then
-            echo "No audio changes to commit"
+            echo "No audio/timing changes to commit"
           else
-            git commit -m "audio: regenerate Harness narration and BGM presets [skip ci]"
+            git commit -m "audio: regenerate Harness narration timing [skip ci]"
             git push
           fi
