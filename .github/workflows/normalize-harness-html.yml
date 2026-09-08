@@ -1,4 +1,4 @@
-name: Normalize Harness HTML
+name: Normalize Project6 Static HTML
 
 on:
   workflow_dispatch:
@@ -18,16 +18,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Normalize static Harness markup
+      - name: Normalize authored static markup
         run: python scripts/normalize-harness-html.py
       - name: Commit normalization
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add presentations/harness-engineering/index.html
+          git add presentations/harness-engineering/index.html motions.html
           if git diff --cached --quiet; then
             echo "No normalization changes"
           else
-            git commit -m "fix: normalize Harness static markup [skip ci]"
+            git commit -m "fix: normalize Project6 static markup [skip ci]"
             git push
           fi
