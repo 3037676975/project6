@@ -1,4 +1,4 @@
-# Project6 项目总纲 · v2.1
+# Project6 项目总纲 · v2.2
 
 > 最高优先级 / Source of Truth  
 > 更新时间：2026-09-09
@@ -38,7 +38,7 @@ Garden 为每个 Scene 设计不同的视觉表达与 Motion
       ↓
 最后添加动画 SFX / BGM
       ↓
-一键 Stage-only 1080P 本地录制
+localhost Stage-only 1080P 本地录制
       ↓
 浏览器下载 WebM
 ```
@@ -71,7 +71,7 @@ Project6 中 Garden / Garden Scale 统一指 Garden Skills 的 `web-video-presen
 - GSAP Timeline 只属于当前 Scene；
 - Scene 要真正可视化表达关系 / 空间 / 状态 / 反馈 / 过程；
 - 禁止统一左右排版、统一卡片模板、统一 fade；
-- Scene 001 是当前 Harness Engineering 的视觉质量 Anchor；
+- Harness Engineering Scene 001 以 `HARNESS ENGINEERING` 为主题主标题；
 - Scene 002～042 必须达到同级别完成度；
 - 动画不是装饰，必须服务讲解逻辑。
 
@@ -94,7 +94,14 @@ Project6 中 Garden / Garden Scale 统一指 Garden Skills 的 `web-video-presen
 - `scripts/visual-qa.mjs`
 - `.github/workflows/visual-qa.yml`
 
-输出 001～042 截图与 `qa/visual-report.json`。
+v42 最终自动检查已达到：
+- 42/42 Scene screenshots；
+- tiny text = 0；
+- DOM overflow = 0；
+- console errors = 0；
+- responsiveFails = 0。
+
+另外增加 1366×768 / 1440×900 / 1280×720 缩放检查，确保窗口预览和全屏使用相同 16:9 坐标系统。
 
 ## 5. 本地 IndexTTS 是正式配音路线
 
@@ -141,13 +148,21 @@ SFX 永远在整片音画通过后进入。
 - Scene 跳转；
 - 全屏；
 - narration 结束后自动下一 Scene；
-- Pause 同时暂停当前 GSAP timeline。
+- Pause 同时暂停当前 GSAP timeline；
+- 窗口模式 / 缩放模式 / 全屏保持相同 16:9 布局。
 
 ## 9. Stage-only 1080P 本地录制
 
 正式播放器提供「一键录制 1080P」。
 
-要求：
+浏览器 `getDisplayMedia / Region Capture` 需要 secure context。当前服务器是 HTTP IP，所以正式低门槛路线不是 Cloudflare / 域名，而是 Project6 自带 localhost bridge：
+
+- `tools/project6-recording-localhost.py`
+- `tools/start-project6-recording.bat`
+
+Windows 用户双击 BAT，把远端 Project6 页面代理为 `127.0.0.1:28444` 后录制。
+
+录制要求：
 
 - 只录中间 `.stage`；
 - 不录后台工具栏；
@@ -179,14 +194,14 @@ Garden 手册
 
 ```text
 A 完整口播           CODE PASS / WAITING USER CONFIRM
-B Garden v41 视觉    CODE POLISHED / QA RUNNING / USER REVIEW
+B Garden v42 视觉    AUTOMATED QA PASS / USER REVIEW
 C 本地 IndexTTS      CODE READY / WAITING
 D 整片音画预览       CODE READY / WAITING AUDIO
 E 动画 SFX           LOCKED
-F 1080P 本地录制     CODE READY / BROWSER TEST
+F 1080P 本地录制     CODE READY / LOCALHOST BROWSER TEST
 ```
 
-当前优先级：**先跑完 42 Scene Screenshot QA，把细节继续修到稳定，再进入最终 TTS。**
+当前优先级：**用户先复核 v42 的封面、缩放和整片视觉；通过后再进入最终 TTS。**
 
 ## 12. 强制开发门禁
 
@@ -205,4 +220,4 @@ Read PROJECT_CHARTER
 → 更新状态文档
 ```
 
-禁止：页面改了文档不更新、假按钮、假数据、假资源、配音与 SFX 混淆、没有截图就宣布视觉完成、录制上传服务器、低于 1080P 却标成高清。
+禁止：页面改了文档不更新、假按钮、假数据、假资源、配音与 SFX 混淆、没有截图就宣布视觉完成、录制上传服务器、低于 1080P 却标成高清、缩放后打乱 16:9 坐标关系。
