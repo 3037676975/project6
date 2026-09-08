@@ -26,32 +26,40 @@ jobs:
       - name: Install edge-tts
         run: pip install "edge-tts==7.2.8"
 
-      - name: Generate YunJhe narration
+      - name: Generate selected narration voice
         run: python scripts/generate-harness-edge-tts.py
 
-      - name: Download CC0 background loop
+      - name: Download CC0 BGM presets
         run: |
           mkdir -p presentations/harness-engineering/public/audio/bgm
           curl -L --fail --retry 3 \
             "https://opengameart.org/sites/default/files/plimplom_0.ogg" \
             -o presentations/harness-engineering/public/audio/bgm/short-plingy-loop.ogg
+          curl -L --fail --retry 3 \
+            "https://opengameart.org/sites/default/files/Relaxing_0.mp3" \
+            -o presentations/harness-engineering/public/audio/bgm/calm-loop.mp3
+          curl -L --fail --retry 3 \
+            "https://opengameart.org/sites/default/files/othercenter.ogg" \
+            -o presentations/harness-engineering/public/audio/bgm/other-center.ogg
 
       - name: Verify outputs
         run: |
           test -s presentations/harness-engineering/public/audio/01-harness-engineering/1.mp3
           test -s presentations/harness-engineering/public/audio/01-harness-engineering/6.mp3
           test -s presentations/harness-engineering/public/audio/bgm/short-plingy-loop.ogg
+          test -s presentations/harness-engineering/public/audio/bgm/calm-loop.mp3
+          test -s presentations/harness-engineering/public/audio/bgm/other-center.ogg
           python - <<'PY'
           import json
           from pathlib import Path
-          p = Path('presentations/harness-engineering/audio-map.json')
-          data = json.loads(p.read_text())
-          assert data['provider'] == 'edge-tts'
-          assert data['voice'] == 'zh-TW-YunJheNeural'
-          assert data['rate'] == '+0%'
-          assert data['status'] == 'ready'
-          assert len(data['segments']) == 6
-          print('audio verification PASS')
+          n = json.loads(Path('presentations/harness-engineering/narrations.json').read_text())
+          a = json.loads(Path('presentations/harness-engineering/audio-map.json').read_text())
+          assert a['provider'] == 'edge-tts'
+          assert a['voice'] == n['voice']['voice']
+          assert a['rate'] == n['voice']['rate']
+          assert a['status'] == 'ready'
+          assert len(a['segments']) == len(n['steps']) == 6
+          print('audio verification PASS:', a['voice'])
           PY
 
       - name: Commit generated audio
@@ -63,6 +71,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No audio changes to commit"
           else
-            git commit -m "audio: generate Harness YunJhe narration and CC0 BGM [skip ci]"
+            git commit -m "audio: regenerate Harness narration and BGM presets [skip ci]"
             git push
           fi
