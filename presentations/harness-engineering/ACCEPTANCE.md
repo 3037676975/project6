@@ -1,48 +1,40 @@
-# Harness Engineering · 整片验收标准 v61
+# Harness Engineering · 整片验收标准 v62
 
-> 当前正式产品构建：**Project6 v61**。正式播放器 `full-video.html?v=61`，录制控制台 `record.html?v=61`，纯成片窗口 `capture.html?v=61`，视频作品页 `works.html?v=61`。
+> 当前正式产品构建：**Project6 v62**。正式播放器 `full-video.html?v=62`，录制控制台 `record.html?v=62`，纯成片窗口 `capture.html?v=62`。
 
-## 当前验收对象
-
-- 完整视频：42 Scene
-- TTS：整片一次 JSON / 一个或多个完整 ZIP 配音源
-- Recording：双窗口控制台 + 纯成片捕获窗口 + 1080P/1440P/4K 输出
-
-## Gate C · 本地 TTS 配音源库 v61
+## Gate C · 本地 TTS 配音源库 v62
 状态：**REVIEW**
 
 - [x] ZIP 保存到当前浏览器 IndexedDB；单个音频不持久保存。
 - [x] 多个 ZIP 形成独立配音源，可切换、试听、删除。
-- [x] 当前配音源刷新后保持。
-- [x] v61 修复配音源控制台与 Capture Surface 通信通道不一致问题。
-- [x] Capture Surface 收到 `voice-source` 后必须切换当前配音源并重新加载当前 Scene 音频。
-- [x] Capture Surface 首次提供“🔊 启用旁白声音”按钮，用于满足 Chrome 用户手势/自动播放策略；点击后必须消失。
-- [x] 控制台必须显示“声音未解锁 / ✓ 声音已解锁”。
-- [ ] 用户实机确认：选择配音源 → 解锁声音 → 自动播放 Scene 001 时可听到对应旁白。
-- [ ] 用户实机确认：切换到另一个配音源后，同一 Scene 的声音随之切换。
+- [x] 正式播放器将当前配音源 001～042 通过 `P6_LOCAL_AUDIO` 注入 Garden 原生 `localAudio`。
+- [x] 旁白默认开启，不再存在必须点击“启用旁白声音”的步骤。
+- [x] 录制控制台直接负责当前配音源播放；“自动播放”点击即为用户手势。
+- [ ] 用户实机确认：选择配音源后直接点“自动播放”，Scene 001 可听到对应旁白。
+- [ ] 用户实机确认：音频结束后 Scene 与下一段配音同步推进。
 
-## Gate F · 高清本地录制 v61
+## Gate F · 高清本地录制 v62
 状态：**REVIEW**
 
-- [x] 成片窗口与控制窗口分离；控制台 UI 不进入最终视频。
-- [x] 录制时选择 `Project6 v61 · Harness Capture Surface`。
-- [x] 录制共享必须勾选“分享标签页音频”，否则不能判定音频 Gate PASS。
-- [x] 当前配音源旁白与本地配乐都在 Capture Surface 播放。
-- [x] 输出画质：1080P / 1440P / 4K；显示 SOURCE → OUTPUT。
+- [x] Capture Surface 只负责成片画面；控制台 UI 不入镜。
+- [x] 通信通道固定为 `project6-harness-control`，不随 v62/v63 改名。
+- [x] TTS Web Audio 混音轨在录制页预创建。
+- [x] 支持用户操作顺序：开始录制 → 再点自动播放。
+- [x] 最终录制流包含 Capture 视频/标签页音频 + TTS 混音轨。
+- [x] 输出画质：1080P / 1440P / 4K。
 - [x] 录制四态：开始、暂停/继续、停止并保存、取消并丢弃。
-- [ ] 用户实机确认：录制文件中有当前配音源旁白。
-- [ ] 用户实机确认：旁白与画面 Scene 同步，不串音、不使用旧配音源。
-- [ ] 用户实机确认：录制文件无工作台、无控制栏、无声音解锁浮层。
+- [ ] 用户实机确认：10～20 秒录制文件中有当前配音源旁白。
+- [ ] 用户实机确认：旁白与画面 Scene 同步，不使用旧配音源。
 
 ## 版本一致性 Gate
 
 以下任意一项出现即 FAIL：
-1. 当前版本不是 v61；
+1. 当前版本不是 v62；
 2. `assets/version.js`、`full-video.html`、`record.html`、`capture.html` 缓存参数不一致；
-3. 录制控制台与 Capture Surface 使用不同 BroadcastChannel；
-4. 配音源 ZIP/单片保存规则被破坏；
+3. 控制台 / Capture / 配音模块通信通道不一致；
+4. 又恢复“成片窗口手动声音解锁”流程；
 5. 页面升级而 DEVELOPMENT_STATUS / ACCEPTANCE 未同步。
 
 ## 当前结论
 
-v61 专门修复“录制控制台已经选择配音源，但自动播放无旁白”的链路问题。根因包括配音源消息通道不一致，以及 Chrome 对跨窗口自动播放音频的用户手势限制。正式流程改为：选择配音源 → Capture Surface 点一次声音解锁 → 自动播放 → 开始录制并分享标签页音频。
+v62 删除 v61 的手动声音解锁方案。真实根因是保存的配音源此前没有正式进入 Garden 的 `localAudio`，同时跨窗口触发声音受 Chrome 自动播放策略影响。v62 改为：正式播放器注入 `localAudio`；录制时由控制台直接播放 TTS，并通过 Web Audio 混入最终录像。
