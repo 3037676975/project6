@@ -2,11 +2,53 @@
 
 > 最新用户明确决策，优先级高于旧实现细节。
 
+## 2026-09-09 · v45 版本统一与发布规则
+
+### 1. 当前唯一产品版本
+
+Project6 当前正式构建：**v45**。
+
+Canonical：`assets/version.js`。
+
+正式页面右上角统一显示：`P6 · v45`。
+
+正式入口统一：
+- `index.html?v=45`
+- `works.html?v=45`
+- `presentations/harness-engineering/full-video.html?v=45`
+
+### 2. 版本与缓存必须一起更新
+
+以后任何 v46 / v47 发布，必须同批同步：
+
+```text
+assets/version.js
+→ index / works / full-video
+→ 正式静态资源和 iframe 的 ?v=
+→ DEVELOPMENT_STATUS
+→ ACCEPTANCE
+→ PROJECT_CHARTER / PRD / Active Decisions 中当前构建信息
+```
+
+禁止页面已升级、后台仍显示旧版；禁止播放器是新版本但 iframe / data / local audio reload 仍指向旧 `?v=`。
+
+### 3. 历史实现文件名不是当前产品版本
+
+正式 v45 播放器仍引用部分 `full-video-v40* / v41* / v42*` 文件作为兼容实现层。它们不能仅因为文件名旧就删除。
+
+只有“正式入口无引用 + 仓库搜索无引用 + 删除后 QA 不受影响”的历史文件才允许清理。
+
+### 4. 旧浏览器状态迁移
+
+作品页的脚本确认状态使用稳定 key：`project6.harness.full.confirm.current`。
+
+若用户浏览器仍有旧 `project6.harness.full.confirm.v40`，首次加载自动迁移，避免版本升级导致用户确认状态丢失。
+
 ## 2026-09-09 · 整片生产模式
 
-### 1. 一个视频就是一个完整 Project
+### 5. 一个视频就是一个完整 Project
 
-后台不再按章节分别做 TTS 交接。章节只用于内部组织和导航，用户实际面对：
+后台不再按章节分别做 TTS 交接。章节只用于内部组织和导航。用户实际面对：
 
 ```text
 一个完整视频项目
@@ -16,27 +58,26 @@
 → 一个完整本地音频 ZIP
 → 一个完整本地音画预览
 → 最后统一加动画 SFX
+→ 最终 1080P MP4
 ```
 
-### 2. 职责边界
+### 6. 职责边界
 
-AI / Project6 负责：完整口播、内部 Chapter / Scene、Garden 视觉与动画、编号维护、总 TTS JSON、本地音频映射、整片预览、视觉 QA。
+AI / Project6 负责：完整口播、内部 Chapter / Scene、Garden 视觉与动画、编号维护、总 TTS JSON、本地音频映射、整片预览、视觉 QA、最终录制工具。
 
-用户负责：确认整片口播与画面、一次复制整片 JSON、本地 IndexTTS 2.5 生成全部语音、上传一个完整 ZIP。
+用户负责：确认整片口播与画面、一次复制整片 JSON、本地 IndexTTS 2.5 生成全部语音、上传一个完整 ZIP、实机复核 MP4。
 
-Project6 不负责本地 GPU 推理。
-
-### 3. Harness Engineering 当前规格
+### 7. Harness Engineering 当前规格
 
 - 7 个内部章节；
 - 42 Scene；
 - 42 段连续口播；
-- 编号固定 `001`～`042`；
+- 编号固定 001～042；
 - TTS：`presentations/harness-engineering/full-tts-tasks.json`；
 - 数据：`presentations/harness-engineering/full-video-data.js`；
 - 播放器：`presentations/harness-engineering/full-video.html`。
 
-### 4. TTS 交接必须整片一次完成
+### 8. TTS 交接整片一次完成
 
 ```text
 完整口播 + 全部画面
@@ -51,90 +92,52 @@ Project6 不负责本地 GPU 推理。
 
 禁止退回“一章一个 JSON”。
 
-### 5. 播放器正式要求
+### 9. 播放器要求
 
 必须提供：播放、暂停/继续、上一张/下一张、Scene 进度跳转、全屏、本地 IndexTTS 注入、音频结束自动下一 Scene。
 
 上传的新本地音频优先级必须高于历史 Edge TTS。
 
-**v42 新增硬要求：预览必须是真正的 16:9 等比缩放。**
+预览必须是真正 16:9 等比缩放：逻辑画布 1920×1080，缩放时 `stage-frame` 同步真实占位尺寸；窗口、浏览器缩放、全屏共享同一坐标关系。
 
-- 逻辑画布固定 1920×1080；
-- 缩放时外层 `stage-frame` 必须同步拥有缩放后的宽高；
-- 禁止只对 1920×1080 DOM 做 `transform: scale()`，却让布局仍按原尺寸占位；
-- 窗口模式、浏览器缩放、全屏都必须保持相同构图比例和坐标关系。
-
-### 6. ZIP 导入
+### 10. ZIP 导入
 
 - 支持完整 ZIP 与直接多选音频；
 - 支持 `audio/001.mp3` 子目录；
 - JSZip 失败必须明确提示并提供多选兜底；
 - “文件已识别”不等于“播放器已切换音源”，必须实际注入播放器。
 
-### 7. Garden v42 视觉原则
+### 11. Garden v45 视觉原则
 
-Scene 001 是视觉 Anchor，但封面主题必须一眼明确：**HARNESS ENGINEERING 是主标题**，中文问题只作为副标题 / Hook。
+Scene 001 是视觉 Anchor，`HARNESS ENGINEERING` 为主标题。Scene 002～042 逐 Scene 设计，禁止统一左右排版、统一卡片模板和统一 fade。每张动画必须解释至少一种：关系 / 空间 / 状态 / 反馈 / 过程。
 
-Scene 002～042 必须逐 Scene 设计，禁止统一左右排版、统一卡片模板和统一 fade。
+### 12. 强制渲染截图 QA
 
-每张动画必须能解释至少一种：关系 / 空间 / 状态 / 反馈 / 过程。
+代码写完不等于画面完成。每次修改正式 Scene 后必须 Chromium 实际渲染、1920×1080 截图、检查字号 / 遮挡 / 溢出 / 对齐 / 留白 / 重心 / 逻辑 / 可视化表达，不通过则返工。
 
-### 8. 强制门禁：渲染截图 QA
+当前自动 QA 基线：42/42、tiny=0、overflow=0、console errors=0、responsiveFails=0。
 
-**代码写完不等于画面完成。**
+### 13. 1080P MP4 本地录制
 
-每次修改正式视频 Scene 后必须：
+正式域名：`https://video.smilechat.cn`；HTTP 自动升级 HTTPS；localhost bridge 作为备用。
 
-```text
-实现 Scene
-→ Chromium 实际渲染
-→ 1920×1080 截图
-→ 检查字号 / 遮挡 / 溢出 / 对齐 / 留白 / 重心 / 逻辑 / 可视化表达
-→ 不通过则返工
-→ QA 通过后才允许标记 REVIEW
-```
-
-仓库使用：
-- `scripts/visual-qa.mjs`
-- `.github/workflows/visual-qa.yml`
-
-自动为 001～042 生成截图和 `qa/visual-report.json`。
-
-### 9. 1080P 本地录制：HTTP 部署使用 localhost bridge
-
-浏览器的 `getDisplayMedia / Region Capture` 要求安全上下文。Project6 正式站点当前是 HTTP IP，因此直接在服务器 URL 点录制一定会被浏览器拒绝。
-
-不引入 Cloudflare、域名或第三方隧道。正式低门槛方案：
-
-```text
-Project6 HTTP Server
-      ↓ 本机标准库代理
-http://127.0.0.1:28444
-      ↓ localhost 被浏览器视为安全上下文
-一键录制 1080P
-```
-
-仓库提供：
-- `tools/project6-recording-localhost.py`
-- `tools/start-project6-recording.bat`
-
-Windows 用户双击 BAT 后即可打开 localhost 录制入口。
-
-录制要求保持：
+要求：
 - 一键录制；
-- 只录中间 `.stage`，不录 Project6 后台工具栏；
-- 请求 1920×1080 / 60fps；
-- 捕获当前标签页视频 + 标签页音频；
-- Chromium Region Capture 精确裁切；
-- 不支持精确裁切时不退化成录整个后台；
-- VP9/Opus 优先，高码率；
-- 完成后浏览器本地下载 WebM；
-- **不上传服务器、不存 Project6 后端。**
+- 只录中间 `.stage`；
+- 目标 1920×1080 / 60fps；
+- 标签页视频 + 标签页声音；
+- Region Capture 精确裁切；
+- 实时 `REC 00:00:00`；
+- 只浏览器本地下载；
+- 最终目标 `.mp4`；
+- v45 不再使用每秒 MP4 分片拼接；
+- v45 在用户手势里解锁播放权限，回到 Scene 001 并等待渲染后再启动动画和录制；
+- 仍需用户实机确认 MP4 无花屏 / 乱码且动画、声音完整。
 
-### 10. 动画音效库 ≠ 人物配音
+### 14. 动画音效库 ≠ 人物配音
 
-SFX 仍是整片最后环节，只管理 reveal / whoosh / transition / click / tick / confirm / accent / digital 等短音效。
+SFX 是整片最后环节，只管理 reveal / whoosh / transition / click / tick / confirm / accent / digital 等短音效。
 
-### 11. 文档同步
+### 15. 文档同步
 
-Garden 手册、项目总纲、PRD、开发状态、验收规则必须跟当前整片模式和最新硬要求同步。禁止页面已经升级、文档仍保留旧规则。
+Garden 手册、项目总纲、PRD、开发状态、验收规则必须跟当前整片模式和当前产品版本同步。禁止页面已经升级、文档仍保留旧 current 规则。
