@@ -1,17 +1,15 @@
-/* Project6 · Harness Engineering · v45 local recorder
- * Goal: record ONLY the 1920×1080 video stage + current tab audio.
- * Output: native MP4 only when browser genuinely exposes MediaRecorder MP4.
- * v45 fixes:
- * - unlock narration inside the real user gesture before getDisplayMedia
- * - do not split native MP4 into 1-second chunks
- * - reset/render Scene 001 before starting capture timeline
- * - start playback immediately after recorder.start()
- * - visible REC timer
- * Storage: browser download only. Nothing is uploaded to Project6 server.
+/* Project6 · Harness Engineering · v46 local recorder
+ * v46 goals:
+ * - resilient getDisplayMedia fallback when strict capture hints fail
+ * - recording can always be stopped, even if MediaRecorder/capture states drift
+ * - playback sound toggle is independent and persisted
+ * - audio capture is optional: sound OFF => video-only recording
+ * - exact Stage crop remains mandatory when supported
  */
 (() => {
   const stage = document.getElementById('stage');
   const recordBtn = document.getElementById('recordBtn');
+  const soundBtn = document.getElementById('soundBtn');
   const recordMeta = document.getElementById('recordMeta');
   const recordTimer = document.getElementById('recordTimer');
   const status = document.getElementById('status');
@@ -21,233 +19,227 @@
   const narration = document.getElementById('narration');
   if (!stage || !recordBtn || !recordMeta || !window.MediaRecorder) return;
 
-  const LOCAL_RECORD_URL = 'http://127.0.0.1:28444/presentations/harness-engineering/full-video.html?v=45';
-  const HTTPS_RECORD_URL = 'https://video.smilechat.cn/presentations/harness-engineering/full-video.html?v=45';
-  let recorder = null, capture = null, chunks = [], stopObserver = null, startedAt = 0, timerId = null;
+  const SOUND_KEY = 'project6.harness.sound.enabled';
+  let soundEnabled = localStorage.getItem(SOUND_KEY) !== '0';
+  let recorder = null;
+  let capture = null;
+  let chunks = [];
+  let stopObserver = null;
+  let startedAt = 0;
+  let timerId = null;
+  let phase = 'idle';
+  let outputExt = 'webm';
+  let outputMime = 'video/webm';
 
-  const nextFrame = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-  const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const nextFrame = () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
   const formatClock = ms => {
     const total = Math.max(0, Math.floor(ms / 1000));
-    const h = String(Math.floor(total / 3600)).padStart(2,'0');
-    const m = String(Math.floor((total % 3600) / 60)).padStart(2,'0');
-    const s = String(total % 60).padStart(2,'0');
-    return `${h}:${m}:${s}`;
+    return `${String(Math.floor(total / 3600)).padStart(2,'0')}:${String(Math.floor((total % 3600) / 60)).padStart(2,'0')}:${String(total % 60).padStart(2,'0')}`;
   };
 
-  const stopTimer = () => { if (timerId) clearInterval(timerId); timerId = null; };
-  const startTimer = () => {
+  function syncSoundUI(){
+    if (narration) narration.muted = !soundEnabled;
+    if (soundBtn) {
+      soundBtn.textContent = soundEnabled ? '🔊 声音开' : '🔇 声音关';
+      soundBtn.setAttribute('aria-pressed', soundEnabled ? 'true' : 'false');
+      soundBtn.classList.toggle('primary', soundEnabled);
+    }
+  }
+  syncSoundUI();
+  soundBtn?.addEventListener('click', () => {
+    soundEnabled = !soundEnabled;
+    localStorage.setItem(SOUND_KEY, soundEnabled ? '1' : '0');
+    syncSoundUI();
+    if (recordMeta && phase === 'idle') recordMeta.textContent = soundEnabled ? '播放声音：开 · 录制可带标签页声音' : '播放声音：关 · 录制为静音视频';
+  });
+
+  function startTimer(){
     stopTimer();
-    if (recordTimer) { recordTimer.classList.add('live'); recordTimer.textContent = 'REC 00:00:00'; }
+    recordTimer?.classList.add('live');
+    if (recordTimer) recordTimer.textContent = 'REC 00:00:00';
     timerId = setInterval(() => {
       if (recordTimer) recordTimer.textContent = `REC ${formatClock(Date.now() - startedAt)}`;
     }, 250);
-  };
-  const resetTimer = (seconds = 0) => {
+  }
+  function stopTimer(){ if (timerId) clearInterval(timerId); timerId = null; }
+  function resetTimer(doneMs = 0){
     stopTimer();
-    if (recordTimer) {
-      recordTimer.classList.remove('live');
-      recordTimer.textContent = seconds ? `DONE ${formatClock(seconds * 1000)}` : 'REC 00:00:00';
-    }
-  };
+    recordTimer?.classList.remove('live');
+    if (recordTimer) recordTimer.textContent = doneMs ? `DONE ${formatClock(doneMs)}` : 'REC 00:00:00';
+  }
 
-  const setRecordUI = (live, text, warn=false) => {
+  function setRecordUI(live, text, warn=false){
     recordBtn.classList.toggle('live', live);
     recordMeta.classList.toggle('live', live);
     recordMeta.classList.toggle('warn', warn);
-    recordBtn.textContent = live ? '■ 停止录制' : '● 一键录制 MP4';
+    recordBtn.textContent = live ? '■ 停止录制' : '● 一键录制';
     recordMeta.textContent = text;
     stage.dataset.recording = live ? 'true' : 'false';
-  };
+  }
 
-  const cleanCapture = () => {
+  function stopTracks(){
+    try { capture?.getTracks().forEach(t => { try { t.stop(); } catch(_){} }); } catch(_){}
+  }
+  function cleanup(){
     stopObserver?.disconnect(); stopObserver = null;
-    capture?.getTracks().forEach(t => t.stop()); capture = null; recorder = null;
-    stage.dataset.recording = 'false'; stopTimer();
-  };
+    stopTracks();
+    capture = null;
+    recorder = null;
+    phase = 'idle';
+    stage.dataset.recording = 'false';
+  }
 
-  function preferredMp4Mime() {
-    const types = [
-      'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
-      'video/mp4;codecs=avc1,mp4a.40.2',
-      'video/mp4;codecs=h264,aac',
-      'video/mp4'
+  function chooseMime(){
+    const candidates = [
+      ['video/mp4;codecs=avc1.42E01E,mp4a.40.2','mp4'],
+      ['video/mp4;codecs=avc1,mp4a.40.2','mp4'],
+      ['video/mp4','mp4'],
+      ['video/webm;codecs=vp9,opus','webm'],
+      ['video/webm;codecs=vp8,opus','webm'],
+      ['video/webm','webm']
     ];
-    return types.find(t => MediaRecorder.isTypeSupported(t)) || '';
-  }
-
-  async function unlockNarrationGesture() {
-    if (!narration) return;
-    try {
-      const oldMuted = narration.muted;
-      narration.muted = true;
-      const p = narration.play();
-      if (p?.then) await p;
-      narration.pause();
-      narration.currentTime = 0;
-      narration.muted = oldMuted;
-    } catch (_) {
-      // Player can still run visual-only; later playback will expose a real audio error if any.
+    for (const [mime,ext] of candidates) {
+      if (MediaRecorder.isTypeSupported(mime)) return {mime,ext};
     }
+    return {mime:'',ext:'webm'};
   }
 
-  async function cropExactlyToStage(videoTrack) {
+  async function requestDisplay(){
+    const attempts = [
+      { video: true, audio: soundEnabled },
+      { video: true, audio: false }
+    ];
+    let lastErr = null;
+    for (const constraints of attempts) {
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia(constraints);
+        if (stream?.getVideoTracks?.().length) return stream;
+        stream?.getTracks?.().forEach(t => t.stop());
+      } catch (err) {
+        lastErr = err;
+        if (err?.name === 'NotAllowedError' || err?.name === 'AbortError') throw err;
+      }
+    }
+    throw lastErr || new Error('无法启动屏幕视频源。请重新选择“当前标签页”，不要选择空白窗口。');
+  }
+
+  async function cropExactlyToStage(videoTrack){
     if (!window.CropTarget || typeof window.CropTarget.fromElement !== 'function' || typeof videoTrack.cropTo !== 'function') {
-      throw new Error('当前浏览器不支持精确区域录制。请使用最新版 Chrome / Edge；Project6 不会退化成录整个后台。');
+      throw new Error('当前浏览器不支持精确区域录制。请使用最新版 Chrome / Edge。');
     }
-    const cropTarget = await window.CropTarget.fromElement(stage);
-    await videoTrack.cropTo(cropTarget);
+    const target = await window.CropTarget.fromElement(stage);
+    await videoTrack.cropTo(target);
   }
 
-  async function enforce1080p(videoTrack) {
-    try { await videoTrack.applyConstraints({width:{ideal:1920},height:{ideal:1080},frameRate:{ideal:60,max:60}}); } catch (_) {}
-    const settings = videoTrack.getSettings?.() || {};
-    const width = Number(settings.width || 0), height = Number(settings.height || 0), fps = Math.round(Number(settings.frameRate || 0));
-    if (width && height && (width < 1920 || height < 1080)) throw new Error(`当前捕获只有 ${width}×${height}，低于 1080P。请把浏览器窗口放到 1920×1080 或更高分辨率后再录。`);
-    return { width: width || 1920, height: height || 1080, fps: fps || 60 };
-  }
-
-  function explainSecureContext(){
-    const origin = location.origin;
-    const protocol = location.protocol;
-    const isDomain = location.hostname.toLowerCase() === 'video.smilechat.cn';
-    setRecordUI(false, `当前环境不安全 · ${origin}`, true);
-    if (status) status.textContent = `RECORDING BLOCKED · ${origin}`;
-    alert([
-      `当前页面：${origin}`,
-      `浏览器安全上下文：${window.isSecureContext ? 'YES' : 'NO'}`,
-      '',
-      protocol === 'http:' ? '原因：当前实际协议仍然是 HTTP。仅仅绑定域名不会自动变成 HTTPS。' : '当前虽然是 HTTPS，但浏览器仍未把该页面判定为安全上下文，请检查证书是否有效。',
-      '',
-      isDomain ? `请直接打开：${HTTPS_RECORD_URL}` : '推荐使用 HTTPS 域名或 Project6 localhost 录制入口。',
-      '',
-      `备用 localhost：${LOCAL_RECORD_URL}`
-    ].join('\n'));
-  }
-
-  async function resetPlayerToSceneOne() {
+  async function resetPlayer(){
     pauseBtn?.click();
     if (scrub) {
       scrub.value = '0';
       scrub.dispatchEvent(new Event('input',{bubbles:true}));
       scrub.dispatchEvent(new Event('change',{bubbles:true}));
     }
-    if (narration) { try { narration.pause(); narration.currentTime = 0; } catch (_) {} }
+    if (narration) { try { narration.pause(); narration.currentTime = 0; narration.muted = !soundEnabled; } catch(_){} }
     await nextFrame();
-    await sleep(120);
+    await sleep(100);
   }
 
-  async function startRecording() {
-    if (!window.isSecureContext || !navigator.mediaDevices?.getDisplayMedia) { explainSecureContext(); return; }
+  async function finishDownload(){
+    const elapsed = Math.max(1000, Date.now() - startedAt);
+    const blob = chunks.length ? new Blob(chunks,{type:outputMime}) : null;
+    if (!blob || blob.size < 16 * 1024) {
+      resetTimer(); cleanup(); setRecordUI(false,'录制没有产生有效数据',true);
+      alert('录制没有产生有效视频数据，请重试。');
+      return;
+    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `project6-harness-v46-${new Date().toISOString().replace(/[:.]/g,'-')}.${outputExt}`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    resetTimer(elapsed);
+    if (status) status.textContent = `RECORDED ${outputExt.toUpperCase()} · ${formatClock(elapsed)} · ${(blob.size/1024/1024).toFixed(1)}MB`;
+    cleanup();
+    setRecordUI(false, `${outputExt.toUpperCase()} · LOCAL DOWNLOAD · ${soundEnabled ? 'SOUND ON' : 'MUTED'}`);
+  }
 
-    const mimeType = preferredMp4Mime();
-    if (!mimeType) throw new Error('当前浏览器不支持原生 MP4 录制。请升级最新版 Chrome / Edge 后重试。');
+  async function stopRecording(reason='manual'){
+    if (phase === 'idle') return;
+    phase = 'stopping';
+    setRecordUI(true, `STOPPING · ${reason}`);
+    pauseBtn?.click();
+    stopObserver?.disconnect(); stopObserver = null;
+    try {
+      if (recorder && recorder.state !== 'inactive') {
+        try { recorder.requestData(); } catch(_){}
+        await sleep(80);
+        if (recorder.state !== 'inactive') recorder.stop();
+      } else {
+        stopTracks(); cleanup(); resetTimer(); setRecordUI(false,'录制已停止');
+      }
+    } catch (err) {
+      console.error(err);
+      stopTracks(); cleanup(); resetTimer(); setRecordUI(false,'录制已强制停止',true);
+    }
+  }
 
-    setRecordUI(false, `MP4 READY · ${location.origin} · 请选择当前标签页 + 分享标签页音频`);
-    capture = await navigator.mediaDevices.getDisplayMedia({
-      video:{width:{ideal:1920},height:{ideal:1080},frameRate:{ideal:60,max:60}},
-      audio:true,
-      preferCurrentTab:true,
-      selfBrowserSurface:'include',
-      surfaceSwitching:'exclude',
-      systemAudio:'exclude'
-    });
+  async function startRecording(){
+    if (!window.isSecureContext || !navigator.mediaDevices?.getDisplayMedia) {
+      throw new Error('当前页面不允许屏幕录制。请使用 HTTPS 地址，并用最新版 Chrome / Edge。');
+    }
+    if (phase !== 'idle') return;
+    phase = 'starting';
+    setRecordUI(true, '正在打开浏览器录制选择器…');
 
+    capture = await requestDisplay();
     const videoTrack = capture.getVideoTracks()[0];
-    const audioTrack = capture.getAudioTracks()[0];
     if (!videoTrack) throw new Error('没有获得视频轨道。');
-    if (!audioTrack) throw new Error('没有获得标签页音频。请重新录制并勾选“分享标签页音频”。');
+    videoTrack.addEventListener('ended', () => stopRecording('浏览器停止共享'), {once:true});
 
     await cropExactlyToStage(videoTrack);
-    const q = await enforce1080p(videoTrack);
-    await resetPlayerToSceneOne();
+    await resetPlayer();
 
+    const chosen = chooseMime();
+    outputMime = chosen.mime || 'video/webm';
+    outputExt = chosen.ext;
     chunks = [];
-    recorder = new MediaRecorder(capture, {
-      mimeType,
-      videoBitsPerSecond:12_000_000,
-      audioBitsPerSecond:192_000
-    });
+    const options = chosen.mime ? {mimeType:chosen.mime,videoBitsPerSecond:12_000_000,audioBitsPerSecond:192_000} : {videoBitsPerSecond:12_000_000};
+    recorder = new MediaRecorder(capture, options);
     recorder.addEventListener('dataavailable', e => { if (e.data?.size) chunks.push(e.data); });
     recorder.addEventListener('stop', finishDownload, {once:true});
-    recorder.addEventListener('error', e => console.error('MediaRecorder error', e));
-    videoTrack.addEventListener('ended', () => { if (recorder?.state === 'recording') recorder.stop(); }, {once:true});
+    recorder.addEventListener('error', e => { console.error('MediaRecorder error', e); stopRecording('Recorder Error'); });
 
-    // IMPORTANT: native MP4 is recorded as one continuous recording.
-    // v44 used recorder.start(1000), which can create fragmented MP4 chunks with poor player compatibility.
     recorder.start();
+    phase = 'recording';
     startedAt = Date.now();
     startTimer();
-    setRecordUI(true, `${q.width}×${q.height} · ${q.fps}fps · MP4 · H264/AAC · STAGE ONLY`);
-    if (status) status.textContent = 'RECORDING MP4 · STARTING PLAYER';
-
-    // Start the visual timeline immediately after recorder is armed.
+    setRecordUI(true, `${outputExt.toUpperCase()} · STAGE ONLY · ${soundEnabled && capture.getAudioTracks().length ? 'SOUND ON' : 'MUTED'} · 点击这里停止`);
+    if (status) status.textContent = 'RECORDING · V46';
     playBtn?.click();
-    await nextFrame();
-    if (status && !/PLAY|RECORD|SCENE|RUN/i.test(status.textContent)) {
-      console.warn('Project6 recorder: player status did not visibly enter play state:', status.textContent);
-    }
 
     if (status) {
       stopObserver = new MutationObserver(() => {
-        if (status.textContent.trim() === 'END' && recorder?.state === 'recording') {
-          setTimeout(() => recorder?.state === 'recording' && recorder.stop(), 500);
-        }
+        if (status.textContent.trim() === 'END' && phase === 'recording') setTimeout(() => stopRecording('END'), 400);
       });
       stopObserver.observe(status,{childList:true,characterData:true,subtree:true});
     }
   }
 
-  function finishDownload() {
-    const seconds = Math.max(1, Math.round((Date.now()-startedAt)/1000));
-    if (!chunks.length) {
-      resetTimer(); cleanCapture();
-      alert('录制没有产生有效视频数据，请重试。');
-      return;
-    }
-    const actualMime = recorder?.mimeType || preferredMp4Mime() || 'video/mp4';
-    const blob = new Blob(chunks,{type:actualMime});
-    if (blob.size < 64 * 1024) {
-      resetTimer(); cleanCapture();
-      alert('录制文件异常小，未下载。请重新录制。');
-      return;
-    }
-    const url = URL.createObjectURL(blob), a = document.createElement('a');
-    a.href=url;
-    a.download=`project6-harness-1080p-${new Date().toISOString().replace(/[:.]/g,'-')}.mp4`;
-    document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),5000);
-    resetTimer(seconds);
-    if (status) status.textContent=`RECORDED MP4 · ${formatClock(seconds*1000)} · ${(blob.size/1024/1024).toFixed(1)}MB`;
-    setRecordUI(false, `MP4 · H264/AAC · ${location.origin} · LOCAL DOWNLOAD`);
-    cleanCapture();
-  }
-
-  async function stopRecording(){
-    if(recorder?.state==='recording'){
-      pauseBtn?.click();
-      try { recorder.requestData(); } catch (_) {}
-      await sleep(80);
-      if (recorder?.state === 'recording') recorder.stop();
-    }
-  }
-
   recordBtn.addEventListener('click', async () => {
-    if (recorder?.state === 'recording') { await stopRecording(); return; }
+    if (phase === 'recording' || phase === 'starting' || phase === 'stopping') { await stopRecording('手动停止'); return; }
     try {
-      // Must happen synchronously from the user's click to unlock media playback later.
-      await unlockNarrationGesture();
       await startRecording();
     } catch (err) {
-      console.error(err); cleanCapture(); resetTimer(); setRecordUI(false,'录制未启动',true);
-      if(status) status.textContent=err?.message || '录制失败'; alert(err?.message || '录制失败');
+      console.error(err);
+      stopTracks(); cleanup(); resetTimer(); setRecordUI(false,'录制未启动',true);
+      if (status) status.textContent = err?.message || '录制失败';
+      const msg = err?.message || '录制失败';
+      alert(msg.includes('Could not start video source') ? '浏览器没有成功启动屏幕视频源。v46 已自动改用兼容模式；请再次点击录制，在弹窗里选择“当前标签页”。' : msg);
     }
   });
 
+  window.addEventListener('beforeunload', stopTracks);
   resetTimer();
-  if (!window.isSecureContext) setRecordUI(false, `NOT SECURE · ${location.origin}`, true);
-  else {
-    const mp4 = preferredMp4Mime();
-    setRecordUI(false, mp4 ? `SECURE · MP4 READY · ${location.origin}` : `SECURE · MP4 UNSUPPORTED · ${location.origin}`, !mp4);
-  }
+  setRecordUI(false, soundEnabled ? 'V46 READY · SOUND ON' : 'V46 READY · MUTED');
 })();
