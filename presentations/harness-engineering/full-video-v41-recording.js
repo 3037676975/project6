@@ -1,26 +1,60 @@
-/* Project6 · Harness Engineering · v43 local recorder
+/* Project6 · Harness Engineering · v44 local recorder
  * Goal: record ONLY the 1920×1080 video stage + current tab audio.
+ * Output: MP4 only when browser supports native MediaRecorder MP4.
  * Storage: browser download only. Nothing is uploaded to Project6 server.
  */
 (() => {
   const stage = document.getElementById('stage');
   const recordBtn = document.getElementById('recordBtn');
   const recordMeta = document.getElementById('recordMeta');
+  const recordTimer = document.getElementById('recordTimer');
   const status = document.getElementById('status');
   const playBtn = document.getElementById('playBtn');
   const pauseBtn = document.getElementById('pauseBtn');
   const scrub = document.getElementById('scrub');
   if (!stage || !recordBtn || !recordMeta || !window.MediaRecorder) return;
 
-  const LOCAL_RECORD_URL = 'http://127.0.0.1:28444/presentations/harness-engineering/full-video.html?v=43';
-  const HTTPS_RECORD_URL = 'https://video.smilechat.cn/presentations/harness-engineering/full-video.html?v=43';
-  let recorder = null, capture = null, chunks = [], stopObserver = null, startedAt = 0;
+  const LOCAL_RECORD_URL = 'http://127.0.0.1:28444/presentations/harness-engineering/full-video.html?v=44';
+  const HTTPS_RECORD_URL = 'https://video.smilechat.cn/presentations/harness-engineering/full-video.html?v=44';
+  let recorder = null, capture = null, chunks = [], stopObserver = null, startedAt = 0, timerId = null;
+
+  const formatClock = ms => {
+    const total = Math.max(0, Math.floor(ms / 1000));
+    const h = String(Math.floor(total / 3600)).padStart(2,'0');
+    const m = String(Math.floor((total % 3600) / 60)).padStart(2,'0');
+    const s = String(total % 60).padStart(2,'0');
+    return `${h}:${m}:${s}`;
+  };
+
+  const stopTimer = () => {
+    if (timerId) clearInterval(timerId);
+    timerId = null;
+  };
+
+  const startTimer = () => {
+    stopTimer();
+    if (recordTimer) {
+      recordTimer.classList.add('live');
+      recordTimer.textContent = 'REC 00:00:00';
+    }
+    timerId = setInterval(() => {
+      if (recordTimer) recordTimer.textContent = `REC ${formatClock(Date.now() - startedAt)}`;
+    }, 250);
+  };
+
+  const resetTimer = (seconds = 0) => {
+    stopTimer();
+    if (recordTimer) {
+      recordTimer.classList.remove('live');
+      recordTimer.textContent = seconds ? `DONE ${formatClock(seconds * 1000)}` : 'REC 00:00:00';
+    }
+  };
 
   const setRecordUI = (live, text, warn=false) => {
     recordBtn.classList.toggle('live', live);
     recordMeta.classList.toggle('live', live);
     recordMeta.classList.toggle('warn', warn);
-    recordBtn.textContent = live ? '■ 停止录制' : '● 一键录制 1080P';
+    recordBtn.textContent = live ? '■ 停止录制' : '● 一键录制 MP4';
     recordMeta.textContent = text;
     stage.dataset.recording = live ? 'true' : 'false';
   };
@@ -29,10 +63,17 @@
     stopObserver?.disconnect(); stopObserver = null;
     capture?.getTracks().forEach(t => t.stop()); capture = null; recorder = null;
     stage.dataset.recording = 'false';
+    stopTimer();
   };
 
-  function preferredMime() {
-    return ['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(t => MediaRecorder.isTypeSupported(t)) || '';
+  function preferredMp4Mime() {
+    const types = [
+      'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
+      'video/mp4;codecs=avc1,mp4a.40.2',
+      'video/mp4;codecs=h264,aac',
+      'video/mp4'
+    ];
+    return types.find(t => MediaRecorder.isTypeSupported(t)) || '';
   }
 
   async function cropExactlyToStage(videoTrack) {
@@ -72,7 +113,13 @@
 
   async function startRecording() {
     if (!window.isSecureContext || !navigator.mediaDevices?.getDisplayMedia) { explainSecureContext(); return; }
-    setRecordUI(false, `SECURE · ${location.origin} · 请选择当前标签页 + 分享标签页音频`);
+
+    const mimeType = preferredMp4Mime();
+    if (!mimeType) {
+      throw new Error('当前浏览器不支持原生 MP4 录制。Project6 不会再下载 WebM。请升级到最新版 Chrome / Edge 后重试。');
+    }
+
+    setRecordUI(false, `MP4 READY · ${location.origin} · 请选择当前标签页 + 分享标签页音频`);
     capture = await navigator.mediaDevices.getDisplayMedia({
       video:{width:{ideal:1920},height:{ideal:1080},frameRate:{ideal:60,max:60}},
       audio:true,
@@ -88,15 +135,20 @@
     await cropExactlyToStage(videoTrack);
     const q = await enforce1080p(videoTrack);
     chunks = [];
-    const options = {videoBitsPerSecond:12_000_000,audioBitsPerSecond:192_000};
-    const mimeType = preferredMime(); if (mimeType) options.mimeType = mimeType;
+    const options = {
+      mimeType,
+      videoBitsPerSecond:12_000_000,
+      audioBitsPerSecond:192_000
+    };
     recorder = new MediaRecorder(capture, options);
     recorder.addEventListener('dataavailable', e => { if (e.data?.size) chunks.push(e.data); });
     recorder.addEventListener('stop', finishDownload, {once:true});
     videoTrack.addEventListener('ended', () => { if (recorder?.state === 'recording') recorder.stop(); }, {once:true});
-    recorder.start(1000); startedAt = Date.now();
-    setRecordUI(true, `${q.width}×${q.height} · ${q.fps}fps · VIDEO + TAB AUDIO · LOCAL`);
-    if (status) status.textContent = 'RECORDING · STAGE ONLY';
+    recorder.start(1000);
+    startedAt = Date.now();
+    startTimer();
+    setRecordUI(true, `${q.width}×${q.height} · ${q.fps}fps · MP4 · VIDEO + TAB AUDIO`);
+    if (status) status.textContent = 'RECORDING MP4 · STAGE ONLY';
     if (scrub) { scrub.value='0'; scrub.dispatchEvent(new Event('input',{bubbles:true})); }
     setTimeout(() => playBtn?.click(), 260);
     if (status) {
@@ -109,12 +161,14 @@
 
   function finishDownload() {
     const seconds = Math.max(1, Math.round((Date.now()-startedAt)/1000));
-    const blob = new Blob(chunks,{type:recorder?.mimeType || 'video/webm'});
+    const blob = new Blob(chunks,{type:recorder?.mimeType || 'video/mp4'});
     const url = URL.createObjectURL(blob), a = document.createElement('a');
-    a.href=url; a.download=`project6-harness-1080p-${new Date().toISOString().replace(/[:.]/g,'-')}.webm`;
+    a.href=url;
+    a.download=`project6-harness-1080p-${new Date().toISOString().replace(/[:.]/g,'-')}.mp4`;
     document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),3000);
-    if (status) status.textContent=`RECORDED · ${seconds}s · LOCAL DOWNLOAD`;
-    setRecordUI(false, `SECURE · ${location.origin} · 1080P LOCAL DOWNLOAD`); cleanCapture();
+    resetTimer(seconds);
+    if (status) status.textContent=`RECORDED MP4 · ${formatClock(seconds*1000)} · LOCAL DOWNLOAD`;
+    setRecordUI(false, `MP4 · ${location.origin} · 1080P LOCAL DOWNLOAD`); cleanCapture();
   }
 
   async function stopRecording(){ if(recorder?.state==='recording'){ pauseBtn?.click(); recorder.stop(); } }
@@ -123,11 +177,15 @@
     if (recorder?.state === 'recording') { await stopRecording(); return; }
     try { await startRecording(); }
     catch (err) {
-      console.error(err); cleanCapture(); setRecordUI(false,'录制未启动',true);
+      console.error(err); cleanCapture(); resetTimer(); setRecordUI(false,'录制未启动',true);
       if(status) status.textContent=err?.message || '录制失败'; alert(err?.message || '录制失败');
     }
   });
 
+  resetTimer();
   if (!window.isSecureContext) setRecordUI(false, `NOT SECURE · ${location.origin}`, true);
-  else setRecordUI(false, `SECURE · ${location.origin} · 1080P READY`);
+  else {
+    const mp4 = preferredMp4Mime();
+    setRecordUI(false, mp4 ? `SECURE · MP4 READY · ${location.origin}` : `SECURE · MP4 UNSUPPORTED · ${location.origin}`, !mp4);
+  }
 })();
