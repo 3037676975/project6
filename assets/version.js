@@ -2,9 +2,9 @@
   const SELF=document.currentScript?.src||new URL('./version.js',location.href).href;
   const BUILD = Object.freeze({
     project: 'Project6',
-    version: 'v60',
-    number: 60,
-    cache: '60',
+    version: 'v61',
+    number: 61,
+    cache: '61',
     updatedAt: '2026-09-09'
   });
   window.P6_BUILD = BUILD;
