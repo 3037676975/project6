@@ -1,0 +1,43 @@
+(() => {
+  const $=id=>document.getElementById(id);
+  const channel=new BroadcastChannel('project6-harness-v60');
+  const openCapture=$('openCapture'),focusCapture=$('focusCapture'),captureState=$('captureState'),playerState=$('playerState');
+  const prev=$('prevBtn'),play=$('playBtn'),pause=$('pauseBtn'),next=$('nextBtn'),sound=$('soundBtn');
+  const musicFile=$('musicFile'),musicToggle=$('musicToggle'),musicName=$('musicName'),musicVolume=$('musicVolume');
+  const quality=$('qualityPreset'),qualityInfo=$('qualityInfo'),sourceInfo=$('sourceInfo');
+  const start=$('startRecord'),pauseRec=$('pauseRecord'),stop=$('stopRecord'),cancel=$('cancelRecord'),timer=$('recTimer'),recState=$('recState');
+  const source=$('captureSource'),canvas=$('recordCanvas'),ctx=canvas.getContext('2d',{alpha:false});
+  const PRESETS={1080:{w:1920,h:1080,bps:24_000_000,label:'1080P'},1440:{w:2560,h:1440,bps:40_000_000,label:'1440P'},2160:{w:3840,h:2160,bps:65_000_000,label:'4K'}};
+  let captureWin=null,captureReady=false,soundEnabled=true,musicWanted=false,musicSelected=null;
+  let rawStream=null,outStream=null,recorder=null,chunks=[],raf=0,startedAt=0,timerId=0,pausedAt=0,totalPaused=0,cancelled=false,stopping=false;
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  const clock=ms=>{const t=Math.max(0,Math.floor(ms/1000));return `${String(Math.floor(t/3600)).padStart(2,'0')}:${String(Math.floor((t%3600)/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`};
+  const preset=()=>PRESETS[quality.value]||PRESETS[1080];
+  function syncQuality(){const p=preset();qualityInfo.textContent=`${p.label} · ${p.w}×${p.h} · ${Math.round(p.bps/1e6)} Mbps`;canvas.width=p.w;canvas.height=p.h}
+  quality.addEventListener('change',syncQuality);syncQuality();
+  function openCaptureSurface(){const url=new URL('./capture.html?v=60',location.href);captureWin=window.open(url.href,'project6Capture','popup=yes,width=1920,height=1080,resizable=yes');if(!captureWin){alert('浏览器阻止了成片窗口，请允许本站弹出窗口。');return}captureState.textContent='正在连接…'}
+  openCapture.addEventListener('click',openCaptureSurface);
+  focusCapture.addEventListener('click',()=>{if(captureWin&&!captureWin.closed)captureWin.focus();else openCaptureSurface()});
+  channel.onmessage=e=>{const m=e.data||{};if(m.type==='capture-ready'){captureReady=true;captureState.textContent='已连接 · PURE 16:9'}if(m.type==='state'){captureReady=true;captureState.textContent='已连接 · PURE 16:9';playerState.textContent=`画面状态：${m.status||'READY'} · ${m.count||'01 / 42'}`}};
+  const cmd=action=>{if(!captureReady){alert('请先打开“纯成片窗口”。');return}channel.postMessage({type:'cmd',action})};
+  prev.addEventListener('click',()=>cmd('prev'));play.addEventListener('click',()=>cmd('play'));pause.addEventListener('click',()=>cmd('pause'));next.addEventListener('click',()=>cmd('next'));
+  sound.addEventListener('click',()=>{soundEnabled=!soundEnabled;sound.textContent=soundEnabled?'🔊 旁白开':'🔇 旁白关';sound.classList.toggle('primary',soundEnabled);channel.postMessage({type:'cmd',action:'sound',enabled:soundEnabled})});
+  musicFile.addEventListener('change',()=>{const f=musicFile.files?.[0];if(!f)return;musicSelected=f;musicWanted=false;musicToggle.disabled=false;musicToggle.textContent='▶ 配乐';musicName.textContent=f.name;channel.postMessage({type:'music-file',file:f,volume:Number(musicVolume.value)/100,play:false})});
+  musicToggle.addEventListener('click',()=>{if(!musicSelected)return;musicWanted=!musicWanted;musicToggle.textContent=musicWanted?'⏸ 配乐':'▶ 配乐';channel.postMessage({type:'music-play',play:musicWanted})});
+  musicVolume.addEventListener('input',()=>channel.postMessage({type:'music-volume',volume:Number(musicVolume.value)/100}));
+  function chooseMime(){for(const [mime,ext] of [['video/mp4;codecs=avc1.42E01E,mp4a.40.2','mp4'],['video/mp4','mp4'],['video/webm;codecs=vp9,opus','webm'],['video/webm','webm']])if(MediaRecorder.isTypeSupported(mime))return{mime,ext};return{mime:'',ext:'webm'}}
+  function stopTracks(){try{rawStream?.getTracks().forEach(t=>t.stop())}catch(_){}try{outStream?.getTracks().forEach(t=>t.stop())}catch(_){}}
+  function crop16by9(sw,sh){const target=16/9,ar=sw/sh;if(ar>target){const h=sh,w=h*target;return{sx:(sw-w)/2,sy:0,sw:w,sh:h}}const w=sw,h=w/target;return{sx:0,sy:(sh-h)/2,sw:w,sh:h}}
+  function draw(){const vw=source.videoWidth||1,vh=source.videoHeight||1,{sx,sy,sw,sh}=crop16by9(vw,vh);ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.fillStyle='#000';ctx.fillRect(0,0,canvas.width,canvas.height);if(vw>2&&vh>2)ctx.drawImage(source,sx,sy,sw,sh,0,0,canvas.width,canvas.height);raf=requestAnimationFrame(draw)}
+  function elapsed(){const live=pausedAt?Date.now()-pausedAt:0;return Math.max(0,Date.now()-startedAt-totalPaused-live)}
+  function startTimer(){clearInterval(timerId);timerId=setInterval(()=>timer.textContent=`REC ${clock(elapsed())}`,250)}
+  function resetUI(){clearInterval(timerId);timerId=0;start.disabled=false;pauseRec.disabled=true;pauseRec.textContent='⏸ 暂停录制';stop.disabled=true;cancel.disabled=true;quality.disabled=false}
+  async function finish(ext,mime){cancelAnimationFrame(raf);const blob=new Blob(chunks,{type:mime||'video/webm'}),duration=elapsed();stopTracks();if(cancelled){recState.textContent='CANCELLED · 未保存';timer.textContent='CANCELLED';resetUI();stopping=false;recorder=null;return}if(blob.size<16384){alert('录制文件异常小，请重试。');resetUI();stopping=false;return}const p=preset(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`project6-harness-v60-${p.label}-${new Date().toISOString().replace(/[:.]/g,'-')}.${ext}`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);recState.textContent=`DONE · ${p.label} · ${(blob.size/1024/1024).toFixed(1)}MB`;timer.textContent=`DONE ${clock(duration)}`;resetUI();stopping=false;recorder=null;rawStream=null;outStream=null}
+  async function finalize(save=true){if(stopping)return;stopping=true;cancelled=!save;clearInterval(timerId);if(recorder&&recorder.state!=='inactive'){if(recorder.state==='paused'){try{recorder.resume()}catch(_){}}try{recorder.requestData()}catch(_){}await sleep(60);if(recorder.state!=='inactive')recorder.stop()}else{cancelAnimationFrame(raf);stopTracks();resetUI();stopping=false}}
+  async function begin(){if(!window.isSecureContext||!navigator.mediaDevices?.getDisplayMedia)throw new Error('请使用 HTTPS + 最新版 Chrome / Edge。');if(!captureReady)throw new Error('请先打开纯成片窗口。');const p=preset();quality.disabled=true;recState.textContent='请选择“Project6 v60 · Harness Capture Surface”标签页';rawStream=await navigator.mediaDevices.getDisplayMedia({video:{width:{ideal:p.w},height:{ideal:p.h},frameRate:{ideal:60,max:60}},audio:true,surfaceSwitching:'exclude'});const vt=rawStream.getVideoTracks()[0];if(!vt)throw new Error('没有获得视频轨道。');vt.addEventListener('ended',()=>finalize(true),{once:true});source.srcObject=rawStream;await source.play();await new Promise(r=>source.readyState>=2&&source.videoWidth?r():source.addEventListener('loadedmetadata',r,{once:true}));canvas.width=p.w;canvas.height=p.h;draw();outStream=canvas.captureStream(60);rawStream.getAudioTracks().forEach(t=>outStream.addTrack(t));const c=chooseMime(),opts=c.mime?{mimeType:c.mime,videoBitsPerSecond:p.bps,audioBitsPerSecond:256_000}:{videoBitsPerSecond:p.bps};chunks=[];cancelled=false;pausedAt=0;totalPaused=0;recorder=new MediaRecorder(outStream,opts);recorder.addEventListener('dataavailable',e=>{if(e.data?.size)chunks.push(e.data)});recorder.addEventListener('stop',()=>finish(c.ext,c.mime||recorder.mimeType),{once:true});recorder.start();startedAt=Date.now();startTimer();start.disabled=true;pauseRec.disabled=false;stop.disabled=false;cancel.disabled=false;const lower=source.videoWidth<p.w||source.videoHeight<p.h;sourceInfo.textContent=`SOURCE ${source.videoWidth}×${source.videoHeight} → OUTPUT ${p.w}×${p.h}${lower?' · 源分辨率低于输出，存在放大':''}`;recState.textContent=`LIVE · ${p.label} · 纯成片窗口捕获`}
+  start.addEventListener('click',async()=>{try{await begin()}catch(err){console.error(err);quality.disabled=false;stopTracks();alert(err?.message||'录制失败');recState.textContent=err?.message||'录制失败'}});
+  pauseRec.addEventListener('click',()=>{if(!recorder)return;if(recorder.state==='recording'){recorder.pause();pausedAt=Date.now();pauseRec.textContent='▶ 继续录制';recState.textContent='REC PAUSED'}else if(recorder.state==='paused'){recorder.resume();totalPaused+=Date.now()-pausedAt;pausedAt=0;pauseRec.textContent='⏸ 暂停录制';recState.textContent='LIVE · 录制已继续'}});
+  stop.addEventListener('click',()=>finalize(true));cancel.addEventListener('click',()=>finalize(false));
+  addEventListener('beforeunload',()=>{stopTracks();channel.close()});
+  openCaptureSurface();
+})();
