@@ -12,7 +12,11 @@
     if(soundBtn){soundBtn.textContent=soundEnabled?'🔊 声音开':'🔇 声音关';soundBtn.setAttribute('aria-pressed',soundEnabled?'true':'false');soundBtn.classList.toggle('primary',soundEnabled)}
   }
   syncSound();
-  soundBtn?.addEventListener('click',()=>{soundEnabled=!soundEnabled;localStorage.setItem(SOUND_KEY,soundEnabled?'1':'0';syncSound())});
+  soundBtn?.addEventListener('click',()=>{
+    soundEnabled=!soundEnabled;
+    localStorage.setItem(SOUND_KEY,soundEnabled?'1':'0');
+    syncSound();
+  });
   recordBtn.textContent='● 打开 1080P 录制';
   if(recordMeta)recordMeta.textContent='V56 · NATIVE GARDEN PLAYER · EXACT 16:9 CROP';
   recordBtn.addEventListener('click',()=>{
