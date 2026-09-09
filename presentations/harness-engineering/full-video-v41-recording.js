@@ -1,6 +1,6 @@
-/* Project6 · Harness Engineering · v52 recorder launcher
- * Preview page opens a dedicated recorder console. The recorder keeps all transport,
- * narration, music, timer and stop controls outside the exact 16:9 stage crop.
+/* Project6 · Harness Engineering · v53 recorder launcher
+ * Preview page opens the dedicated recorder console. Transport controls are now
+ * the real Garden player buttons, not proxy buttons that click hidden controls.
  */
 (() => {
   const recordBtn=document.getElementById('recordBtn');
@@ -17,9 +17,9 @@
   syncSound();
   soundBtn?.addEventListener('click',()=>{soundEnabled=!soundEnabled;localStorage.setItem(SOUND_KEY,soundEnabled?'1':'0');syncSound()});
   recordBtn.textContent='● 打开 1080P 录制';
-  if(recordMeta)recordMeta.textContent='V52 · RECORDER CONSOLE · EXACT 16:9 CROP';
+  if(recordMeta)recordMeta.textContent='V53 · DIRECT PLAYER CONTROLS · EXACT 16:9 CROP';
   recordBtn.addEventListener('click',()=>{
-    const url=new URL('./record.html?v=52',location.href);
+    const url=new URL('./record.html?v=53',location.href);
     const w=window.open(url.href,'project6Recorder','popup=yes,width=1600,height=1000,resizable=yes');
     if(!w) alert('浏览器阻止了录制窗口，请允许本站弹出窗口后再点一次。');
   });
