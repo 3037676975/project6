@@ -4,18 +4,18 @@
 
 ## 当前 Phase
 
-**Phase 1 · Harness Engineering · Project6 v46**
+**Phase 1 · Harness Engineering · Project6 v48**
 
 ## 当前唯一构建版本
 
-- Product build：**v46**
+- Product build：**v48**
 - 单一版本源：`assets/version.js`
-- 正式作品页：`works.html?v=46`
-- 正式播放器：`presentations/harness-engineering/full-video.html?v=46`
-- 页面右上角必须显示 `P6 · v46`
+- 正式作品页：`works.html?v=48`
+- 正式播放器：`presentations/harness-engineering/full-video.html?v=48`
+- 页面右上角必须显示 `P6 · v48`
 - 以后发布新版本必须同步：版本源、页面缓存参数、作品 Gate、验收、开发状态。
 
-## v46 当前能力
+## v48 当前能力
 
 ### Garden / Visual
 - [x] 42 Scene 整片模式。
@@ -32,9 +32,7 @@
 - [x] `stage-frame` 同步缩放后的真实占位尺寸。
 - [x] 窗口 / 缩放 / 全屏保持同一 16:9 坐标关系。
 - [x] 播放 / 暂停 / 全屏 / Scene 跳转。
-- [x] v46 新增 `声音开 / 声音关` 控件。
-- [x] 声音选择写入 localStorage，刷新后保持。
-- [x] 声音关闭时 narration 静音；录制默认按静音视频处理。
+- [x] `声音开 / 声音关` 控件与 localStorage 记忆。
 
 ### TTS / Audio
 - [x] 一个完整 `full-tts-tasks.json`。
@@ -44,37 +42,37 @@
 - [x] 新本地 IndexTTS 优先于历史音频。
 - [ ] 等用户上传最终真实整包后做 timing 微调。
 
-### Recording · v46
+### Recording · v48
 - [x] 正式 HTTPS 域名：`https://video.smilechat.cn`。
-- [x] HTTP 域名自动升级 HTTPS。
-- [x] Stage-only Region Capture 仍是正式目标。
-- [x] v46 删除过强的首轮 `getDisplayMedia` 视频约束，优先使用兼容模式启动视频源。
-- [x] 若带声音的捕获失败，会尝试视频-only 捕获，不再直接卡死在 `Could not start video source`。
-- [x] 录制状态机改为 `idle / starting / recording / stopping`。
-- [x] 点击录制按钮后，录制中同一按钮变为 `■ 停止录制`。
-- [x] 无论 MediaRecorder 或屏幕共享轨道谁先结束，都会执行统一清理。
-- [x] 浏览器停止共享时自动触发停止流程。
-- [x] END 自动停止；也支持手动停止。
-- [x] REC 实时计时。
-- [x] 输出优先 MP4；浏览器不支持原生 MP4 MediaRecorder 时自动使用 WebM，并准确标注扩展名，不伪装为 MP4。
+- [x] **删除 Region Crop 作为正式录制链路**；v47 在用户设备上出现录制文件只有底色、主体动画丢失。
+- [x] 点击录制时，从同一个用户手势触发 `stage-frame` 全屏 + 当前标签页捕获。
+- [x] 录制对象改为“全屏当前标签页”，避免 GPU/DOM 裁剪层产生空白视频。
+- [x] 录制开始前自动回到 Scene 001，再启动整片播放。
+- [x] 实际读取 capture track 的 width / height / frameRate。
+- [x] 若实际捕获低于 1920×1080，直接提示并拒绝伪装成 1080P。
+- [x] 目标 16 Mbps 视频码率、192 kbps 音频码率。
+- [x] 声音开关控制是否请求标签页音频。
+- [x] REC 计时保留；录制时 document.title 同步 `REC HH:MM:SS`。
+- [x] END 自动停止；浏览器“停止共享”自动停止；退出全屏也自动停止。
+- [x] 输出优先原生 MP4；浏览器不支持时使用真实 WebM，不伪装扩展名。
 - [x] 文件只在浏览器本地下载，不上传服务器。
-- [ ] 用户重新实机验证 v46：能启动、能停止、声音开关正确、下载文件可播放。
+- [ ] 用户实机验证 v48：录制画面不再空白、主体动画完整、实际分辨率达到 1080P、文件可正常播放。
 
 ## 当前 Gate
 
 | Gate | 状态 | 通过条件 |
 |---|---|---|
 | A 完整口播 | REVIEW | 用户最终确认整片口播 |
-| B Garden v46 视觉 | REVIEW | 自动 QA 已通过，等待用户最终视觉确认 |
+| B Garden v48 视觉 | REVIEW | 自动 QA 已通过，等待用户最终视觉确认 |
 | C 本地 IndexTTS | WAITING | 用户生成并上传真实 001～042 总 ZIP |
 | D 整片音画 | WAITING | 真实音频注入 + timing 调整 |
 | E 动画 SFX | LOCKED | D PASS 后进入 |
-| F 1080P 本地录制 | REVIEW | 用户实机确认录制能启动/停止、文件可播放、声音开关正常 |
+| F 1080P 本地录制 | REVIEW | 用户实机确认 v48 全屏标签页录制：画面完整、1080P、文件可播放 |
 
 ## 当前下一步
 
-1. 用户测试 v46 一键录制，选择浏览器的“当前标签页”；
-2. 录制开始后再次点击同一按钮，验证能够立即停止并下载；
-3. 分别测试 `声音开` 和 `声音关`；
-4. 录制通过后继续整片视觉 / 口播确认；
-5. 一次复制总 TTS JSON，本地 IndexTTS 生成 001～042；上传总 ZIP 后做真实音画 timing；最后添加 SFX。
+1. 用户测试 v48：点击一次录制，在浏览器弹窗中选择“当前标签页”；
+2. Project6 自动进入全屏录制模式并从 Scene 001 开始；
+3. 先录 10～20 秒，使用浏览器顶部“停止共享”或退出全屏停止；
+4. 检查下载文件是否包含真实动画，而不是只有背景底色；
+5. 录制 Gate 通过后继续最终 TTS 整包与 timing。
