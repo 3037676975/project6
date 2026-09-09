@@ -29,13 +29,14 @@
     if (/\bv\d+\b/i.test(document.title)) document.title = document.title.replace(/\bv\d+\b/gi, BUILD.version);
   }
   function loadScript(name,onload){
-    if(document.querySelector(`script[data-p6-module="${name}"]`))return;
+    if(document.querySelector(`script[data-p6-module="${name}"]`)){if(onload)onload();return}
     const s=document.createElement('script');s.dataset.p6Module=name;s.src=new URL(`./${name}?v=${BUILD.cache}`,SELF).href;if(onload)s.onload=onload;document.head.appendChild(s);
   }
   function loadVoiceModules(){
     loadScript('voice-library-v60.js',()=>{
       const p=location.pathname.toLowerCase();
       if(p.endsWith('/full-video.html')||p.endsWith('/capture.html'))loadScript('voice-runtime-v60.js');
+      if(p.endsWith('/record.html'))loadScript('voice-record-v60.js');
     });
   }
   const mount = () => {
