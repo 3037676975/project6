@@ -1,7 +1,7 @@
 (() => {
   if(!/\/record\.html$/i.test(location.pathname)||!window.P6VoiceLibrary)return;
   const LIB=window.P6VoiceLibrary;
-  const channel=new BroadcastChannel('project6-harness-v59');
+  const channel=new BroadcastChannel('project6-harness-v60');
   const grid=document.querySelector('.grid');if(!grid)return;
   const card=document.createElement('div');card.className='card';card.innerHTML=`<h2>② 配音源</h2><div class="row"><select id="voiceSourceSelect" class="select"><option value="">未选择已保存配音源</option></select><button class="btn" id="voicePreviewBtn" disabled>▶ 试听 001</button><span class="pill" id="voiceSourceState">读取本地配音源…</span></div><audio id="voicePreviewAudio" controls style="width:100%;margin-top:12px;display:none"></audio><p class="tip">这里只显示你在“视频作品”页上传过的 ZIP 配音源。ZIP 会保存在当前浏览器；单个音频片段不会保存。选择后，纯成片窗口和后续录制都使用这个配音源。</p>`;
   const musicCard=[...grid.children].find(x=>x.querySelector('h2')?.textContent.includes('配乐'));
