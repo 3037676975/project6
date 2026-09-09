@@ -22,8 +22,6 @@
   function syncSound(){if(narration)narration.muted=!soundEnabled;soundBtn.textContent=soundEnabled?'🔊 旁白开':'🔇 旁白关';soundBtn.classList.toggle('on',soundEnabled);localStorage.setItem(SOUND_KEY,soundEnabled?'1':'0')}
   syncSound(); soundBtn.addEventListener('click',()=>{soundEnabled=!soundEnabled;syncSound()});
 
-  // IMPORTANT v56: transport is owned ONLY by full-video-v40.js.
-  // This script never calls gsap.globalTimeline.pause/resume and never keeps a second scene index.
   function syncPlayerState(){
     const c=(countLabel?.textContent||'01 / 42').trim();
     const s=(status?.textContent||'').trim();
@@ -46,7 +44,7 @@
   function crop(){const r=stageFrame.getBoundingClientRect(),sw=source.videoWidth||1,sh=source.videoHeight||1,vw=Math.max(1,document.documentElement.clientWidth),vh=Math.max(1,document.documentElement.clientHeight);const sx=Math.max(0,r.left/vw*sw),sy=Math.max(0,r.top/vh*sh),cw=Math.min(sw-sx,r.width/vw*sw),ch=Math.min(sh-sy,r.height/vh*sh);return{sx,sy,cw,ch}}
   function draw(){const {sx,sy,cw,ch}=crop();ctx.fillStyle='#111';ctx.fillRect(0,0,1920,1080);if(cw>2&&ch>2)ctx.drawImage(source,sx,sy,cw,ch,0,0,1920,1080);raf=requestAnimationFrame(draw)}
   function elapsed(){const now=Date.now(),livePause=recPausedAt?now-recPausedAt:0;return Math.max(0,now-startedAt-totalPausedMs-livePause)}
-  function startTimer(){clearInterval(timerId);timerEl.classList.add('live');timerId=setInterval(()=>timerEl.innerHTML=`<span class="rec-dot"></span>REC ${clock(elapsed())}`,250)}
+  function startTimer(){clearInterval(timerId);timerEl.classList.add('live');timerId=setInterval(()=>{const t=clock(elapsed());timerEl.innerHTML=`<span class="rec-dot"></span>REC ${t}`;document.title=`● REC ${t} · Project6 v57`},250)}
   function resetRecUI(){clearInterval(timerId);timerId=0;timerEl.classList.remove('live');openBtn.disabled=false;pauseRecBtn.disabled=true;pauseRecBtn.textContent='⏸ 暂停录制';stopBtn.disabled=true;cancelBtn.disabled=true;stageFrame.classList.remove('recording')}
 
   async function finalize(save=true,reason='manual'){
@@ -62,8 +60,8 @@
     cancelAnimationFrame(raf);const duration=elapsed(),blob=new Blob(chunks,{type:mime||'video/webm'});stopTracks();
     if(cancelled){stateEl.textContent='CANCELLED · 未保存文件';timerEl.innerHTML='<span class="rec-dot"></span>CANCELLED';resetRecUI();stopping=false;recorder=null;return}
     if(blob.size<16384){alert('录制文件异常小，请重试。');resetRecUI();stopping=false;return}
-    const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`project6-harness-v56-1080p-${new Date().toISOString().replace(/[:.]/g,'-')}.${ext}`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
-    stateEl.textContent=`DONE · ${ext.toUpperCase()} · ${(blob.size/1024/1024).toFixed(1)}MB`;timerEl.innerHTML=`<span class="rec-dot"></span>DONE ${clock(duration)}`;resetRecUI();stopping=false;recorder=null;rawStream=null;composedStream=null;
+    const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`project6-harness-v57-1080p-${new Date().toISOString().replace(/[:.]/g,'-')}.${ext}`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
+    stateEl.textContent=`DONE · ${ext.toUpperCase()} · ${(blob.size/1024/1024).toFixed(1)}MB`;timerEl.innerHTML=`<span class="rec-dot"></span>DONE ${clock(duration)}`;document.title=`Project6 v57 · DONE ${clock(duration)}`;resetRecUI();stopping=false;recorder=null;rawStream=null;composedStream=null;
   }
 
   async function begin(){
@@ -75,10 +73,10 @@
     overlay.classList.add('hidden');draw();composedStream=canvas.captureStream(60);rawStream.getAudioTracks().forEach(t=>composedStream.addTrack(t));
     const c=chooseMime(),opts=c.mime?{mimeType:c.mime,videoBitsPerSecond:18_000_000,audioBitsPerSecond:192_000}:{videoBitsPerSecond:18_000_000};
     chunks=[];cancelled=false;totalPausedMs=0;recPausedAt=0;recorder=new MediaRecorder(composedStream,opts);recorder.addEventListener('dataavailable',e=>{if(e.data?.size)chunks.push(e.data)});recorder.addEventListener('stop',()=>finish(c.ext,c.mime||recorder.mimeType),{once:true});recorder.start();startedAt=Date.now();startTimer();
-    openBtn.disabled=true;pauseRecBtn.disabled=false;stopBtn.disabled=false;cancelBtn.disabled=false;stageFrame.classList.add('recording');stateEl.textContent=`LIVE · NATIVE GARDEN PLAYER · ${source.videoWidth}×${source.videoHeight}`;
+    openBtn.disabled=true;pauseRecBtn.disabled=false;stopBtn.disabled=false;cancelBtn.disabled=false;stageFrame.classList.add('recording');stateEl.textContent=`LIVE · PLAYER INIT FIXED · ${source.videoWidth}×${source.videoHeight}`;
   }
 
-  openBtn.addEventListener('click',()=>{if(recorder?.state==='recording'||recorder?.state==='paused')return;overlay.classList.remove('hidden');info.textContent='v56 · 录制不再接管 Garden 播放/翻页；画面控制全部交给原生播放器'});
+  openBtn.addEventListener('click',()=>{if(recorder?.state==='recording'||recorder?.state==='paused')return;overlay.classList.remove('hidden');info.textContent='v57 · Garden 播放器已完整初始化；录制不再接管播放/翻页'});
   pauseRecBtn.addEventListener('click',()=>{if(!recorder)return;if(recorder.state==='recording'){recorder.pause();recPausedAt=Date.now();pauseRecBtn.textContent='▶ 继续录制';stateEl.textContent='REC PAUSED · Garden 播放器仍可操作'}else if(recorder.state==='paused'){recorder.resume();totalPausedMs+=Date.now()-recPausedAt;recPausedAt=0;pauseRecBtn.textContent='⏸ 暂停录制';stateEl.textContent='LIVE · 录制已继续'}});
   stopBtn.addEventListener('click',()=>finalize(true,'手动停止并保存'));
   cancelBtn.addEventListener('click',()=>finalize(false,'用户取消'));
