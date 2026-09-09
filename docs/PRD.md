@@ -1,37 +1,38 @@
-# Project6 PRD · v2.2
+# Project6 PRD · v2.3
 
 **状态：** Current / 最新产品基准  
-**当前产品构建：** Project6 **v45**  
+**当前产品构建：** Project6 **v60**  
 **总纲：** `docs/PROJECT_CHARTER.md`
 
 ## 1. 产品定位
 
-Project6 是面向低预算创作者的 **AI HTML 视频项目生产后台**。一个视频就是一个 Project，围绕完整脚本、Garden 画面、本地 TTS、整片预览、最后 SFX 和本地 MP4 导出完成生产。
+Project6 是面向低预算创作者的 **AI HTML 视频项目生产后台**。一个视频就是一个 Project，围绕完整脚本、Garden 画面、本地 TTS、整片预览、最后 SFX 和本地高清视频导出完成生产。
 
 ## 2. 核心对象
 
-Project 内包含：Script、Chapter、Scene、Garden 视觉、Scene Motion、验收 Gate、TTS JSON、本地 IndexTTS 音频、整片预览、动画 SFX、本地 MP4 录制、视觉 QA。
+Project 内包含：Script、Chapter、Scene、Garden 视觉、Scene Motion、验收 Gate、TTS JSON、**本地配音源库**、整片预览、动画 SFX、本地高清录制、视觉 QA。
 
 ## 3. P0 主流程
 
 ```text
 完整口播
-→ AI 拆 42 Scene / 设计 Garden 画面
+→ AI 拆 Scene / 设计 Garden 画面
 → 每 Scene 实际渲染 + 截图 QA
 → 用户确认整片视觉
 → 解锁完整 TTS JSON
 → 用户本地 IndexTTS 生成 001～042
-→ 一个 ZIP 上传
-→ 浏览器自动匹配 42/42
+→ ZIP 上传
+→ 保存为本地“配音源 N”
+→ 可重复上传多个完整 ZIP / 切换配音源
 → 整片本地音画预览
 → timing 微调
 → 最后动画 SFX
-→ 一键 1080P MP4 本地录制
+→ 双窗口高清本地录制
 ```
 
 ## 4. 视频作品页
 
-必须独立展示一个完整视频项目；Chapter 只用于组织；用户实际面对一份完整口播、一个总 JSON、一个总音频包和一个整片预览。
+必须独立展示一个完整视频项目；Chapter 只用于组织；用户实际面对一份完整口播、一个总 JSON、多个可复用配音源和一个整片预览。
 
 必须显示 Gate、验收规则、下一步和**当前产品版本**。
 
@@ -41,19 +42,28 @@ Canonical：`presentations/<project>/full-tts-tasks.json`。
 
 必须：可见预览、一键复制、001～042 稳定编号。当前正式 engine 为 `IndexTTS 2.5`。
 
-## 6. 本地配音导入
+## 6. 本地配音导入与配音源库
 
 Project6 浏览器端必须：
 - JSZip 解压；
 - 支持 ZIP 子目录；
-- 支持直接多选音频兜底；
 - 自动 001 ↔ Scene001；
-- 42/42 才进入整片音画 Gate；
-- ObjectURL 只存在浏览器内，不上传服务器。
+- 完整 ZIP 可作为一个独立“配音源”保存；
+- **只有 ZIP 持久保存，单个 MP3 / WAV / M4A / OGG 不持久保存；**
+- 一个 ZIP = 一个配音源，按 `配音源 1 / 配音源 2 / 配音源 3 ...` 管理；
+- 每个配音源保存原 ZIP Blob、ZIP 文件名、创建时间、解压后的 Scene 音频 Blob、完整度；
+- 使用浏览器 IndexedDB 本地保存，不上传服务器、不提交 GitHub；
+- 当前配音源必须可记忆，刷新后继续使用；
+- 支持配音源试听、切换、删除；
+- 录制控制台必须可以直接选择已保存配音源；
+- 单个音频仍可作为临时兜底导入，但刷新后不保留；
+- 浏览器存储被用户主动清理后，本地配音源允许丢失；系统应 best-effort 请求 Persistent Storage。
 
 ## 7. 整片播放器
 
-必须支持：播放、暂停/继续、上一张/下一张、进度跳转、全屏、本地 IndexTTS 注入、音频 ended 自动进入下一 Scene。
+必须支持：播放、暂停/继续、上一张/下一张、进度跳转、全屏、本地配音源注入、音频 ended 自动进入下一 Scene。
+
+当前 Scene 切换时，播放器必须从当前选中的配音源读取对应的 001～042 音频。
 
 Pause 必须同时暂停 narration 与当前 GSAP timeline。
 
@@ -73,23 +83,32 @@ Pause 必须同时暂停 narration 与当前 GSAP timeline。
 
 逻辑 Stage 固定 1920×1080；缩放时 `stage-frame` 必须同步拥有缩放后的布局尺寸。窗口模式、浏览器缩放和全屏必须共享同一 16:9 坐标关系。
 
-## 10. 本地 1080P MP4 录制
+## 10. 双窗口高清本地录制
 
 正式站点：`https://video.smilechat.cn`。
 
+正式录制架构：
+
+```text
+record.html 录制控制台
+        ↓ BroadcastChannel
+capture.html 纯成片窗口
+        ↓ 浏览器标签页捕获
+Canvas 输出
+        ↓
+1080P / 1440P / 4K 本地文件
+```
+
 要求：
-- 只录 `.stage`；
-- 不录后台工具栏；
-- 目标 1920×1080 / 60fps；
-- 当前标签页视频 + 标签页音频；
-- Region Capture 精确裁切；
-- 不支持精确裁切时不能退化成录整个页面；
-- 录制中显示实时 `REC 00:00:00`；
-- 结果只浏览器本地下载；
-- 最终交付目标 `.mp4`；
-- 不上传服务器、不保存 Project6 后端；
-- v45 使用连续录制块，禁止每秒 MP4 分片拼接；
-- v45 必须先解锁播放权限、重置 Scene 001、等待画面稳定，再启动动画与录制。
+- 录制控制台与成片窗口分离；
+- `capture.html` 只显示纯 16:9 Garden 成片，不显示控制按钮、REC、工作台；
+- 控制台负责上一页 / 下一页 / 播放 / 暂停 / 旁白 / 配音源 / 配乐 / 录制状态；
+- 当前选中的配音源在成片窗口中播放；
+- 录制时用户选择纯成片标签页；
+- 输出档位：1080P 1920×1080 / 1440P 2560×1440 / 4K 3840×2160；目标 60fps；
+- 显示实际 SOURCE → OUTPUT；低分辨率源不得冒充原生高清；
+- 录制支持开始、暂停/继续、停止并保存、取消并丢弃；
+- 文件只在浏览器本地下载，不上传服务器。
 
 ## 11. 验收状态系统
 
@@ -99,19 +118,19 @@ Pause 必须同时暂停 narration 与当前 GSAP timeline。
 |---|---|
 | A | 完整口播 |
 | B | Garden 视觉 + Screenshot QA |
-| C | 本地 IndexTTS |
+| C | 本地 IndexTTS + 配音源库 |
 | D | 整片音画预览 |
 | E | 动画 SFX |
-| F | 本地 1080P MP4 录制 |
+| F | 双窗口高清本地录制 |
 
 ## 12. 版本与缓存管理
 
-当前 canonical build：`assets/version.js` → `v45`。
+当前 canonical build：`assets/version.js` → `v60`。
 
 要求：
-- 正式页面右上角显示 `P6 · v45`；
-- `index.html / works.html / full-video.html` 必须与 canonical build 同步；
-- 正式静态资源与 iframe 链接使用同版本 `?v=45` 缓存参数；
+- 正式页面显示 `P6 · v60`；
+- `works.html / full-video.html / record.html / capture.html` 必须与 canonical build 同步；
+- 正式静态资源与 iframe 链接使用同版本缓存参数；
 - 发布下一版时，页面、缓存、DEVELOPMENT_STATUS、ACCEPTANCE 必须同批更新；
 - 历史实现文件名可以保留，但不能作为 UI 当前版本来源。
 
@@ -121,17 +140,15 @@ SFX Library 与人物配音严格分开。SFX 永远在完整音画通过后处�
 
 ## 14. 当前验收项目
 
-Harness Engineering / 42 Scene / Project6 v45。
+Harness Engineering / 42 Scene / Project6 v60。
 
 当前目标：
 
 ```text
-v45 MP4 实机复核
-→ 用户最终视觉 / 口播确认
-→ 完整 TTS JSON
-→ 本地 IndexTTS 001～042
-→ ZIP
+配音源 ZIP 持久化实机验证
+→ 多配音源切换 / 试听
 → 整片音画预览 + timing
 → SFX
-→ 最终 1080P MP4
+→ 双窗口高清录制
+→ 最终视频
 ```
