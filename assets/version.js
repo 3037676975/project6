@@ -8,7 +8,35 @@
   });
   window.P6_BUILD = BUILD;
 
+  function syncCurrentVersionUI(){
+    const skip = new Set(['SCRIPT','STYLE','PRE','CODE','TEXTAREA']);
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) {
+      const n = walker.currentNode;
+      if (!n.parentElement || skip.has(n.parentElement.tagName)) continue;
+      if (/\bv\d+\b/i.test(n.nodeValue || '')) nodes.push(n);
+    }
+    nodes.forEach(n => {
+      n.nodeValue = n.nodeValue.replace(/\bv\d+\b/gi, BUILD.version);
+    });
+
+    document.querySelectorAll('a[href], iframe[src]').forEach(el => {
+      const attr = el.hasAttribute('href') ? 'href' : 'src';
+      const raw = el.getAttribute(attr);
+      if (!raw) return;
+      let next = raw.replace(/([?&])v=\d+/g, `$1v=${BUILD.cache}`);
+      next = next.replace(/\bv\d+\b/gi, BUILD.version);
+      if (next !== raw) el.setAttribute(attr, next);
+    });
+
+    if (/\bv\d+\b/i.test(document.title)) {
+      document.title = document.title.replace(/\bv\d+\b/gi, BUILD.version);
+    }
+  }
+
   const mount = () => {
+    syncCurrentVersionUI();
     if (document.getElementById('p6BuildBadge')) return;
     const badge = document.createElement('div');
     badge.id = 'p6BuildBadge';
