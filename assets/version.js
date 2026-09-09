@@ -1,9 +1,9 @@
 (() => {
   const BUILD = Object.freeze({
     project: 'Project6',
-    version: 'v51',
-    number: 51,
-    cache: '51',
+    version: 'v52',
+    number: 52,
+    cache: '52',
     updatedAt: '2026-09-09'
   });
   window.P6_BUILD = BUILD;
