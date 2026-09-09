@@ -1,4 +1,4 @@
-/* Project6 · Harness Engineering · v58 recorder launcher */
+/* Project6 · Harness Engineering · v59 dual-window recorder launcher */
 (() => {
   const recordBtn=document.getElementById('recordBtn');
   const recordMeta=document.getElementById('recordMeta');
@@ -14,10 +14,10 @@
   syncSound();
   soundBtn?.addEventListener('click',()=>{soundEnabled=!soundEnabled;localStorage.setItem(SOUND_KEY,soundEnabled?'1':'0');syncSound()});
   recordBtn.textContent='● 打开高清录制';
-  if(recordMeta)recordMeta.textContent='V58 · SAME VISUAL CHAIN · 1080P / 1440P / 4K';
+  if(recordMeta)recordMeta.textContent='V59 · DUAL WINDOW · PURE CAPTURE';
   recordBtn.addEventListener('click',()=>{
-    const url=new URL('./record.html?v=58',location.href);
-    const w=window.open(url.href,'project6Recorder','popup=yes,width=1700,height=1050,resizable=yes');
-    if(!w) alert('浏览器阻止了录制窗口，请允许本站弹出窗口后再点一次。');
+    const url=new URL('./record.html?v=59',location.href);
+    const w=window.open(url.href,'project6RecorderController','popup=yes,width=1500,height=920,resizable=yes');
+    if(!w) alert('浏览器阻止了录制控制台，请允许本站弹出窗口后再点一次。');
   });
 })();
