@@ -1,6 +1,6 @@
-# Harness Engineering · 整片验收标准 v45
+# Harness Engineering · 整片验收标准 v46
 
-> 当前正式产品构建：**Project6 v45**。右上角必须显示 `P6 · v45`，正式播放器与作品页缓存参数必须统一为 `?v=45`。
+> 当前正式产品构建：**Project6 v46**。右上角必须显示 `P6 · v46`，正式播放器缓存参数统一为 `?v=46`。
 
 ## 当前验收对象
 
@@ -9,7 +9,7 @@
 - Scene 002～042：逐 Scene 独立 visual / motion recipe
 - TTS：整片一次 JSON / 一次 ZIP
 - SFX：最终环节
-- Recording：Stage-only 1080P MP4，本地下载
+- Recording：Stage-only 本地录制；优先 MP4，不支持原生 MP4 时准确回退 WebM
 
 ## Gate A · 完整口播
 状态：**REVIEW**
@@ -18,10 +18,9 @@
 - [x] TTS 只导出一个总 JSON。
 - [ ] 用户最终确认整片口播。
 
-## Gate B · Garden v45 视觉
+## Gate B · Garden v46 视觉
 状态：**REVIEW**
 - [x] 42/42 Scene 独立视觉表达。
-- [x] 禁止统一左右版式 / 纯卡片 / 统一 fade。
 - [x] 42/42 Screenshot QA。
 - [x] tiny text = 0。
 - [x] DOM overflow = 0。
@@ -41,6 +40,8 @@
 状态：**WAITING**
 - [x] 播放 / 暂停 / 继续 / 全屏 / Scene 跳转。
 - [x] Pause 同时暂停 narration 与当前 GSAP timeline。
+- [x] v46 新增 `声音开 / 声音关`。
+- [x] 声音设置持久化。
 - [x] 新本地音频优先于历史音频。
 - [x] 窗口 / 缩放 / 全屏保持同一 16:9 坐标系统。
 - [ ] 真实 IndexTTS 注入后做 timing 微调。
@@ -50,32 +51,36 @@
 
 整片真实音画 PASS 以后才进入。
 
-## Gate F · 1080P MP4 本地录制
+## Gate F · 本地录制 v46
 状态：**REVIEW**
 
 验收要求：
 - [x] 正式 HTTPS：`video.smilechat.cn`。
-- [x] HTTP 自动升级 HTTPS；localhost bridge 作为备用。
 - [x] 只录中间 `.stage`。
-- [x] Chromium Region Capture。
-- [x] 目标 1920×1080 / 60fps。
-- [x] 标签页视频 + 标签页音频。
-- [x] 录制 UI 显示 `REC 00:00:00`。
-- [x] 最终下载目标 `.mp4`。
-- [x] v45 不再每秒切 MP4 分片，使用连续录制块。
-- [x] v45 录制前解锁播放权限、重置 Scene 001、等待渲染后启动动画。
-- [ ] 用户实机确认 MP4 能正常打开，无花屏 / 乱码。
-- [ ] 用户实机确认动画和声音都真实录入。
+- [x] Chromium Region Capture 仍为正式裁切方式。
+- [x] v46 首次屏幕捕获改为宽兼容 `video:true`，避免过强约束触发 `Could not start video source`。
+- [x] 声音开时请求标签页声音；失败时允许视频-only 兼容回退。
+- [x] 声音关时直接录静音视频。
+- [x] 状态机：idle / starting / recording / stopping。
+- [x] 录制中同一按钮显示 `■ 停止录制`。
+- [x] 手动停止、浏览器停止共享、END 均进入同一停止清理流程。
+- [x] REC 计时。
+- [x] 优先 MP4；浏览器不支持则保存为真实 WebM，不伪装扩展名。
+- [x] 文件只在浏览器本地下载。
+- [ ] 用户实机确认：可以启动录制。
+- [ ] 用户实机确认：再次点击可停止。
+- [ ] 用户实机确认：声音开 / 关行为正确。
+- [ ] 用户实机确认：下载文件可正常播放。
 
 ## 版本一致性 Gate
 
 以下任意一项出现即 FAIL：
-1. 正式 UI 显示 v40/v41/v42/v43/v44；
-2. 正式作品页 / 播放器仍用旧 `?v=` 缓存参数；
+1. 正式播放器右上角不是 v46；
+2. 正式播放器仍加载旧 `?v=` 缓存参数；
 3. 页面版本与 `assets/version.js` 不一致；
 4. 页面升级而 DEVELOPMENT_STATUS / ACCEPTANCE 未同步；
-5. 删除仍在正式页面引用的历史文件。
+5. 删除仍在正式页面引用的历史实现文件。
 
 ## 当前结论
 
-Project6 当前正式构建为 **v45**。视觉自动 QA 已通过；当前最重要的实机验证是 v45 MP4 录制兼容性，然后才进入最终 TTS 整包与 timing。
+Project6 当前正式播放器构建为 **v46**。本次只修录制兼容性、停止状态机与声音开关，不改已通过 QA 的 42 Scene 视觉。下一步由用户实机验证录制启动 / 停止 / 声音开关。
