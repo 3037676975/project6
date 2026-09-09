@@ -1,19 +1,19 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Garden 中文手册 · Project6</title><style>
-:root{--bg:#f5f1e8;--paper:#fffdf8;--text:#43302b;--muted:#7b6b61;--line:#e7dec9;--teal:#14a899}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1160px;margin:auto;padding:32px 24px 70px}.top{display:flex;justify-content:space-between;align-items:center;gap:18px}.top h1{margin:0;font-size:32px}.top p{margin:7px 0 0;color:var(--muted)}.btn{display:inline-flex;min-height:42px;align-items:center;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--text);font-weight:800;text-decoration:none}.hero{margin-top:22px;padding:28px;background:var(--paper);border:1px solid var(--line);border-radius:24px}.hero .k{font:900 12px ui-monospace;color:var(--teal);letter-spacing:.1em}.hero h2{font-size:40px;margin:12px 0 10px;letter-spacing:-.04em}.hero p{max-width:820px;line-height:1.8;color:var(--muted)}.flow{margin-top:18px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.flow div{padding:15px;border:1px solid var(--line);border-radius:15px;background:#fff}.flow b{display:block}.flow small{color:var(--muted);display:block;margin-top:5px;line-height:1.45}.layout{display:grid;grid-template-columns:230px 1fr;gap:18px;margin-top:20px}.toc,.doc{background:var(--paper);border:1px solid var(--line);border-radius:20px}.toc{padding:16px;align-self:start;position:sticky;top:18px}.toc b{display:block;margin-bottom:9px}.toc a{display:block;text-decoration:none;color:var(--muted);padding:8px 9px;border-radius:9px}.toc a:hover{background:#f6f0e4;color:var(--text)}.doc{padding:24px}.sec{padding:8px 0 25px;border-bottom:1px solid var(--line);margin-bottom:22px}.sec:last-child{border-bottom:0}.sec h3{font-size:22px;margin:0 0 10px}.sec p,.sec li{line-height:1.85;color:#66574f}.code{white-space:pre-wrap;background:#332722;color:#f8f1e7;border-radius:15px;padding:16px;font:13px/1.7 ui-monospace,monospace;overflow:auto}.tip{padding:15px 17px;border-radius:14px;background:#ecf8f5;color:#326c65;line-height:1.7;margin:12px 0}.bad{padding:15px 17px;border-radius:14px;background:#fff4eb;color:#8a5740;line-height:1.7;margin:12px 0}@media(max-width:820px){.layout{grid-template-columns:1fr}.toc{position:static}.flow{grid-template-columns:1fr 1fr}}
-</style></head><body><main class="wrap"><div class="top"><div><h1>Garden 中文手册</h1><p>Project6 的正式视频制作规范，不再跳转旧页面。</p></div><a class="btn" href="./index.html">← 返回后台</a></div>
-<section class="hero"><div class="k">GARDEN · WEB VIDEO PRESENTATION</div><h2>先有口播节拍，再有画面。</h2><p>Garden 在 Project6 里不是“某种风格”，而是制作秩序：先确定 Narration，再拆 Chapter / Step，再决定 Theme 与画面；动画只服务当前 Step，不抢着翻页。</p><div class="flow"><div><b>Script</b><small>先把话讲清楚</small></div><div><b>Chapter</b><small>按主题分章</small></div><div><b>Step</b><small>每个口播节拍一张</small></div><div><b>Visual</b><small>Garden Theme + SVG</small></div><div><b>Audio</b><small>声音决定最终节奏</small></div></div></section>
-<div class="layout"><aside class="toc"><b>目录</b><a href="#script">01 Script</a><a href="#chapter">02 Chapter</a><a href="#step">03 Step</a><a href="#theme">04 Theme</a><a href="#motion">05 GSAP / Emil</a><a href="#audio">06 Audio</a><a href="#gate">07 验收 Gate</a><a href="#errors">08 常见错误</a></aside><article class="doc">
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Garden 中文手册 · Project6 v63</title><style>
+:root{--bg:#f1f3f6;--paper:#fff;--text:#121722;--muted:#657084;--line:#dce1e8;--blue:#3156d3}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:"Avenir Next","SF Pro Display","PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:auto;padding:34px 28px 76px}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding-bottom:20px;border-bottom:1px solid var(--line)}.top h1{margin:0;font-size:42px;letter-spacing:-.05em;line-height:1}.top p{margin:9px 0 0;color:var(--muted);font-size:13px}.btn{display:inline-flex;min-height:42px;align-items:center;padding:0 14px;border-radius:9px;border:1px solid #c9d0da;background:#fff;color:var(--text);font-weight:720;text-decoration:none;font-size:13px}.hero{margin-top:24px;padding:29px 30px;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:10px}.hero .k{font-size:12px;color:var(--muted);font-weight:680}.hero h2{font-size:46px;margin:13px 0 10px;letter-spacing:-.055em;line-height:1.04}.hero p{max-width:850px;line-height:1.8;color:var(--muted);font-size:14px}.flow{margin-top:21px;display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);border-radius:9px;overflow:hidden}.flow div{padding:15px;background:#fafbfc;border-right:1px solid var(--line)}.flow div:last-child{border-right:0}.flow b{display:block;font-size:12px}.flow small{color:var(--muted);display:block;margin-top:6px;line-height:1.45;font-size:11px}.layout{display:grid;grid-template-columns:230px 1fr;gap:18px;margin-top:20px}.toc,.doc{background:var(--paper);border:1px solid var(--line);border-radius:12px}.toc{padding:14px;align-self:start;position:sticky;top:18px}.toc b{display:block;margin:5px 9px 10px;font-size:12px}.toc a{display:block;text-decoration:none;color:var(--muted);padding:8px 9px;border-radius:7px;font-size:12px}.toc a:hover{background:#edf1ff;color:var(--blue)}.doc{padding:28px}.sec{padding:7px 0 25px;border-bottom:1px solid var(--line);margin-bottom:22px}.sec:last-child{border-bottom:0}.sec h3{font-size:22px;margin:0 0 10px;letter-spacing:-.025em}.sec p,.sec li{line-height:1.85;color:#58657a;font-size:13px}.code{white-space:pre-wrap;background:#151a23;color:#e7ebf1;border-radius:10px;padding:16px;font:12px/1.7 "SFMono-Regular",Consolas,monospace;overflow:auto}.tip{padding:14px 16px;border-radius:9px;background:#edf1ff;border:1px solid #d8e0fb;color:#4a5b83;line-height:1.7;margin:12px 0;font-size:12px}.bad{padding:14px 16px;border-radius:9px;background:#fff4e9;border:1px solid #f0d8c4;color:#82553f;line-height:1.7;margin:12px 0;font-size:12px}@media(max-width:820px){.layout{grid-template-columns:1fr}.toc{position:static}.flow{grid-template-columns:1fr 1fr}.top{flex-direction:column}.wrap{padding:22px 15px 70px}}
+</style></head><body><main class="wrap"><div class="top"><div><h1>Garden 中文手册</h1><p>Project6 v63 · 视频画面制作秩序与验收规范</p></div><a class="btn" href="./index.html?v=63">返回后台</a></div>
+<section class="hero"><div class="k">Garden · Web video presentation</div><h2>先有口播节拍，再有画面。</h2><p>Garden 在 Project6 里不是一种固定“风格”，而是一套生产秩序：先确定 Narration，再拆 Chapter / Scene，再决定 Theme 与画面。动画只服务当前 Scene，不抢叙事控制权。</p><div class="flow"><div><b>Script</b><small>把话讲清楚</small></div><div><b>Chapter</b><small>组织内容主题</small></div><div><b>Scene</b><small>一个口播节拍一张</small></div><div><b>Visual</b><small>HTML / SVG / Theme</small></div><div><b>Audio</b><small>最终节奏由声音验证</small></div></div></section>
+<div class="layout"><aside class="toc"><b>目录</b><a href="#script">01 Script</a><a href="#chapter">02 Chapter</a><a href="#scene">03 Scene</a><a href="#theme">04 Theme</a><a href="#motion">05 Motion</a><a href="#audio">06 Audio</a><a href="#gate">07 Gate</a><a href="#errors">08 常见错误</a></aside><article class="doc">
 <section class="sec" id="script"><h3>01 · Script / Narration</h3><p>视频不是先做 HTML 再想配音，而是先写完整口播。口播是画面数量、节奏和最终 TTS JSON 的事实来源。</p><div class="code">主题 / 文章
 ↓
 完整 Narration
 ↓
-拆成 Chapter
+拆 Chapter
 ↓
-每章拆成多个 Step</div></section>
-<section class="sec" id="chapter"><h3>02 · Chapter</h3><p>Chapter 是一个完整内容章节。一个项目可以有多章，但 Project6 当前执行严格 Gate：第一章没有最终 PASS，不开发第二章。</p></section>
-<section class="sec" id="step"><h3>03 · Step</h3><p>Step 是视频里真正的最小叙事单位。在我们的作品页里直接显示成“第1张、第2张、第3张……”。</p><div class="tip"><b>固定规则：</b>一个 Step 对应一段 Narration，对应一个稳定编号，例如 001.mp3 ↔ 第1张。</div></section>
-<section class="sec" id="theme"><h3>04 · Theme</h3><p>Theme 统一颜色、字体、圆角、空间密度与视觉气质。当前 Harness Engineering 第一章使用 `warm-keynote`：奶油纸底、暖网格、teal 单强调。</p><p>Theme 永远高于 Galaxy 组件的原始配色。组件只能借结构和微交互，不允许整块照搬。</p></section>
-<section class="sec" id="motion"><h3>05 · Emil + GSAP</h3><p>Emil 负责判断“该不该动、为什么动、多久”；GSAP 负责真正 Timeline / SVG / MotionPath。</p><div class="code">Garden Step
+拆 Scene</div></section>
+<section class="sec" id="chapter"><h3>02 · Chapter</h3><p>Chapter 只用于整片内部组织，不再形成独立 TTS 交接流程。用户最终面对的是一个完整 Project、一份完整脚本和一个整片预览。</p></section>
+<section class="sec" id="scene"><h3>03 · Scene</h3><p>Scene 是视频里的最小叙事单位。当前 Harness Engineering 使用连续 001～042 编号。</p><div class="tip"><b>固定规则：</b>一个 Scene 对应一段 Narration，对应一个稳定音频编号，例如 001.mp3 ↔ Scene 001。</div></section>
+<section class="sec" id="theme"><h3>04 · Theme</h3><p>Theme 统一颜色、字体、空间密度与视觉气质。组件库只能提供结构和微交互原型，不能把社区组件原始配色整块复制到成片。</p><p>后台 UI 与视频 Theme 是两套系统：后台负责高效生产，成片视觉负责叙事表达。</p></section>
+<section class="sec" id="motion"><h3>05 · Emil + GSAP</h3><p>Emil Skills 负责判断“该不该动、为什么动、多久”；GSAP 负责 Timeline、SVG、MotionPath、Flip、Morph 等真实执行。</p><div class="code">Garden Scene
 ↓
 Galaxy 找视觉原型
 ↓
@@ -21,23 +21,27 @@ Theme 适配
 ↓
 Emil 判断动画机会
 ↓
-GSAP 执行</div><div class="bad"><b>禁止：</b>GSAP 自己切下一 Step；用 `audio.currentTime / duration` 粗百分比猜中文语义；到处 opacity + translateY 当万能答案。</div></section>
-<section class="sec" id="audio"><h3>06 · Audio</h3><p>当前正式配音路线已经改成本地 IndexTTS 2.5。Project6 负责生成 JSON，你本地 GPU 生成，再把 ZIP 传回来。</p><div class="code">Project6 tts-tasks.json
+GSAP 执行
+↓
+Screenshot / Motion QA</div><div class="bad"><b>禁止：</b>用整屏 fade / pop 当万能答案；文字正在阅读时持续漂移；动画自己切换下一 Scene；为了“更炫”添加与讲解无关的运动。</div></section>
+<section class="sec" id="audio"><h3>06 · Audio</h3><p>当前正式人物配音路线是本地 IndexTTS 2.5。Project6 负责完整 JSON、稳定编号、配音源导入与整片验证。</p><div class="code">Project6 full-tts-tasks.json
 ↓
 本地 IndexTTS 2.5
 ↓
-001.mp3 / 002.mp3 / ... / manifest.json
+001.mp3 / 002.mp3 / ...
 ↓
 ZIP
 ↓
-Project6 浏览器自动解压
+IndexedDB 配音源
 ↓
-001 ↔ 第1张</div><p>动画音效 SFX 是最后阶段，和人物配音完全分开。</p></section>
-<section class="sec" id="gate"><h3>07 · 验收 Gate</h3><p>每个项目必须显示自己的状态：</p><div class="code">A 口播稿
-B Garden 画面
-C 本地 IndexTTS
-D 本地音画预览
-E 动画音效
-F 下一章节</div><p>只有上一 Gate 通过，下一 Gate 才能解锁。</p></section>
-<section class="sec" id="errors"><h3>08 · 常见错误</h3><ul><li>先做漂亮页面，再硬塞一段长配音。</li><li>一句话很长，却用人工 8.6s / 10.4s 去猜哪个词该出现。</li><li>把人物配音和动画音效混在一个“音效库”里。</li><li>页面已经改了，PROJECT_CHARTER / PRD / DEVELOPMENT_STATUS 还留着旧流程。</li><li>第一章没验收就继续第二章。</li></ul></section>
-</article></div></main></body></html>
+001 ↔ Scene 001
+↓
+整片音画预览</div><p>v63 不再提供独立动画音效库。SFX / BGM 仍保留，但只有 Gate D 整片音画 PASS 后，才在具体 Project 内处理。</p></section>
+<section class="sec" id="gate"><h3>07 · 验收 Gate</h3><div class="code">A 完整口播
+B Garden 视觉 + Screenshot QA
+C 本地 IndexTTS / 配音源
+D 整片音画
+E 项目内 SFX / BGM
+F 高清本地录制</div><p>Gate 是依赖关系，不是进度装饰。上一阶段没有满足验收条件，下一阶段不能靠“先做着”绕过去。</p></section>
+<section class="sec" id="errors"><h3>08 · 常见错误</h3><ul><li>先做漂亮页面，再硬塞一段长配音。</li><li>所有 Scene 使用相同左右结构，只替换文字。</li><li>用人工固定秒数猜中文语义节点。</li><li>把人物配音和 SFX 混成一个资源池。</li><li>为了资源完整而先堆脱离真实项目的素材库。</li><li>页面升级了，Charter / PRD / Development Status 仍写旧版本。</li></ul></section>
+</article></div></main><script src="./assets/version.js?v=63"></script></body></html>
