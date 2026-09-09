@@ -22,17 +22,13 @@
     }
     if(audioCtx.state!=='running')await audioCtx.resume();
     gain.gain.value=soundEnabled?1:0;
+    return dest.stream;
   }
+  window.P6EnsureVoiceMix=ensureAudioGraph;
   async function getSceneBlob(id){const sid=LIB.active();if(!sid)return null;const s=await LIB.get(sid);return (s?.audios||[]).find(a=>a.id===id)?.blob||null}
   async function loadEngine(id){const blob=await getSceneBlob(id);if(!blob)return false;revokeEngine();engineUrl=URL.createObjectURL(blob);engineAudio.src=engineUrl;engineAudio.currentTime=0;return true}
-  async function playScene(id){
-    await ensureAudioGraph();const ok=await loadEngine(id);if(!ok){playState.textContent=`Scene ${id} 无配音`;return false}
-    try{await engineAudio.play();playState.textContent=`🔊 播放中 · ${id}`;return true}catch(err){console.error(err);playState.textContent='旁白播放失败';return false}
-  }
-  async function render(){
-    const sources=await LIB.list(),active=LIB.active();sel.innerHTML='<option value="">未选择已保存配音源</option>'+sources.map((s,i)=>`<option value="${s.id}" ${s.id===active?'selected':''}>${s.label||`配音源 ${i+1}`} · ${s.total}/42 · ${s.zipName}</option>`).join('');
-    state.textContent=sources.length?`${sources.length} 个已保存 · ${active?'当前已选择':'请选择一个'}`:'暂无已保存 ZIP 配音源';preview.disabled=!active;
-  }
+  async function playScene(id){await ensureAudioGraph();const ok=await loadEngine(id);if(!ok){playState.textContent=`Scene ${id} 无配音`;return false}try{await engineAudio.play();playState.textContent=`🔊 播放中 · ${id}`;return true}catch(err){console.error(err);playState.textContent='旁白播放失败';return false}}
+  async function render(){const sources=await LIB.list(),active=LIB.active();sel.innerHTML='<option value="">未选择已保存配音源</option>'+sources.map((s,i)=>`<option value="${s.id}" ${s.id===active?'selected':''}>${s.label||`配音源 ${i+1}`} · ${s.total}/42 · ${s.zipName}</option>`).join('');state.textContent=sources.length?`${sources.length} 个已保存 · ${active?'当前已选择':'请选择一个'}`:'暂无已保存 ZIP 配音源';preview.disabled=!active}
   sel.addEventListener('change',()=>{auto=false;engineAudio.pause();LIB.setActive(sel.value);preview.disabled=!sel.value;state.textContent=sel.value?'已切换当前配音源':'未选择配音源';revokePreview();revokeEngine();previewAudio.style.display='none'});
   preview.addEventListener('click',async()=>{const blob=await getSceneBlob('001');if(!blob)return;revokePreview();previewUrl=URL.createObjectURL(blob);previewAudio.src=previewUrl;previewAudio.style.display='block';previewAudio.play().catch(()=>{})});
   function intercept(el,fn){el?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();fn(e)},{capture:true})}
