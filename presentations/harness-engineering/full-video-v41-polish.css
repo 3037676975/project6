@@ -1,4 +1,4 @@
-/* Project6 Harness Engineering · Garden v42 polish
+/* Project6 Harness Engineering · Garden v44 polish
  * Purpose: readability, screenshot-reviewed refinements, true responsive 16:9 scaling,
  * and recording controls. This file overrides v40 scene CSS without replacing recipes.
  */
@@ -16,7 +16,6 @@
 .scene .label{font-size:18px;line-height:1.4}
 .chapter{font-size:16px}.count{font-size:15px}
 
-/* Primary semantic labels should read comfortably in 1080p exports. */
 .pipe-node,.bench-node,.peak,.spec,.example,.answer-ray,.input-source,.selected-stream,.drawer,.lane-row,.qa-metric,.check,.cloud-item,.final-tag{font-size:19px}
 .pipe-node b,.bench-node b,.peak b{font-size:29px!important}
 .s008 .prompt-source{font-size:30px;line-height:1.55}
@@ -41,7 +40,6 @@
 .s041 .sys-node{font-size:19px}
 .s042 .final-tag{font-size:18px}
 
-/* Screenshot QA round 1 + v42 round 2 corrections. */
 .s004 .orbit-copy{font-size:19px!important;font-family:var(--font-body)!important;font-weight:800!important;letter-spacing:0!important}
 .s004 .r3{font-size:37px!important}.s004 .r2{font-size:35px!important}
 .s009 .dial span{font-size:18px!important}.s009 .dial b{font-size:41px!important}.s009 .dial{width:380px!important;height:380px!important}
@@ -52,17 +50,12 @@
 .s036 .scene-title{top:105px!important;max-width:760px!important}.s036 .scene-title h1{font-size:62px!important;line-height:1.05!important}.s036 .browser{top:255px!important;bottom:85px!important}
 .s040 .scene-title h1{font-size:70px!important}.s040 .micro{font-size:17px!important}.s040 .equation2{top:355px!important}.s040 .unstable{font-size:19px!important}
 
-/* v42: real proportional preview.
- * Stage stays logically 1920×1080. stage-frame owns the scaled layout footprint,
- * so the browser never lays out a 1920px box and merely paints it smaller.
- */
 .viewer{position:relative;overflow:hidden;display:grid;place-items:center;min-width:0;min-height:0}
 .stage-frame{position:relative;display:block;flex:0 0 auto;overflow:visible;aspect-ratio:16/9}
 .stage-frame>.stage{margin:0!important;max-width:none!important;max-height:none!important}
 .stage{width:1920px!important;height:1080px!important;contain:layout paint style;will-change:transform}
 .stage[data-recording="true"]{box-shadow:none}
 
-/* v42 cover: the topic is the hero, not a tiny HUD label. */
 .s001 .copy{max-width:760px}
 .s001 .copy>.eyebrow{display:none}
 .s001 .legacy-cover-question{display:none!important}
@@ -74,21 +67,23 @@
 .s001 .cover-question-v42{font-size:35px;line-height:1.22;font-weight:900;letter-spacing:-.035em;color:var(--text-2);margin-top:4px}
 .s001 .copy p{font-size:25px!important;line-height:1.62!important;max-width:700px!important;margin-top:10px!important}
 
-/* Keep reading areas stable after their construction animation. */
 .s010 .spec,.s015 .slot,.s023 .skill-sheet,.s029 .qa-metric,.s035 .doc-preview,.s036 .browser{backface-visibility:hidden;transform:translateZ(0)}
 
-/* Make the control strip calm and recording-friendly. */
-.toolbar{grid-template-columns:minmax(320px,1fr) auto minmax(320px,1fr);min-height:78px}
+.toolbar{grid-template-columns:minmax(300px,1fr) auto minmax(300px,1fr);min-height:78px}
 .toolbar .center{gap:8px;flex-wrap:nowrap}
 .btn.record{background:var(--text);color:var(--surface);border-color:var(--text);min-width:148px}
 .btn.record.live{background:#7c2d2d;color:#fff;border-color:#7c2d2d}
+.record-timer{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 12px;border:1px solid var(--rule);border-radius:12px;background:#fff;font:900 12px/1 var(--font-mono);letter-spacing:.04em;color:var(--text-mute);white-space:nowrap}
+.record-timer::before{content:"";width:8px;height:8px;border-radius:50%;background:#a3a3a3}
+.record-timer.live{color:#991b1b;border-color:#fecaca;background:#fff7f7}
+.record-timer.live::before{background:#dc2626;box-shadow:0 0 0 5px rgba(220,38,38,.12);animation:recPulse 1s ease-in-out infinite}
 .record-meta{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 11px;border:1px solid var(--rule);border-radius:12px;background:rgba(255,255,255,.78);font:800 11px/1.2 var(--font-mono);color:var(--text-mute);white-space:nowrap}
 .record-meta::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
 .record-meta.live::before{background:#b91c1c;box-shadow:0 0 0 5px rgba(185,28,28,.12)}
 .record-meta.warn{color:#8a4b11;border-color:#e3c39a;background:#fff9ef}
 .record-meta.warn::before{background:#d97706}
+@keyframes recPulse{0%,100%{opacity:1}50%{opacity:.35}}
 
-@media(max-width:1180px){
-  .toolbar{grid-template-columns:1fr auto 1fr}.record-meta{display:none}.btn.record{min-width:116px}
-}
-@media(prefers-reduced-motion:reduce){.record-meta.live::before{box-shadow:none}}
+@media(max-width:1380px){.record-meta{display:none}}
+@media(max-width:1180px){.toolbar{grid-template-columns:1fr auto 1fr}.record-timer{padding:0 9px}.btn.record{min-width:116px}}
+@media(prefers-reduced-motion:reduce){.record-meta.live::before{box-shadow:none}.record-timer.live::before{animation:none}}
