@@ -4,46 +4,46 @@
 
 ## 当前 Phase
 
-**Phase 1 · Harness Engineering · Project6 v53**
+**Phase 1 · Harness Engineering · Project6 v54**
 
 ## 当前唯一构建版本
 
-- Product build：**v53**
+- Product build：**v54**
 - 单一版本源：`assets/version.js`
-- 正式播放器：`presentations/harness-engineering/full-video.html?v=53`
-- 专用录制页：`presentations/harness-engineering/record.html?v=53`
-- 页面右上角必须显示 `P6 · v53`
+- 正式播放器：`presentations/harness-engineering/full-video.html?v=54`
+- 专用录制页：`presentations/harness-engineering/record.html?v=54`
+- 页面右上角必须显示 `P6 · v54`
 
-## Recording Console · v53
+## Recording Console · v54
 
 - [x] 黑色工作区 + 中间 16:9 成片框 + 底部常驻控制台。
 - [x] Canvas 每帧按 `.stage-frame` 真实坐标精确裁切，最终只录中间成片框。
-- [x] REC 状态只显示在控制台，不进入成片。
-- [x] **v53 删除“可见按钮 → 隐藏按钮”的代理桥接。**
-- [x] 可见 `上一页 / 自动播放 / 暂停 / 下一页` 直接使用播放器真实 `prevBtn / playBtn / pauseBtn / nextBtn` ID，由 Garden 播放器本身绑定。
-- [x] 旁白开关继续可用。
-- [x] 本地配乐：选择文件、显示文件名与时长、播放/暂停、音量控制。
-- [x] 配乐是否播放由独立 `musicWanted` 状态维护，录制开始时按用户选择从 0 秒播放。
-- [x] 开始 / 停止录制、REC 计时、状态显示。
-- [x] 最终输出固定 1920×1080，`canvas.captureStream(60)`。
-- [x] 目标视频码率 18 Mbps，音频 192 kbps。
-- [ ] 用户实机验证 v53：上一页、下一页、自动播放、暂停均可直接工作；配乐状态正确；最终文件只含中间成片。
+- [x] REC 状态和所有控制均在成片框外，不进入最终视频。
+- [x] `上一页 / 自动播放 / 暂停 / 下一页` 为 Garden 播放器真实按钮。
+- [x] **v54 把录制状态与播放器状态彻底解耦。**
+- [x] 开始录制只启动 MediaRecorder，不再自动 pause / reset / play，不再修改播放器的 `playing / paused` 状态。
+- [x] 录制开始后由用户手动点击“自动播放”；暂停、上一页、下一页保持独立可用。
+- [x] 播放状态栏实时显示 `待播放 / 自动播放中 / 已暂停 / 已结束 + Scene 编号`。
+- [x] 旁白开关、本地配乐选择/播放/暂停/音量继续可用。
+- [x] 最终输出固定 1920×1080，`canvas.captureStream(60)`，目标 18 Mbps / 192 kbps。
+- [ ] 用户实机验证 v54：开始录制后再点自动播放可以启动；暂停、上一页、下一页在录制中仍可工作。
 
 ## 当前 Gate
 
 | Gate | 状态 | 通过条件 |
 |---|---|---|
 | A 完整口播 | REVIEW | 用户最终确认整片口播 |
-| B Garden v53 视觉 | REVIEW | 用户最终确认视觉 |
+| B Garden v54 视觉 | REVIEW | 用户最终确认视觉 |
 | C 本地 IndexTTS | WAITING | 用户生成并上传真实 001～042 总 ZIP |
 | D 整片音画 | WAITING | 真实音频注入 + timing 调整 |
 | E 动画 SFX | LOCKED | D PASS 后进入 |
-| F 1080P 本地录制 | REVIEW | v53 真实播放器控制可用、控制不入镜、成片仅中间 16:9、文件可播放 |
+| F 1080P 本地录制 | REVIEW | v54 录制与播放器互不锁定；控制不入镜；成片仅中间 16:9；文件可播放 |
 
 ## 当前下一步
 
-1. 打开 `record.html?v=53`；
-2. 不录制也先测试：上一页、自动播放、暂停、下一页必须都能工作；
-3. 选择一首本地配乐，验证文件名/时长、播放/暂停和音量；
-4. 再开始录制 10～20 秒；
-5. 检查下载文件只含中间 16:9 成片框。
+1. 打开 `record.html?v=54`；
+2. 先点击“开始录制”并选择当前标签页；
+3. 录制真正开始后，再手动点击“自动播放”；
+4. 检查状态栏是否从 `待播放` 变为 `自动播放中`；
+5. 测试暂停、上一页、下一页；
+6. 录 10～20 秒后停止，检查最终成片。
