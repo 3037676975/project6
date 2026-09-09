@@ -1,0 +1,26 @@
+(() => {
+  const channel = new BroadcastChannel('project6-harness-v60');
+  const $ = id => document.getElementById(id);
+  const prev=$('prevBtn'),next=$('nextBtn'),play=$('playBtn'),pause=$('pauseBtn'),sound=$('narration'),bgm=$('bgm'),count=$('countLabel'),status=$('status');
+  let musicUrl='';
+  const sendState=()=>channel.postMessage({type:'state',count:(count?.textContent||'01 / 42').trim(),status:(status?.textContent||'READY').trim(),ready:true});
+  if(count)new MutationObserver(sendState).observe(count,{childList:true,subtree:true,characterData:true});
+  if(status)new MutationObserver(sendState).observe(status,{childList:true,subtree:true,characterData:true});
+  channel.onmessage=async e=>{
+    const m=e.data||{};
+    if(m.type==='cmd'){
+      if(m.action==='prev')prev?.click();
+      if(m.action==='next')next?.click();
+      if(m.action==='play')play?.click();
+      if(m.action==='pause')pause?.click();
+      if(m.action==='sound'&&sound)sound.muted=!m.enabled;
+      if(m.action==='goto'&&Number.isFinite(m.index)){const scrub=$('scrub');if(scrub){scrub.value=String(m.index);scrub.dispatchEvent(new Event('input',{bubbles:true}))}}
+      requestAnimationFrame(sendState);
+    }
+    if(m.type==='music-file'&&m.file){if(musicUrl)URL.revokeObjectURL(musicUrl);musicUrl=URL.createObjectURL(m.file);bgm.src=musicUrl;bgm.currentTime=0;bgm.volume=Number.isFinite(m.volume)?m.volume:.35;if(m.play){try{await bgm.play()}catch(_){}}}
+    if(m.type==='music-play'){if(m.play){try{await bgm.play()}catch(_){}}else bgm.pause()}
+    if(m.type==='music-volume')bgm.volume=Math.max(0,Math.min(1,Number(m.volume)||0));
+  };
+  addEventListener('load',async()=>{if(document.fonts?.ready)await document.fonts.ready;setTimeout(()=>{sendState();channel.postMessage({type:'capture-ready'});},120)});
+  addEventListener('beforeunload',()=>{if(musicUrl)URL.revokeObjectURL(musicUrl);channel.close()});
+})();
