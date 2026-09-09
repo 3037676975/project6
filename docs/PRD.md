@@ -1,16 +1,18 @@
-# Project6 PRD · v2.3
+# Project6 PRD · v2.4
 
 **状态：** Current / 最新产品基准  
-**当前产品构建：** Project6 **v60**  
+**当前产品构建：** Project6 **v63**  
 **总纲：** `docs/PROJECT_CHARTER.md`
 
 ## 1. 产品定位
 
-Project6 是面向低预算创作者的 **AI HTML 视频项目生产后台**。一个视频就是一个 Project，围绕完整脚本、Garden 画面、本地 TTS、整片预览、最后 SFX 和本地高清视频导出完成生产。
+Project6 是面向低预算创作者的 **AI HTML 视频项目生产后台**。一个视频就是一个 Project，围绕完整脚本、Garden 画面、本地 TTS、整片预览、项目内 SFX / BGM 和本地高清视频导出完成生产。
+
+Project6 当前优先级不是继续扩展大型模块，而是把第一支完整视频从脚本跑到最终成片，并把链路沉淀为可复用流程。
 
 ## 2. 核心对象
 
-Project 内包含：Script、Chapter、Scene、Garden 视觉、Scene Motion、验收 Gate、TTS JSON、**本地配音源库**、整片预览、动画 SFX、本地高清录制、视觉 QA。
+Project 内包含：Script、Chapter、Scene、Garden 视觉、Scene Motion、验收 Gate、TTS JSON、**本地配音源库**、整片预览、项目内 SFX / BGM、本地高清录制、视觉 QA。
 
 ## 3. P0 主流程
 
@@ -26,7 +28,7 @@ Project 内包含：Script、Chapter、Scene、Garden 视觉、Scene Motion、�
 → 可重复上传多个完整 ZIP / 切换配音源
 → 整片本地音画预览
 → timing 微调
-→ 最后动画 SFX
+→ 项目内 SFX / BGM
 → 双窗口高清本地录制
 ```
 
@@ -35,6 +37,8 @@ Project 内包含：Script、Chapter、Scene、Garden 视觉、Scene Motion、�
 必须独立展示一个完整视频项目；Chapter 只用于组织；用户实际面对一份完整口播、一个总 JSON、多个可复用配音源和一个整片预览。
 
 必须显示 Gate、验收规则、下一步和**当前产品版本**。
+
+独立资源页不能取代作品页成为主生产入口。
 
 ## 5. TTS JSON
 
@@ -120,27 +124,52 @@ Canvas 输出
 | B | Garden 视觉 + Screenshot QA |
 | C | 本地 IndexTTS + 配音源库 |
 | D | 整片音画预览 |
-| E | 动画 SFX |
+| E | 项目内 SFX / BGM |
 | F | 双窗口高清本地录制 |
 
 ## 12. 版本与缓存管理
 
-当前 canonical build：`assets/version.js` → `v60`。
+当前 canonical build：`assets/version.js` → `v63`。
 
 要求：
-- 正式页面显示 `P6 · v60`；
-- `works.html / full-video.html / record.html / capture.html` 必须与 canonical build 同步；
+- 正式页面显示 `P6 · v63`；
+- `works.html / full-video.html / record.html / capture.html` 必须以 canonical build 为准；
 - 正式静态资源与 iframe 链接使用同版本缓存参数；
 - 发布下一版时，页面、缓存、DEVELOPMENT_STATUS、ACCEPTANCE 必须同批更新；
 - 历史实现文件名可以保留，但不能作为 UI 当前版本来源。
 
-## 13. 动画音效库
+## 13. SFX 策略
 
-SFX Library 与人物配音严格分开。SFX 永远在完整音画通过后处理。
+Project6 v63 不再提供独立 `audio.html` / “动画音效库”页面。
 
-## 14. 当前验收项目
+SFX 与人物配音仍严格分开，但 SFX 只归属具体视频 Project：
 
-Harness Engineering / 42 Scene / Project6 v60。
+```text
+Gate D 整片音画 PASS
+→ Gate E 项目内 SFX / BGM
+→ 只添加当前 Scene 真正需要的 reveal / whoosh / click / confirm / accent 等声音
+```
+
+禁止为了“以后可能会用”先堆一个脱离真实项目的音效资源库。
+
+## 14. 后台 UI 设计系统
+
+Project6 v63 后台使用 `assets/admin-ui-v63.css` 作为共享视觉层。
+
+设计方向：**Editorial Production Console / 创作控制台**。
+
+要求：
+- 功能优先，不因美化改变行为；
+- 信息结构本身承担视觉层级；
+- 避免通用 SaaS 卡片模板；
+- 减少无意义渐变、阴影、全大写标签与统一圆角；
+- 状态色只服务 Gate / 系统反馈；
+- 支持键盘 focus、移动端和 `prefers-reduced-motion`；
+- 首页、作品页、组件库、动效库、Garden 手册、项目总纲视觉语言应统一。
+
+## 15. 当前验收项目
+
+Harness Engineering / 42 Scene / Project6 v63。
 
 当前目标：
 
@@ -148,7 +177,8 @@ Harness Engineering / 42 Scene / Project6 v60。
 配音源 ZIP 持久化实机验证
 → 多配音源切换 / 试听
 → 整片音画预览 + timing
-→ SFX
+→ Gate D PASS
+→ 项目内 SFX / BGM
 → 双窗口高清录制
 → 最终视频
 ```
