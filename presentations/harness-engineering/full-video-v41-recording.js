@@ -1,4 +1,4 @@
-/* Project6 · Harness Engineering · v60 dual-window recorder launcher */
+/* Project6 · Harness Engineering · v61 dual-window recorder launcher */
 (() => {
   const recordBtn=document.getElementById('recordBtn');
   const recordMeta=document.getElementById('recordMeta');
@@ -14,9 +14,9 @@
   syncSound();
   soundBtn?.addEventListener('click',()=>{soundEnabled=!soundEnabled;localStorage.setItem(SOUND_KEY,soundEnabled?'1':'0');syncSound()});
   recordBtn.textContent='● 打开高清录制';
-  if(recordMeta)recordMeta.textContent='V60 · DUAL WINDOW · PERSISTENT VOICE SOURCES';
+  if(recordMeta)recordMeta.textContent='V61 · VOICE SYNC + AUDIO UNLOCK';
   recordBtn.addEventListener('click',()=>{
-    const url=new URL('./record.html?v=60',location.href);
+    const url=new URL('./record.html?v=61',location.href);
     const w=window.open(url.href,'project6RecorderController','popup=yes,width=1500,height=920,resizable=yes');
     if(!w) alert('浏览器阻止了录制控制台，请允许本站弹出窗口后再点一次。');
   });
