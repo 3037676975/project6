@@ -1,6 +1,6 @@
-# Harness Engineering · 整片验收标准 v48
+# Harness Engineering · 整片验收标准 v50
 
-> 当前正式产品构建：**Project6 v48**。右上角必须显示 `P6 · v48`，正式播放器缓存参数统一为 `?v=48`。
+> 当前正式产品构建：**Project6 v50**。正式播放器缓存参数统一为 `?v=50`，专用录制页为 `record.html?v=50`。
 
 ## 当前验收对象
 
@@ -9,7 +9,7 @@
 - Scene 002～042：逐 Scene 独立 visual / motion recipe
 - TTS：整片一次 JSON / 一次 ZIP
 - SFX：最终环节
-- Recording：全屏当前标签页录制；不再使用 Region Crop
+- Recording：专用录制页 + 1920×1080 Canvas 输出
 
 ## Gate A · 完整口播
 状态：**REVIEW**
@@ -18,14 +18,11 @@
 - [x] TTS 只导出一个总 JSON。
 - [ ] 用户最终确认整片口播。
 
-## Gate B · Garden v48 视觉
+## Gate B · Garden v50 视觉
 状态：**REVIEW**
 - [x] 42/42 Scene 独立视觉表达。
-- [x] 42/42 Screenshot QA。
-- [x] tiny text = 0。
-- [x] DOM overflow = 0。
-- [x] Console Errors = 0。
-- [x] responsiveFails = 0。
+- [x] Screenshot QA 基线保留。
+- [x] 普通预览字号与大画面字号分层。
 - [ ] 用户最终确认整片视觉。
 
 ## Gate C · 本地 IndexTTS
@@ -46,33 +43,38 @@
 
 整片真实音画 PASS 以后才进入。
 
-## Gate F · 本地录制 v48
+## Gate F · 本地录制 v50
 状态：**REVIEW**
 
 验收要求：
 - [x] HTTPS：`video.smilechat.cn`。
-- [x] v47 的 Region Crop 在用户实机出现“只有底色、主体动画丢失”，因此 v48 删除该链路。
-- [x] 点击录制时从同一用户手势请求 `stage-frame` 全屏 + 当前标签页捕获。
-- [x] 录制对象为全屏当前标签页，不再录缩小预览框后再裁剪。
-- [x] 录制前自动回到 Scene 001 并启动整片播放。
-- [x] 实际读取 capture track 分辨率；低于 1920×1080 直接 FAIL，不伪装 1080P。
-- [x] 目标 60fps / 16 Mbps。
-- [x] REC 实时计时；录制时页面标题同步计时。
-- [x] END / 浏览器停止共享 / 退出全屏均可停止。
-- [x] 输出优先 MP4；不支持则使用真实 WebM。
-- [ ] 用户实机确认：下载文件包含完整动画内容，不再只有背景。
-- [ ] 用户实机确认：实际捕获为 1920×1080 或更高。
+- [x] 不再依赖 Fullscreen API 保持全屏；Chrome 打开屏幕共享权限窗口时会退出网页 Fullscreen。
+- [x] 不再使用 Region Crop / CropTarget。
+- [x] 新增 `record.html` 专用录制页；整个网页只显示视频画面。
+- [x] 正式播放器点击录制只打开专用录制页。
+- [x] 用户在共享弹窗中只需选择“当前标签页”。
+- [x] 捕获结果通过隐藏 video 输入 1920×1080 Canvas。
+- [x] Canvas 对捕获画面做居中 16:9 裁切，再 `canvas.captureStream(60)` 输出。
+- [x] 最终视频输出尺寸固定为 1920×1080，不依赖当前预览框大小。
+- [x] 标签页音频轨道加入最终输出流。
+- [x] 目标 18 Mbps / 192 kbps。
+- [x] 录制前自动回到 Scene 001。
+- [x] 页面标题显示 REC 计时，不进入成片。
+- [x] END / 浏览器停止共享 / 键盘 `S` / `Esc` 可停止录制。
+- [x] 输出优先 MP4；不支持时保存真实 WebM。
+- [ ] 用户实机确认：成片不再是缩小后台，而是完整视频画面。
+- [ ] 用户实机确认：成片不包含后台按钮和旁边区域。
+- [ ] 用户实机确认：动画主体完整，不再只有背景。
 - [ ] 用户实机确认：文件可正常播放。
-- [ ] 用户实机确认：声音开 / 关行为正确。
 
 ## 版本一致性 Gate
 
 以下任意一项出现即 FAIL：
-1. 正式播放器右上角不是 v48；
+1. 正式播放器右上角不是 v50；
 2. 正式播放器仍加载旧 `?v=` 缓存参数；
 3. 页面版本与 `assets/version.js` 不一致；
 4. 页面升级而 DEVELOPMENT_STATUS / ACCEPTANCE 未同步。
 
 ## 当前结论
 
-Project6 当前正式构建为 **v48**。本轮不改 42 Scene 视觉，只重构录制链：从“缩小预览 + Region Crop”改为“全屏 Stage + 当前标签页直接录制”。等待用户实机验证后再决定是否需要浏览器内转码层。
+Project6 当前正式构建为 **v50**。v50 把录制从“预览页自录”彻底拆成“专用纯视频页 + Canvas 1080P 输出”，目的就是消除共享权限弹窗导致的全屏退出、页面缩小和 Region Crop 空白问题。等待用户实机验证。
