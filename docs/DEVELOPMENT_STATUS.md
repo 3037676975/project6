@@ -1,53 +1,44 @@
 # Project6 开发状态
 
-> 每次开发前阅读：PROJECT_CHARTER → PRD → ACTIVE_DECISIONS → DEVELOPMENT_STATUS → 当前作品 ACCEPTANCE → Garden CHAPTER-CRAFT → Project6 motions/components。
+> 每次开发前阅读：PROJECT_CHARTER → PRD → ACTIVE_DECISIONS → DEVELOPMENT_STATUS → 当前作品 ACCEPTANCE → Garden → motions/components。
 
 ## 当前 Phase
 
-**Phase 1 · Harness Engineering · Project6 v63**
+**Phase 1 · Harness Engineering · Project6 v64**
 
-当前策略：**停止扩展大模块，优先跑通第一支完整视频。**
+当前策略：**先跑通第一支完整视频，同时把多视频项目结构固定下来。**
 
 ## 当前唯一构建版本
 
-- Product build：**v63**
+- Product build：**v64**
 - 单一版本源：`assets/version.js`
-- 后台共享视觉层：`assets/admin-ui-v63.css`
-- 正式播放器：`presentations/harness-engineering/full-video.html?v=63`
-- 录制控制台：`presentations/harness-engineering/record.html?v=63`
-- 纯成片窗口：`presentations/harness-engineering/capture.html?v=63`
-- 页面版本必须统一显示 `P6 · v63`
+- 视频项目库：`works.html?v=64`
+- Harness 独立详情：`project-harness-engineering.html?v=64`
+- Harness 项目目录：`presentations/harness-engineering/`
+- 正式播放器：`presentations/harness-engineering/full-video.html?v=64`
+- 录制控制台：`presentations/harness-engineering/record.html?v=64`
+- 纯成片窗口：`presentations/harness-engineering/capture.html?v=64`
 
-## Backend UI · v63
+## Multi-project Architecture · v64
 
-- [x] 首页重构为 Editorial Production Console / 创作控制台。
-- [x] 作品页保留原功能并统一视觉层级。
-- [x] 新增共享后台样式 `assets/admin-ui-v63.css`。
-- [x] 颜色只服务状态与重点，减少无意义渐变和模板化卡片。
-- [x] 增加键盘 focus 与 reduced-motion 基础处理。
-- [x] 删除独立 `audio.html` 动画音效库。
-- [x] Gate E 改为“项目内 SFX / BGM”，只在 Gate D PASS 后进入。
-- [ ] 组件库 / 动效库 / Garden 手册 / 项目总纲最终视觉回归检查。
+- [x] `works.html` 从“某一个视频详情页”改为真正的视频项目库。
+- [x] 项目库展示封面、名称、状态、Scene / Chapter 摘要。
+- [x] Harness Engineering 拆为独立详情页 `project-harness-engineering.html`。
+- [x] 单项目详情保留完整脚本、Garden、TTS、音频导入、Gate 与录制链路。
+- [x] 项目总纲明确三层结构：工作台 → 项目库 → 独立项目详情。
+- [x] 新视频必须创建新 slug、新详情页、新 `presentations/<slug>/` 目录。
+- [x] 新项目必须使用独立 localStorage / IndexedDB namespace。
+- [x] 禁止新增视频时覆盖旧项目文件或状态。
 
-## TTS Voice Source Library
+## Backend UI
 
-- [x] ZIP 持久保存到当前浏览器 IndexedDB；单个 MP3/WAV/M4A/OGG 仅临时使用。
-- [x] 一个 ZIP = 一个独立配音源，可保存多个版本并试听/切换/删除。
-- [x] 正式播放器通过 `P6_LOCAL_AUDIO` 把 001～042 真正注入 Garden 原生 `localAudio`，不再只修改 `<audio src>`。
-- [x] 旁白默认开启，不再要求纯成片窗口额外点击“启用旁白声音”。
+- [x] 首页为 Editorial Production Console / 创作控制台。
+- [x] 视频作品页现在以封面项目卡片为核心。
+- [x] 项目总纲重新设计为多项目架构说明页。
+- [x] 组件库 / 动效库 / Garden 手册继续作为共享能力层。
+- [x] 独立动画音效库已移除；Gate E 为项目内 SFX / BGM。
 
-## Recording Architecture
-
-- [x] 控制台与成片窗口继续双窗口分离。
-- [x] 控制台、Capture Surface、配音模块统一使用稳定通道 `project6-harness-control`；版本升级不再改变通信通道。
-- [x] TTS 在录制控制台直接播放，避免 Chrome 跨窗口自动播放限制。
-- [x] 用户点击“自动播放”就是实际用户手势，因此可直接播放当前配音源。
-- [x] 录制页预创建 TTS Web Audio 混音流，支持“先开始录制，再点自动播放”。
-- [x] 最终录制流混合 Capture 画面/标签页音频与 TTS 音轨。
-- [x] 输出档位：1080P 24 Mbps / 1440P 40 Mbps / 4K 65 Mbps。
-- [x] 开始 / 暂停 / 继续 / 停止并保存 / 取消并丢弃独立可用。
-
-## 当前 Gate
+## Harness Engineering 当前 Gate
 
 | Gate | 状态 | 通过条件 |
 |---|---|---|
@@ -55,29 +46,32 @@
 | B Garden 视觉 | REVIEW | 正式播放器与纯成片窗口视觉一致 |
 | C 本地 IndexTTS / 配音源库 | REVIEW | ZIP 保存、多源切换、原生播放器注入实机通过 |
 | D 整片音画 | REVIEW | 自动播放 001～042 旁白与 Scene 同步 |
-| E 项目内 SFX / BGM | LOCKED | D PASS 后进入；不再维护独立音效库 |
-| F 高清本地录制 | REVIEW | “先开始录制→再自动播放”导出文件仍有 TTS 声音 |
+| E 项目内 SFX / BGM | LOCKED | D PASS 后进入 |
+| F 高清本地录制 | REVIEW | 导出文件包含当前配音源声音 |
 
 ## 当前测试顺序
 
-1. 打开 `works.html?v=63`，确认后台 UI、版本和入口无旧音效库；
-2. 打开 `record.html?v=63`；
-3. 选择一个已保存配音源；
-4. 先直接点“自动播放”，确认 Scene 001 有声音；
-5. 再测试：先开始录制 → 选择 Capture Surface → 再点自动播放；
-6. 录 10～20 秒停止，确认最终文件有当前配音源声音；
-7. Gate D 通过后才进入项目内 SFX / BGM。
+1. 打开 `works.html?v=64`，确认先看到视频项目列表而不是 Harness 详情；
+2. 点击 Harness Engineering 封面卡片；
+3. 确认进入 `project-harness-engineering.html?v=64`；
+4. 检查原脚本、Garden、TTS、音频上传与 Gate 功能仍存在；
+5. 打开 `record.html?v=64` 完成真实配音与录制验证；
+6. Gate D 通过后才进入当前项目 SFX / BGM。
 
-## 本轮 Acceptance
+## 下一支视频的固定动作
 
-### UI
-- [x] 首页不再展示独立音效库。
-- [x] 作品页不再链接 `audio.html`。
-- [x] README 已建立并详细说明产品、架构、流程、部署与开发规则。
-- [x] `assets/version.js` 已升级 v63。
-- [x] 原 TTS / Garden / 预览 / 录制功能未主动删除。
+```text
+创建 project-<new-slug>.html
+→ 创建 presentations/<new-slug>/
+→ 创建该项目自己的 data / TTS / player / record / capture / ACCEPTANCE
+→ 创建独立本地状态 namespace
+→ 在 works.html 新增项目卡片
+→ 不修改旧项目业务状态
+```
 
-### 仍需实机确认
-- [ ] 正式部署后浏览器是否拿到 v63 新 CSS，缓存无旧版污染。
-- [ ] 作品页 ZIP 导入与 42/42 注入实际可用。
-- [ ] 录制输出文件仍包含当前配音源声音。
+## 仍需实机确认
+
+- [ ] 正式部署后 `works.html` 项目库样式与封面卡片正常。
+- [ ] Harness 独立详情页全部原功能正常。
+- [ ] ZIP 配音源与 42/42 注入实际可用。
+- [ ] 最终录制文件包含当前配音源声音。
