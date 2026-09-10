@@ -3,7 +3,7 @@ name: Publish IP PNG Assets
 on:
   push:
     paths:
-      - 'tools/ip-upload/AIGC小黑云-IP资产库-v1.zip'
+      - 'tools/ip-upload/READY'
 
 permissions:
   contents: write
@@ -13,14 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Extract direct PNG assets
+      - name: Rebuild and verify asset package
         run: |
-          set -e
-          ZIP='tools/ip-upload/AIGC小黑云-IP资产库-v1.zip'
+          set -euo pipefail
+          cat tools/ip-upload/chunk-* > /tmp/project6-ip-assets.zip
+          unzip -t /tmp/project6-ip-assets.zip
+      - name: Extract 48 direct PNG assets
+        run: |
+          set -euo pipefail
           TMP='/tmp/project6-ip-assets'
           rm -rf "$TMP" assets/ip/xiaohieyun
           mkdir -p "$TMP" assets/ip/xiaohieyun/{host,machine,prop,metaphor,card}
-          unzip -q "$ZIP" -d "$TMP"
+          unzip -q /tmp/project6-ip-assets.zip -d "$TMP"
           cp "$TMP"/host-*.png assets/ip/xiaohieyun/host/
           cp "$TMP"/machine-*.png assets/ip/xiaohieyun/machine/
           cp "$TMP"/prop-*.png assets/ip/xiaohieyun/prop/
@@ -33,6 +37,7 @@ jobs:
         run: |
           git config user.name 'project6-bot'
           git config user.email 'actions@users.noreply.github.com'
-          git add assets/ip/xiaohieyun
+          rm -rf tools/ip-upload
+          git add assets/ip/xiaohieyun tools/ip-upload
           git commit -m 'fix(ip): publish 48 direct PNG assets' || exit 0
           git push
