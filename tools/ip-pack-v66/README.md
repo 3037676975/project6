@@ -1,0 +1,1 @@
+Project6 IP asset publishing payload. Temporary build input; generated PNGs are committed into assets/ip/xiaohieyun/ by GitHub Actions and this payload can be removed afterward.
