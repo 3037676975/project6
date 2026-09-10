@@ -13,27 +13,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Extract original PNG assets
+      - name: Extract direct PNG assets
         run: |
           set -e
           ZIP='tools/ip-upload/AIGC小黑云-IP资产库-v1.zip'
           TMP='/tmp/project6-ip-assets'
           rm -rf "$TMP" assets/ip/xiaohieyun
-          mkdir -p "$TMP" assets/ip/xiaohieyun/{host,machine,prop,metaphor,card,bible}
+          mkdir -p "$TMP" assets/ip/xiaohieyun/{host,machine,prop,metaphor,card}
           unzip -q "$ZIP" -d "$TMP"
-          ROOT="$TMP/series-asset-library"
-          cp "$ROOT"/01-host-poses/png/host-*.png assets/ip/xiaohieyun/host/
-          cp "$ROOT"/02-ai-machines/png/machine-*.png assets/ip/xiaohieyun/machine/
-          cp "$ROOT"/03-case-props/png/prop-*.png assets/ip/xiaohieyun/prop/
-          cp "$ROOT"/04-teaching-metaphors/png/metaphor-*.png assets/ip/xiaohieyun/metaphor/
-          cp "$ROOT"/05-cards/png/card-*.png assets/ip/xiaohieyun/card/
-          find "$ROOT/00-character-bible" -type f -iname '*.png' -exec cp {} assets/ip/xiaohieyun/bible/ \;
-          echo 'Published PNG count:'
-          find assets/ip/xiaohieyun -type f -name '*.png' | wc -l
+          cp "$TMP"/host-*.png assets/ip/xiaohieyun/host/
+          cp "$TMP"/machine-*.png assets/ip/xiaohieyun/machine/
+          cp "$TMP"/prop-*.png assets/ip/xiaohieyun/prop/
+          cp "$TMP"/metaphor-*.png assets/ip/xiaohieyun/metaphor/
+          cp "$TMP"/card-*.png assets/ip/xiaohieyun/card/
+          COUNT=$(find assets/ip/xiaohieyun -type f -name '*.png' | wc -l)
+          echo "Published PNG count: $COUNT"
+          test "$COUNT" -eq 48
       - name: Commit direct PNG files
         run: |
           git config user.name 'project6-bot'
           git config user.email 'actions@users.noreply.github.com'
           git add assets/ip/xiaohieyun
-          git commit -m 'fix(ip): publish original direct PNG assets' || exit 0
+          git commit -m 'fix(ip): publish 48 direct PNG assets' || exit 0
           git push
