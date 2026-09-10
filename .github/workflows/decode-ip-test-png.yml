@@ -1,0 +1,31 @@
+name: Decode IP Test PNG
+
+on:
+  push:
+    paths:
+      - 'assets/ip/xiaohieyun-test/host-thinking.png.b64.txt'
+      - '.github/workflows/decode-ip-test-png.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  decode:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode one direct PNG
+        run: |
+          set -e
+          mkdir -p assets/ip/xiaohieyun-test
+          base64 -d assets/ip/xiaohieyun-test/host-thinking.png.b64.txt > assets/ip/xiaohieyun-test/host-thinking.png
+          file assets/ip/xiaohieyun-test/host-thinking.png
+          test "$(head -c 8 assets/ip/xiaohieyun-test/host-thinking.png | xxd -p)" = "89504e470d0a1a0a"
+          rm assets/ip/xiaohieyun-test/host-thinking.png.b64.txt
+      - name: Commit decoded PNG
+        run: |
+          git config user.name 'project6-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A assets/ip/xiaohieyun-test
+          git commit -m 'test(ip): publish one direct PNG asset' || exit 0
+          git push
