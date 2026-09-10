@@ -1,0 +1,1 @@
+Direct PNG test directory. The test page must reference only host-thinking.png here. No sprite/atlas/preview assets.
