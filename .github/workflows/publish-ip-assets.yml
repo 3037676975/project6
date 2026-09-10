@@ -13,23 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Rebuild and verify asset package
+      - name: Rebuild PNG package
         run: |
-          set -euo pipefail
-          cat tools/ip-upload/chunk-* > /tmp/project6-ip-assets.zip
-          unzip -t /tmp/project6-ip-assets.zip
-      - name: Extract 48 direct PNG assets
-        run: |
-          set -euo pipefail
+          set -e
           TMP='/tmp/project6-ip-assets'
           rm -rf "$TMP" assets/ip/xiaohieyun
           mkdir -p "$TMP" assets/ip/xiaohieyun/{host,machine,prop,metaphor,card}
-          unzip -q /tmp/project6-ip-assets.zip -d "$TMP"
-          cp "$TMP"/host-*.png assets/ip/xiaohieyun/host/
-          cp "$TMP"/machine-*.png assets/ip/xiaohieyun/machine/
-          cp "$TMP"/prop-*.png assets/ip/xiaohieyun/prop/
-          cp "$TMP"/metaphor-*.png assets/ip/xiaohieyun/metaphor/
-          cp "$TMP"/card-*.png assets/ip/xiaohieyun/card/
+          cat tools/ip-upload/chunk-*.txt > "$TMP/assets.b64"
+          base64 -d "$TMP/assets.b64" > "$TMP/assets.zip"
+          unzip -t "$TMP/assets.zip"
+          unzip -q "$TMP/assets.zip" -d "$TMP/png"
+          cp "$TMP/png"/host-*.png assets/ip/xiaohieyun/host/
+          cp "$TMP/png"/machine-*.png assets/ip/xiaohieyun/machine/
+          cp "$TMP/png"/prop-*.png assets/ip/xiaohieyun/prop/
+          cp "$TMP/png"/metaphor-*.png assets/ip/xiaohieyun/metaphor/
+          cp "$TMP/png"/card-*.png assets/ip/xiaohieyun/card/
           COUNT=$(find assets/ip/xiaohieyun -type f -name '*.png' | wc -l)
           echo "Published PNG count: $COUNT"
           test "$COUNT" -eq 48
@@ -37,7 +35,6 @@ jobs:
         run: |
           git config user.name 'project6-bot'
           git config user.email 'actions@users.noreply.github.com'
-          rm -rf tools/ip-upload
-          git add assets/ip/xiaohieyun tools/ip-upload
+          git add assets/ip/xiaohieyun
           git commit -m 'fix(ip): publish 48 direct PNG assets' || exit 0
           git push
