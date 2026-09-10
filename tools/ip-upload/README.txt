@@ -1,0 +1,1 @@
+Temporary staging files for direct PNG publication. These are removed after the 48 PNG files are committed.
