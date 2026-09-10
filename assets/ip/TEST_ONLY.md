@@ -1,0 +1,1 @@
+IP asset test mode. All sprite/atlas/preview assets are being removed. The page should render only a direct PNG asset during verification.
