@@ -1,0 +1,14 @@
+{
+  "library":"AIGC小黑云系列资产库",
+  "version":"v1",
+  "character":"小黑云",
+  "positioning":"把难懂的AI工程，讲成人话。",
+  "categories":[
+    {"id":"host","name":"主持人动作","count":24,"items":["host-welcome","host-point-left","host-point-right","host-idea","host-open-book","host-pointer","host-delighted","host-surprised","host-curious","host-thinking","host-worried","host-thumbs-up","host-laptop","host-phone","host-toolbox","host-plug-cable","host-inspect-document","host-compare-cards","host-run-in","host-peek","host-run-out","host-listen","host-celebrate","host-bow"]},
+    {"id":"machine","name":"AI 系统机器","count":6,"items":["machine-language-model","machine-agent-toolbox","machine-workflow-router","machine-debug-monitor","machine-rag-library","machine-safety-gate"]},
+    {"id":"prop","name":"案例道具","count":6,"items":["prop-service-desk","prop-order-lookup","prop-auto-refund","prop-human-review","prop-api-service","prop-mcp-adapter"]},
+    {"id":"metaphor","name":"教学比喻","count":6,"items":["metaphor-open-book","metaphor-modular-puzzle","metaphor-fork-road","metaphor-inspect-gears","metaphor-token-meter","metaphor-hallucination-warning"]},
+    {"id":"card","name":"空白卡片","count":6,"items":["card-title-board","card-sticky-note","card-speech-bubble","card-comparison","card-process","card-question"]}
+  ],
+  "rules":{"identity":["巨大不规则炭黑水彩云团脑袋","两只等大的白色圆眼和小黑瞳","小猫嘴，每侧三根白胡须","短小黑色身体","橙到红渐变几何纹样围巾"],"forbidden":["真人化","动漫美女化","头发","眼镜","鞋或额外服装","让图片模型生成课程正文/代码","紫粉科技渐变"],"workflow":["先查公共资产池","已有素材优先复用/镜像/缩放/HTML组合","只有缺少的核心概念才生成","新资产验收后回收入公共池并登记"]}
+}
