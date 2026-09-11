@@ -1,4 +1,4 @@
-# Project6 PRD · v2.5
+# Project6 PRD · v2.6
 
 **状态：** Current / 最新产品基准  
 **当前产品构建：** Project6 **v64**  
@@ -32,11 +32,11 @@ Project6 是面向低预算创作者的 **AI HTML 多视频项目生产后台**�
 - 制作方式摘要；
 - 进入项目详情的入口。
 
-未来 Project 002、003、004… 都在此列表中新增，不覆盖旧项目。
+未来 Project 003、004… 都在此列表中新增，不覆盖旧项目。
 
 ## 4. 独立项目详情
 
-每个视频必须有自己的详情页，例如 `project-harness-engineering.html`。
+每个视频必须有自己的详情页，例如 `project-harness-engineering.html`、`project-aigc-xiaoheiyun-agent.html`。
 
 详情页负责：
 - 完整脚本；
@@ -56,6 +56,8 @@ project-<slug>.html
 presentations/
 └── <slug>/
     ├── full-video.html
+    ├── full-video.css
+    ├── full-video.js
     ├── full-video-data.js
     ├── full-tts-tasks.json
     ├── record.html
@@ -76,7 +78,7 @@ presentations/
 → 完整 TTS JSON
 → 本地 IndexTTS 2.5
 → ZIP / 配音源库
-→ 整片音画预览 + timing
+→ 整片本地音画预览 + timing
 → 项目内 SFX / BGM
 → 双窗口高清本地录制
 → 最终视频
@@ -99,7 +101,7 @@ presentations/
 
 必须支持：播放、暂停/继续、上一 Scene、下一 Scene、进度跳转、全屏、本地配音源注入、音频结束自动进入下一 Scene。
 
-Pause 必须同时暂停 narration 与当前 GSAP timeline。
+Pause 必须同时暂停 narration 与当前动画 timeline。
 
 ## 9. Garden 视觉质量
 
@@ -157,31 +159,41 @@ Canvas / MediaRecorder
 IndexTTS 2.5
 ```
 
-### Project 002：AIGC 小黑云 · 从 ChatGPT 到 Agent
+**Project 001 是已完成案例和规范基线。Project 002 开发时不修改其业务文件。**
+
+### Project 002：小黑云 · LangChain Agent 实战课
 
 ```text
 详情：project-aigc-xiaoheiyun-agent.html
 目录：presentations/aigc-xiaoheiyun-agent/
 9 Chapters
-45 planned Scenes
-当前：Chapter 1 / Scene 001～004 Visual Anchor
-主题：Agent / LangChain / LangGraph / RAG / MCP / Multi-Agent
-主持 IP：AIGC 小黑云
+42 planned Scenes
+完整口播：42 / 42 REVIEW
+当前视觉：Scene 001～004 Visual Anchor REVIEW
+主题：ChatGPT → Agent → LangChain → LangGraph → RAG / MCP / Multi-Agent
+主持 IP：小黑云
+视觉：继承 Project 001 warm-keynote Garden 语言
 ```
 
-Project 002 必须继续遵循独立项目规则，不读取或覆盖 Project 001 的业务状态。
+Project 002 强制规则：
+- 原始课程转写必须先清洗 ASR、核对事实、重写成自己的口播；
+- 上一版深色科技卡片方案废弃；
+- Scene 001 是本项目 Visual Anchor；
+- 先验收 Scene 001～004，再继续 Scene 005～042；
+- Gate A/B 未 PASS 前，`full-tts-tasks.json` 保持锁定；
+- 不读取或覆盖 Project 001 的业务状态。
 
 ## 14. 当前版本
 
 Canonical：`assets/version.js` → **v64**。
 
-v64 的核心结构是多项目层级：
+当前多项目层级：
 
 ```text
 works.html 项目列表
 → Project 001 Harness Engineering
-→ Project 002 AIGC 小黑云 Agent / LangChain 入门
+→ Project 002 小黑云 LangChain Agent 实战课
 → 每个 Project 拥有独立详情与 presentations/<slug>/ 目录
 ```
 
-以后新增视频时，必须新增项目，不允许把新视频的数据直接写进 Harness Engineering。
+本轮只更新 Project 002 内容与项目库元数据，不升级全局 build；Project 002 使用 `?v=64-p2a2` 作为本轮 REVIEW 阶段缓存标识，避免为了第二支视频强制触碰 Project 001 已完成入口。
