@@ -1,0 +1,3 @@
+Project6 deploy probe
+marker=P6-DEPLOY-PROBE-20260911-1202
+purpose=single-webhook deployment diagnosis after Project 002 updates
