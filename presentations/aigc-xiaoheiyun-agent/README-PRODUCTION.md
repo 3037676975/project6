@@ -1,1 +1,0 @@
-Project 002 production flow: Script → TTS JSON → Import 001-042 audio pack → local player → SFX/BGM → capture/record → local 1080P/1440P/4K export. Same framework as Project 001; independent data/state.
