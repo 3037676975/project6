@@ -4,9 +4,9 @@
 
 ## 当前 Phase
 
-**Phase 1 · Harness Engineering · Project6 v64**
+**Phase 1 · 多视频结构已启用 · Project6 v64**
 
-当前策略：**先跑通第一支完整视频，同时把多视频项目结构固定下来。**
+当前策略：**保留 Project 001 Harness Engineering 原业务状态，同时新增 Project 002 AIGC 小黑云，并按“先 Visual Anchor、验收后批量”的方式开发。**
 
 ## 当前唯一构建版本
 
@@ -14,31 +14,21 @@
 - 单一版本源：`assets/version.js`
 - 视频项目库：`works.html?v=64`
 - Harness 独立详情：`project-harness-engineering.html?v=64`
+- 小黑云独立详情：`project-aigc-xiaoheiyun-agent.html?v=64`
 - Harness 项目目录：`presentations/harness-engineering/`
-- 正式播放器：`presentations/harness-engineering/full-video.html?v=64`
-- 录制控制台：`presentations/harness-engineering/record.html?v=64`
-- 纯成片窗口：`presentations/harness-engineering/capture.html?v=64`
+- 小黑云项目目录：`presentations/aigc-xiaoheiyun-agent/`
 
 ## Multi-project Architecture · v64
 
-- [x] `works.html` 从“某一个视频详情页”改为真正的视频项目库。
-- [x] 项目库展示封面、名称、状态、Scene / Chapter 摘要。
-- [x] Harness Engineering 拆为独立详情页 `project-harness-engineering.html`。
-- [x] 单项目详情保留完整脚本、Garden、TTS、音频导入、Gate 与录制链路。
-- [x] 项目总纲明确三层结构：工作台 → 项目库 → 独立项目详情。
-- [x] 新视频必须创建新 slug、新详情页、新 `presentations/<slug>/` 目录。
+- [x] `works.html` 是真正的视频项目库。
+- [x] Harness Engineering 保持 Project 001 独立项目。
+- [x] AIGC 小黑云作为 Project 002 新增，不覆盖 Project 001。
+- [x] Project 002 已建立独立详情页与 `presentations/aigc-xiaoheiyun-agent/`。
+- [x] Project 002 已建立独立 full-video / data / TTS draft / capture / record / ACCEPTANCE。
 - [x] 新项目必须使用独立 localStorage / IndexedDB namespace。
 - [x] 禁止新增视频时覆盖旧项目文件或状态。
 
-## Backend UI
-
-- [x] 首页为 Editorial Production Console / 创作控制台。
-- [x] 视频作品页现在以封面项目卡片为核心。
-- [x] 项目总纲重新设计为多项目架构说明页。
-- [x] 组件库 / 动效库 / Garden 手册继续作为共享能力层。
-- [x] 独立动画音效库已移除；Gate E 为项目内 SFX / BGM。
-
-## Harness Engineering 当前 Gate
+## Project 001 · Harness Engineering 当前 Gate
 
 | Gate | 状态 | 通过条件 |
 |---|---|---|
@@ -49,29 +39,50 @@
 | E 项目内 SFX / BGM | LOCKED | D PASS 后进入 |
 | F 高清本地录制 | REVIEW | 导出文件包含当前配音源声音 |
 
-## 当前测试顺序
+## Project 002 · AIGC 小黑云当前 Gate
 
-1. 打开 `works.html?v=64`，确认先看到视频项目列表而不是 Harness 详情；
-2. 点击 Harness Engineering 封面卡片；
-3. 确认进入 `project-harness-engineering.html?v=64`；
-4. 检查原脚本、Garden、TTS、音频上传与 Gate 功能仍存在；
-5. 打开 `record.html?v=64` 完成真实配音与录制验证；
-6. Gate D 通过后才进入当前项目 SFX / BGM。
+| Gate | 状态 | 当前进度 |
+|---|---|---|
+| A 完整口播 | REVIEW | 7:30～8:00 脚本已存在，最新 LangChain 资料已核对 |
+| B Garden 视觉 | REVIEW | Chapter 1 Scene 001～004 Visual Anchor 已创建 |
+| C 本地 IndexTTS | WAITING | 当前只有 4 段 Anchor 草稿，不是正式整片 TTS |
+| D 整片音画 | LOCKED | 等 B/C PASS |
+| E 项目内 SFX / BGM | LOCKED | 等 D PASS |
+| F 高清本地录制 | LOCKED | 已建立独立入口，整片完成后解锁 |
 
-## 下一支视频的固定动作
+## Project 002 固定内容
 
 ```text
-创建 project-<new-slug>.html
-→ 创建 presentations/<new-slug>/
-→ 创建该项目自己的 data / TTS / player / record / capture / ACCEPTANCE
-→ 创建独立本地状态 namespace
-→ 在 works.html 新增项目卡片
-→ 不修改旧项目业务状态
+标题：AIGC 小黑云｜从 ChatGPT 到 Agent：AI 为什么开始“自己干活”了？
+画幅：16:9
+时长：7分30秒～8分
+章节：9 Chapters
+计划：45 visual beats / Scenes
+主持 IP：AIGC 小黑云
+技术主线：Agent → LangChain → LangGraph → RAG / MCP / Multi-Agent
+视觉：深色科技 + 暖橙围巾点缀 + Garden web-video-presentation
 ```
+
+## Project 002 下一步
+
+1. 用户先检查 `presentations/aigc-xiaoheiyun-agent/full-video.html?v=64` 的 4 个 Visual Anchor Scene；
+2. 如果视觉方向通过，再拆分并制作 Scene 005～045；
+3. 45 Scene 完成后执行实际 Chromium Screenshot QA；
+4. Gate A / B 一起确认后再生成正式完整 IndexTTS JSON；
+5. 后续配音、整片音画、SFX/BGM、录制全部使用 Project 002 独立状态。
+
+## 当前测试顺序
+
+1. 打开 `works.html?v=64`，确认存在 Project 001 与 Project 002 两张独立卡片；
+2. 点击 Project 002，进入 `project-aigc-xiaoheiyun-agent.html?v=64`；
+3. 检查 Chapter 1 iframe 预览；
+4. 打开 `presentations/aigc-xiaoheiyun-agent/full-video.html?v=64`，检查 001～004 切换和自动播放；
+5. 确认 Project 001 Harness Engineering 页面与业务状态未变化。
 
 ## 仍需实机确认
 
-- [ ] 正式部署后 `works.html` 项目库样式与封面卡片正常。
-- [ ] Harness 独立详情页全部原功能正常。
-- [ ] ZIP 配音源与 42/42 注入实际可用。
-- [ ] 最终录制文件包含当前配音源声音。
+- [ ] 正式部署后 `works.html` 两张项目卡片正常。
+- [ ] Project 002 Chapter 1 Visual Anchor 在桌面端 16:9 正常。
+- [ ] Project 002 小黑云角色视觉与用户 IP 素材方向一致。
+- [ ] 用户确认 Anchor 后，再批量开发 Scene 005～045。
+- [ ] Harness 原功能继续按原 Gate 独立验证。
