@@ -4,85 +4,72 @@
 
 ## 当前 Phase
 
-**Phase 2 · Project 002 Visual Anchor 重做 · Project6 v64**
+**Phase 2 · Project 002 完整项目框架对齐 · Project6 v64**
 
-当前策略：**Project 001 Harness Engineering 原项目保持不动；Project 002 小黑云 LangChain Agent 实战课严格复用 Project 001 的生产规范，先完成正确的完整脚本和 Scene 001～004 Visual Anchor。**
+当前策略：**Project 001 Harness Engineering 原项目保持不动；Project 002 必须复制 Project 001 的完整项目结构，而不只是做一个视觉预览页。**
 
 ## 当前入口
 
 - Product build：**v64**
-- 视频项目库：`works.html?v=64-p2a2`
+- 视频项目库：`works.html?v=64-p2a5`
 - Project 001：`project-harness-engineering.html?v=64`
-- Project 002：`project-aigc-xiaoheiyun-agent.html?v=64-p2a2`
-- Project 002 Anchor：`presentations/aigc-xiaoheiyun-agent/full-video.html?v=64-p2a2`
+- Project 002：`project-aigc-xiaoheiyun-agent.html?v=64-p2a5`
+- Project 002 Player：`presentations/aigc-xiaoheiyun-agent/full-video.html?v=64-p2a5`
+- Project 002 Recorder：`presentations/aigc-xiaoheiyun-agent/record.html?v=64-p2a5`
+- Project 002 Capture：`presentations/aigc-xiaoheiyun-agent/capture.html?v=64-p2a5`
 
 ## Project 001 · Harness Engineering
 
-**本轮未修改业务文件。** 它继续作为多项目架构和 Garden 制作规范基线。
+**本轮未修改业务文件。** 它继续作为 Project 002 的目录、TTS、语音导入、播放器和录制结构基线。
 
 ## Project 002 · 当前 Gate
 
 | Gate | 状态 | 当前进度 |
 |---|---|---|
-| A 完整口播 | REVIEW | 原始课程转写已清洗并重写为 9 Chapters / 42 Scenes |
-| B Garden 视觉 | REVIEW | Scene 001～004 已按 warm-keynote / Garden 重做并完成 Chromium Screenshot QA |
-| C 本地 IndexTTS | WAITING | `full-tts-tasks.json` 保持锁定，等待 A/B PASS |
-| D 整片音画 | LOCKED | 等 B/C PASS |
-| E 项目内 SFX / BGM | LOCKED | 等 D PASS |
-| F 高清本地录制 | LOCKED | 整片完成后进入 |
+| A 完整口播 | REVIEW | 9 Chapters / 42 Scenes，详情页可一次确认 |
+| B Garden 视觉 | ANCHOR REVIEW | Scene 001～004 高信息密度 Anchor；禁止 CSS mascot |
+| C 本地 IndexTTS | REVIEW READY | 已生成完整 42 段 TTS manifest；支持 ZIP / 多音频导入与 IndexedDB |
+| D 整片音画 | WAITING | Player 已支持本地音频注入 / 自动恢复；仍缺 Scene 005～042 视觉 |
+| E 项目内 SFX / BGM | LOCKED | Recorder 已保留本地 BGM 控制 |
+| F 高清本地录制 | BROWSER TEST | Harness-style record.html + capture.html 已建立 |
 
-## 本轮纠正内容 · 2026-09-11
+## 本轮结构纠正 · 2026-09-11
 
-### 1. 脚本纠正
+用户指出：第二个项目不能只模仿视觉风格，必须完整继承第一个项目已经搭好的生产结构。
 
-- 不再使用上一版自创的短脚本；
-- 以用户提供的约 7 分钟原始转写为内容基线；
-- 修正 ASR 错词与技术名词；
-- 修正 Deep Research 时间线；
-- 使用 2026 LangChain 官方当前口径重写 LangChain / LangGraph / Deep Agents / LangSmith 部分；
-- 输出完整 42 Scene 口播，但仍保持 Gate A REVIEW。
-
-### 2. 视觉纠正
-
-上一版“深色科技 + 大量卡片”的 Anchor 判定为不符合需求，已废弃。
-
-新 Anchor 直接对齐 Project 001：
-- 米白纸面 / 网格；
-- 暖棕正文；
-- 青绿主强调；
-- 橙色只做第二强调；
-- 1920×1080 逻辑画布；
-- HUD / toolbar / scale 方式对齐 Harness；
-- 每张使用不同可视化关系。
-
-### 3. Scene 001～004
-
-1. `001`：2022.11.30 / ChatGPT / “AI 的大门第一次被推开”——门的空间隐喻；
-2. `002`：会说 ≠ 会做——聊天牢笼 vs 执行动作；
-3. `003`：2023 AutoGPT → 2024 Computer Use → 2025 Deep Research → 2026 Long-running Agents；
-4. `004`：Agent → 自动化工作流 / AI 数据分析 / 7×24 客服 / 数字员工。
-
-## Screenshot QA
-
-本轮用 Chromium 实际渲染 Scene 001～004：
-- [x] 4/4 成功渲染；
-- [x] 16:9 stage 比例正常；
-- [x] 未发现可见文字溢出；
-- [x] 未发现主体遮挡；
-- [x] 4 个 Scene 不是同一模板换字；
-- [x] Scene 001 已形成视觉 Anchor。
-
-## 下一步门禁
-
-**等待用户确认 Scene 001～004。**
-
-只有确认后才允许：
+现在 Project 002 已补齐：
 
 ```text
-Scene 005～042 Garden 开发
-→ 全片 Screenshot QA
-→ Gate B PASS
-→ 正式 full-tts-tasks.json
-→ IndexTTS
-→ Gate C/D/E/F
+完整 42 Scene 脚本
+→ 脚本确认 checkbox
+→ 一键复制完整 42 段 TTS JSON
+→ full-tts-tasks.json 42/42
+→ ZIP / 多音频导入 001～042
+→ Project 002 独立 IndexedDB
+→ 42 格音频匹配状态
+→ 音频试听
+→ 本地音频注入播放器
+→ Player 自动恢复本地音频
+→ 播放 / 暂停 / 声音 / 全屏 / Scene 进度
+→ 打开高清录制
+→ record.html Recorder Controller
+→ capture.html 纯 16:9 成片窗口
+→ 独立 BroadcastChannel
+→ 1080P / 1440P / 4K
+→ BGM / 开始 / 暂停 / 停止保存 / 取消
 ```
+
+## 视觉规则
+
+- 完全删除 CSS 绘制的小黑云 / 黑色云朵角色；
+- 项目识别只保留左上角文字 HUD；
+- 画面信息量必须与口播匹配；
+- Scene 001～004 使用时间、对比表、演进时间线、业务矩阵等高信息密度结构；
+- Scene 005～042 继续按同一密度逐 Scene 制作。
+
+## 下一步
+
+1. 用户检查 Project 002 完整详情页结构是否已经与 Project 001 对齐；
+2. 实机测试脚本确认 → 复制 TTS JSON → 导入语音包 → 注入播放器；
+3. 实机测试 Recorder / Capture 通道；
+4. 结构确认后继续 Scene 005～042 Garden 开发与 Screenshot QA。
