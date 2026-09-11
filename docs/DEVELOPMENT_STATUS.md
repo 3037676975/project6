@@ -4,85 +4,85 @@
 
 ## 当前 Phase
 
-**Phase 1 · 多视频结构已启用 · Project6 v64**
+**Phase 2 · Project 002 Visual Anchor 重做 · Project6 v64**
 
-当前策略：**保留 Project 001 Harness Engineering 原业务状态，同时新增 Project 002 AIGC 小黑云，并按“先 Visual Anchor、验收后批量”的方式开发。**
+当前策略：**Project 001 Harness Engineering 原项目保持不动；Project 002 小黑云 LangChain Agent 实战课严格复用 Project 001 的生产规范，先完成正确的完整脚本和 Scene 001～004 Visual Anchor。**
 
-## 当前唯一构建版本
+## 当前入口
 
 - Product build：**v64**
-- 单一版本源：`assets/version.js`
-- 视频项目库：`works.html?v=64`
-- Harness 独立详情：`project-harness-engineering.html?v=64`
-- 小黑云独立详情：`project-aigc-xiaoheiyun-agent.html?v=64`
-- Harness 项目目录：`presentations/harness-engineering/`
-- 小黑云项目目录：`presentations/aigc-xiaoheiyun-agent/`
+- 视频项目库：`works.html?v=64-p2a2`
+- Project 001：`project-harness-engineering.html?v=64`
+- Project 002：`project-aigc-xiaoheiyun-agent.html?v=64-p2a2`
+- Project 002 Anchor：`presentations/aigc-xiaoheiyun-agent/full-video.html?v=64-p2a2`
 
-## Multi-project Architecture · v64
+## Project 001 · Harness Engineering
 
-- [x] `works.html` 是真正的视频项目库。
-- [x] Harness Engineering 保持 Project 001 独立项目。
-- [x] AIGC 小黑云作为 Project 002 新增，不覆盖 Project 001。
-- [x] Project 002 已建立独立详情页与 `presentations/aigc-xiaoheiyun-agent/`。
-- [x] Project 002 已建立独立 full-video / data / TTS draft / capture / record / ACCEPTANCE。
-- [x] 新项目必须使用独立 localStorage / IndexedDB namespace。
-- [x] 禁止新增视频时覆盖旧项目文件或状态。
+**本轮未修改业务文件。** 它继续作为多项目架构和 Garden 制作规范基线。
 
-## Project 001 · Harness Engineering 当前 Gate
-
-| Gate | 状态 | 通过条件 |
-|---|---|---|
-| A 完整口播 | REVIEW | 用户最终确认整片口播 |
-| B Garden 视觉 | REVIEW | 正式播放器与纯成片窗口视觉一致 |
-| C 本地 IndexTTS / 配音源库 | REVIEW | ZIP 保存、多源切换、原生播放器注入实机通过 |
-| D 整片音画 | REVIEW | 自动播放 001～042 旁白与 Scene 同步 |
-| E 项目内 SFX / BGM | LOCKED | D PASS 后进入 |
-| F 高清本地录制 | REVIEW | 导出文件包含当前配音源声音 |
-
-## Project 002 · AIGC 小黑云当前 Gate
+## Project 002 · 当前 Gate
 
 | Gate | 状态 | 当前进度 |
 |---|---|---|
-| A 完整口播 | REVIEW | 7:30～8:00 脚本已存在，最新 LangChain 资料已核对 |
-| B Garden 视觉 | REVIEW | Chapter 1 Scene 001～004 Visual Anchor 已创建 |
-| C 本地 IndexTTS | WAITING | 当前只有 4 段 Anchor 草稿，不是正式整片 TTS |
+| A 完整口播 | REVIEW | 原始课程转写已清洗并重写为 9 Chapters / 42 Scenes |
+| B Garden 视觉 | REVIEW | Scene 001～004 已按 warm-keynote / Garden 重做并完成 Chromium Screenshot QA |
+| C 本地 IndexTTS | WAITING | `full-tts-tasks.json` 保持锁定，等待 A/B PASS |
 | D 整片音画 | LOCKED | 等 B/C PASS |
 | E 项目内 SFX / BGM | LOCKED | 等 D PASS |
-| F 高清本地录制 | LOCKED | 已建立独立入口，整片完成后解锁 |
+| F 高清本地录制 | LOCKED | 整片完成后进入 |
 
-## Project 002 固定内容
+## 本轮纠正内容 · 2026-09-11
+
+### 1. 脚本纠正
+
+- 不再使用上一版自创的短脚本；
+- 以用户提供的约 7 分钟原始转写为内容基线；
+- 修正 ASR 错词与技术名词；
+- 修正 Deep Research 时间线；
+- 使用 2026 LangChain 官方当前口径重写 LangChain / LangGraph / Deep Agents / LangSmith 部分；
+- 输出完整 42 Scene 口播，但仍保持 Gate A REVIEW。
+
+### 2. 视觉纠正
+
+上一版“深色科技 + 大量卡片”的 Anchor 判定为不符合需求，已废弃。
+
+新 Anchor 直接对齐 Project 001：
+- 米白纸面 / 网格；
+- 暖棕正文；
+- 青绿主强调；
+- 橙色只做第二强调；
+- 1920×1080 逻辑画布；
+- HUD / toolbar / scale 方式对齐 Harness；
+- 每张使用不同可视化关系。
+
+### 3. Scene 001～004
+
+1. `001`：2022.11.30 / ChatGPT / “AI 的大门第一次被推开”——门的空间隐喻；
+2. `002`：会说 ≠ 会做——聊天牢笼 vs 执行动作；
+3. `003`：2023 AutoGPT → 2024 Computer Use → 2025 Deep Research → 2026 Long-running Agents；
+4. `004`：Agent → 自动化工作流 / AI 数据分析 / 7×24 客服 / 数字员工。
+
+## Screenshot QA
+
+本轮用 Chromium 实际渲染 Scene 001～004：
+- [x] 4/4 成功渲染；
+- [x] 16:9 stage 比例正常；
+- [x] 未发现可见文字溢出；
+- [x] 未发现主体遮挡；
+- [x] 4 个 Scene 不是同一模板换字；
+- [x] Scene 001 已形成视觉 Anchor。
+
+## 下一步门禁
+
+**等待用户确认 Scene 001～004。**
+
+只有确认后才允许：
 
 ```text
-标题：AIGC 小黑云｜从 ChatGPT 到 Agent：AI 为什么开始“自己干活”了？
-画幅：16:9
-时长：7分30秒～8分
-章节：9 Chapters
-计划：45 visual beats / Scenes
-主持 IP：AIGC 小黑云
-技术主线：Agent → LangChain → LangGraph → RAG / MCP / Multi-Agent
-视觉：深色科技 + 暖橙围巾点缀 + Garden web-video-presentation
+Scene 005～042 Garden 开发
+→ 全片 Screenshot QA
+→ Gate B PASS
+→ 正式 full-tts-tasks.json
+→ IndexTTS
+→ Gate C/D/E/F
 ```
-
-## Project 002 下一步
-
-1. 用户先检查 `presentations/aigc-xiaoheiyun-agent/full-video.html?v=64` 的 4 个 Visual Anchor Scene；
-2. 如果视觉方向通过，再拆分并制作 Scene 005～045；
-3. 45 Scene 完成后执行实际 Chromium Screenshot QA；
-4. Gate A / B 一起确认后再生成正式完整 IndexTTS JSON；
-5. 后续配音、整片音画、SFX/BGM、录制全部使用 Project 002 独立状态。
-
-## 当前测试顺序
-
-1. 打开 `works.html?v=64`，确认存在 Project 001 与 Project 002 两张独立卡片；
-2. 点击 Project 002，进入 `project-aigc-xiaoheiyun-agent.html?v=64`；
-3. 检查 Chapter 1 iframe 预览；
-4. 打开 `presentations/aigc-xiaoheiyun-agent/full-video.html?v=64`，检查 001～004 切换和自动播放；
-5. 确认 Project 001 Harness Engineering 页面与业务状态未变化。
-
-## 仍需实机确认
-
-- [ ] 正式部署后 `works.html` 两张项目卡片正常。
-- [ ] Project 002 Chapter 1 Visual Anchor 在桌面端 16:9 正常。
-- [ ] Project 002 小黑云角色视觉与用户 IP 素材方向一致。
-- [ ] 用户确认 Anchor 后，再批量开发 Scene 005～045。
-- [ ] Harness 原功能继续按原 Gate 独立验证。
