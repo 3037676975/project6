@@ -1,0 +1,1 @@
+Project 002 必须按 Project 001 的完整视频项目结构开发：脚本、完整 TTS、整包语音导入、本地音画、SFX/BGM、Recorder、Capture、高清导出。禁止把第二个项目降级成只有 4 张视觉预览的 Demo。
