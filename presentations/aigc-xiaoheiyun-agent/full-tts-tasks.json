@@ -1,0 +1,13 @@
+{
+  "project": "AIGC 小黑云 · 从 ChatGPT 到 Agent",
+  "slug": "aigc-xiaoheiyun-agent",
+  "engine": "IndexTTS 2.5",
+  "status": "DRAFT_ANCHOR_ONLY",
+  "note": "当前仅 Chapter 1 视觉 Anchor 的 4 段草稿。整片 45 Scene 拆分与 Gate A 确认后再生成正式总 TTS JSON。",
+  "tasks": [
+    {"id":"001","scene":"scene001","filename":"001.mp3","text":"2022 年底，ChatGPT 出现的时候，很多人第一次有了一种很奇怪的感觉：电脑，好像真的开始听得懂人话了。"},
+    {"id":"002","scene":"scene002","filename":"002.mp3","text":"但当时有一个很明显的问题——你不问，它基本不动。它更像一个特别聪明的嘴替，而不是会自己完成任务的助手。"},
+    {"id":"003","scene":"scene003","filename":"003.mp3","text":"如果 AI 不只会回答，还能自己搜索、打开网页、读取文件、调用工具，再根据结果判断下一步，它就开始像一个真正的数字员工。"},
+    {"id":"004","scene":"scene004","filename":"004.mp3","text":"而这几年 AI 最重要的一次变化，就是它开始从回答问题，走向执行任务。这个东西，就是我们今天要聊的 Agent。"}
+  ]
+}
