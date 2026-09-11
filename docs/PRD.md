@@ -147,7 +147,7 @@ Canvas / MediaRecorder
 
 ## 13. 当前项目
 
-Project 001：**Harness Engineering**
+### Project 001：Harness Engineering
 
 ```text
 详情：project-harness-engineering.html
@@ -157,16 +157,31 @@ Project 001：**Harness Engineering**
 IndexTTS 2.5
 ```
 
+### Project 002：AIGC 小黑云 · 从 ChatGPT 到 Agent
+
+```text
+详情：project-aigc-xiaoheiyun-agent.html
+目录：presentations/aigc-xiaoheiyun-agent/
+9 Chapters
+45 planned Scenes
+当前：Chapter 1 / Scene 001～004 Visual Anchor
+主题：Agent / LangChain / LangGraph / RAG / MCP / Multi-Agent
+主持 IP：AIGC 小黑云
+```
+
+Project 002 必须继续遵循独立项目规则，不读取或覆盖 Project 001 的业务状态。
+
 ## 14. 当前版本
 
 Canonical：`assets/version.js` → **v64**。
 
-v64 的核心变化是补齐多项目层级：
+v64 的核心结构是多项目层级：
 
 ```text
 works.html 项目列表
-→ Harness Engineering 项目卡片
-→ project-harness-engineering.html 独立详情
+→ Project 001 Harness Engineering
+→ Project 002 AIGC 小黑云 Agent / LangChain 入门
+→ 每个 Project 拥有独立详情与 presentations/<slug>/ 目录
 ```
 
 以后新增视频时，必须新增项目，不允许把新视频的数据直接写进 Harness Engineering。
