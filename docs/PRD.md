@@ -1,4 +1,4 @@
-# Project6 PRD · v2.5
+# Project6 PRD · v2.6
 
 **状态：** Current / 最新产品基准  
 **当前产品构建：** Project6 **v64**  
@@ -19,35 +19,15 @@ Project6 是面向低预算创作者的 **AI HTML 多视频项目生产后台**�
 → presentations/<slug>/ 独立生产目录
 ```
 
-`works.html` 只负责展示项目列表，不再直接承载某一支视频的完整制作详情。
+`works.html` 只负责展示项目列表，不承载某一支视频的完整制作详情。
 
 ## 3. 视频项目库
 
-每个项目卡片至少显示：
-- 封面；
-- 项目名称；
-- 当前状态；
-- Scene 数量；
-- Chapter 数量；
-- 制作方式摘要；
-- 进入项目详情的入口。
-
-未来 Project 002、003、004… 都在此列表中新增，不覆盖旧项目。
+每个项目卡片至少显示：封面、项目名称、当前状态、Scene / Chapter 摘要、制作方式摘要和进入项目详情的入口。
 
 ## 4. 独立项目详情
 
-每个视频必须有自己的详情页，例如 `project-harness-engineering.html`。
-
-详情页负责：
-- 完整脚本；
-- Chapter / Scene；
-- Garden 完整预览；
-- 验收 Gate；
-- 完整 TTS JSON；
-- 配音 ZIP / 配音源；
-- 整片音画；
-- 项目内 SFX / BGM；
-- 高清录制入口。
+每个视频必须有自己的详情页。详情页负责完整脚本、Chapter / Scene、Garden 预览、验收 Gate、完整 TTS JSON、配音源、整片音画、项目内 SFX / BGM 和高清录制入口。
 
 ## 5. 新项目目录协议
 
@@ -56,6 +36,8 @@ project-<slug>.html
 presentations/
 └── <slug>/
     ├── full-video.html
+    ├── full-video.css
+    ├── full-video.js
     ├── full-video-data.js
     ├── full-tts-tasks.json
     ├── record.html
@@ -63,7 +45,7 @@ presentations/
     └── ACCEPTANCE.md
 ```
 
-本地状态必须使用 `project6.<slug>.*` namespace，禁止不同项目复用状态 key。
+本地状态必须使用 `project6.<slug>.*` namespace。
 
 ## 6. P0 主流程
 
@@ -76,52 +58,17 @@ presentations/
 → 完整 TTS JSON
 → 本地 IndexTTS 2.5
 → ZIP / 配音源库
-→ 整片音画预览 + timing
+→ 整片本地音画预览 + timing
 → 项目内 SFX / BGM
 → 双窗口高清本地录制
 → 最终视频
 ```
 
-## 7. 本地配音源
+## 7. Garden 视觉质量
 
-- JSZip 解压；
-- 支持 ZIP 子目录；
-- 自动编号 ↔ Scene；
-- 一个 ZIP = 一个配音源；
-- ZIP 可持久保存到浏览器 IndexedDB；
-- 单个音频只作为临时兜底；
-- 当前配音源可切换、试听、删除；
-- 不上传服务器；
-- 不提交 GitHub；
-- 每个视频项目必须隔离自己的配音源 namespace。
+每个 Scene 必须真正表达关系、空间、状态、反馈或过程。禁止批量复制同一左右布局、同一卡片模板和只有 fade/pop 的伪动画。正式 Scene 修改后必须实际 Chromium 渲染并完成 Screenshot QA。
 
-## 8. 整片播放器
-
-必须支持：播放、暂停/继续、上一 Scene、下一 Scene、进度跳转、全屏、本地配音源注入、音频结束自动进入下一 Scene。
-
-Pause 必须同时暂停 narration 与当前 GSAP timeline。
-
-## 9. Garden 视觉质量
-
-每个 Scene 必须真正表达关系、空间、状态、反馈或过程。禁止批量复制同一左右布局、同一卡片模板和只有 fade/pop 的伪动画。
-
-正式 Scene 修改后必须实际 Chromium 渲染并完成 Screenshot QA。
-
-## 10. 高清本地录制
-
-```text
-record.html 录制控制台
-        ↓ BroadcastChannel
-capture.html 纯成片窗口
-        ↓ 浏览器标签页捕获
-Canvas / MediaRecorder
-        ↓
-1080P / 1440P / 4K 本地文件
-```
-
-录制结果只保存在浏览器本地，不上传服务器。
-
-## 11. Gate
+## 8. Gate
 
 状态只允许：PASS / REVIEW / WAITING / LOCKED。
 
@@ -134,54 +81,42 @@ Canvas / MediaRecorder
 | E | 项目内 SFX / BGM |
 | F | 高清本地录制 |
 
-## 12. UI 设计系统
-
-后台采用 **Editorial Production Console / 创作控制台**：
-- 工作台负责全局；
-- 视频作品页负责项目选择；
-- 单项目详情负责制作；
-- 公共资源与业务状态分开；
-- 项目封面是列表页主要视觉识别；
-- 状态色只服务 Gate 与反馈；
-- 支持键盘 focus、移动端和 reduced motion。
-
-## 13. 当前项目
-
-### Project 001：Harness Engineering
+## 9. Project 001 · Harness Engineering
 
 ```text
 详情：project-harness-engineering.html
 目录：presentations/harness-engineering/
 7 Chapters
 42 Scenes
-IndexTTS 2.5
 ```
 
-### Project 002：AIGC 小黑云 · 从 ChatGPT 到 Agent
+**状态：规范基线 / 旧项目保护。Project 002 开发时不修改其业务文件。**
+
+## 10. Project 002 · 小黑云 LangChain Agent 实战课
 
 ```text
 详情：project-aigc-xiaoheiyun-agent.html
 目录：presentations/aigc-xiaoheiyun-agent/
 9 Chapters
-45 planned Scenes
-当前：Chapter 1 / Scene 001～004 Visual Anchor
-主题：Agent / LangChain / LangGraph / RAG / MCP / Multi-Agent
-主持 IP：AIGC 小黑云
+42 planned Scenes
+当前已实现视觉：Scene 001～004
+当前完整脚本：42 / 42
+主题：ChatGPT → Agent → LangChain → LangGraph → RAG / MCP / Multi-Agent
+主持 IP：小黑云
+视觉基线：继承 Project 001 warm-keynote Garden 系统
 ```
 
-Project 002 必须继续遵循独立项目规则，不读取或覆盖 Project 001 的业务状态。
+### Project 002 强制规则
 
-## 14. 当前版本
+1. 原始转写先清洗、校准、重写，禁止直接复制 ASR 文本；
+2. Scene 001 是视觉 Anchor；
+3. 上一版深色科技卡片方案废弃；
+4. 先确认 Scene 001～004，再开发 Scene 005～042；
+5. Gate A/B 未 PASS 前，正式 `full-tts-tasks.json` 保持锁定；
+6. 不读取或覆盖 Project 001 的状态。
+
+## 11. 当前构建
 
 Canonical：`assets/version.js` → **v64**。
 
-v64 的核心结构是多项目层级：
-
-```text
-works.html 项目列表
-→ Project 001 Harness Engineering
-→ Project 002 AIGC 小黑云 Agent / LangChain 入门
-→ 每个 Project 拥有独立详情与 presentations/<slug>/ 目录
-```
-
-以后新增视频时，必须新增项目，不允许把新视频的数据直接写进 Harness Engineering。
+本轮仅更新 Project 002 内容与项目库元数据，不升级全局 build，以避免为了第二个视频强制触碰 Project 001 的已完成入口。Project 002 使用 `?v=64-p2a2` 作为本轮静态缓存标识。
